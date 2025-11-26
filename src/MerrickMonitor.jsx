@@ -217,7 +217,7 @@ const MerrickMonitor = () => {
       status: "MAINT",
       trend: "DOWN",
       activity: [0, 0, 0, 1, 0],
-      teams: ["Sales/Lead"],
+      teams: ["GMC/Product", "Content/On-Page", "Sales/Lead", "Specialists"],
     },
     {
       id: 8,
