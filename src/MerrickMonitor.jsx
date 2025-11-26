@@ -116,10 +116,10 @@ const MerrickMonitor = () => {
   const getWeekRange = () => {
     const curr = new Date();
     const day = curr.getDay() || 7;
-    if (day !== 1) curr.setHours(-24 * (day - 1));
-
     const monday = new Date(curr);
-    const friday = new Date(curr);
+    monday.setDate(curr.getDate() - (day - 1));
+
+    const friday = new Date(monday);
     friday.setDate(monday.getDate() + 4);
 
     const opts = { month: "short", day: "numeric" };
