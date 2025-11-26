@@ -254,21 +254,55 @@ export class GitHubService {
   }
 
   /**
+   * Load static GitHub data from JSON file (fallback)
+   */
+  async loadStaticData() {
+    try {
+      const response = await fetch("/src/data/githubData.json");
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (error) {
+      console.warn("Failed to load static GitHub data:", error);
+    }
+    return null;
+  }
+
+  /**
    * Get enriched tool data for all mapped repositories
    */
   async getAllToolsData() {
+    // Try to use static data first (for production/GitHub Pages)
+    const staticData = await this.loadStaticData();
+
     const tools = [];
     let id = 1;
 
     for (const [toolName, config] of Object.entries(REPO_MAPPING)) {
-      const [activity, stats, commitsCount] = await Promise.all([
-        this.getWeeklyActivity(config.repo),
-        this.getRepoStats(config.repo),
-        this.getRecentCommitsCount(config.repo),
-      ]);
+      let activity, stats, status, trend;
 
-      const status = this.determineStatus(stats, commitsCount);
-      const trend = this.determineTrend(commitsCount, stats);
+      // Use static data if available, otherwise fetch from API
+      if (staticData && staticData.tools[toolName]) {
+        const toolData = staticData.tools[toolName];
+        activity = toolData.activity;
+        stats = toolData.stats;
+        status = toolData.status;
+        trend = toolData.trend;
+      } else {
+        // Fallback to API (only in development with token)
+        const [fetchedActivity, fetchedStats, commitsCount] = await Promise.all(
+          [
+            this.getWeeklyActivity(config.repo),
+            this.getRepoStats(config.repo),
+            this.getRecentCommitsCount(config.repo),
+          ],
+        );
+
+        activity = fetchedActivity;
+        stats = fetchedStats;
+        status = this.determineStatus(stats, commitsCount);
+        trend = this.determineTrend(commitsCount, stats);
+      }
 
       // Estimate users based on watchers/stars (mock calculation)
       const users = stats
@@ -285,7 +319,6 @@ export class GitHubService {
         activity,
         repoName: config.repo,
         stats,
-        commitsCount,
         description: config.description,
         repoUrl: `${GITHUB_CONFIG.baseUrl}/${config.repo}`,
         teams: config.teams || [],
