@@ -11,33 +11,86 @@ const WeeklyAgenda = ({ theme, isRetro }) => {
     {
       day: "MON",
       slots: [
-        { timeSlot: "morning", project: "Sheet Freak", type: "planned" },
-        { timeSlot: "afternoon", project: "On-Page Sheet", type: "planned" },
+        {
+          timeSlot: "morning",
+          project: "Sheet Freak",
+          type: "planned",
+          completed: true,
+        },
+        {
+          timeSlot: "afternoon",
+          project: "On-Page Sheet",
+          type: "planned",
+          completed: true,
+        },
       ],
     },
     {
       day: "TUE",
       slots: [
-        { timeSlot: "allday", project: "On-Page Sheet", type: "planned" },
+        {
+          timeSlot: "morning",
+          project: "On-Page Sheet",
+          type: "planned",
+          completed: true,
+        },
+        {
+          timeSlot: "afternoon",
+          project: "On-Page Sheet",
+          type: "planned",
+          completed: true,
+        },
       ],
     },
     {
       day: "WED",
       slots: [
-        { timeSlot: "allday", project: "Merrick Monitor", type: "unplanned" },
+        {
+          timeSlot: "morning",
+          project: "Merrick Monitor",
+          type: "unplanned",
+          completed: true,
+        },
+        {
+          timeSlot: "afternoon",
+          project: "Merrick Monitor",
+          type: "unplanned",
+          completed: true,
+        },
       ],
     },
     {
       day: "THU",
       slots: [
-        { timeSlot: "morning", project: "Merrick Monitor", type: "unplanned" },
-        { timeSlot: "afternoon", project: "On-Page Sheet", type: "planned" },
+        {
+          timeSlot: "morning",
+          project: "Merrick Monitor",
+          type: "unplanned",
+          completed: false,
+        },
+        {
+          timeSlot: "afternoon",
+          project: "On-Page Sheet",
+          type: "planned",
+          completed: false,
+        },
       ],
     },
     {
       day: "FRI",
       slots: [
-        { timeSlot: "allday", project: "On-Page Sheet", type: "planned" },
+        {
+          timeSlot: "morning",
+          project: "On-Page Sheet",
+          type: "planned",
+          completed: false,
+        },
+        {
+          timeSlot: "afternoon",
+          project: "On-Page Sheet",
+          type: "planned",
+          completed: false,
+        },
       ],
     },
   ];
@@ -94,34 +147,96 @@ const WeeklyAgenda = ({ theme, isRetro }) => {
                   <div className="text-[8px] animate-pulse mt-0.5">TODAY</div>
                 )}
               </div>
-              <div className="flex-1">
-                <div className="flex flex-wrap gap-2">
-                  {daySchedule.slots.map((slot, idx) => (
-                    <div
-                      key={idx}
-                      className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wide transition-all inline-flex items-center gap-1 ${
-                        slot.type === "unplanned"
-                          ? isRetro
-                            ? "bg-amber-900/30 border border-amber-700 text-amber-400"
-                            : "bg-amber-50 border border-amber-300 text-amber-700"
-                          : isRetro
-                            ? "bg-green-900/30 border border-green-700 text-green-400"
-                            : "bg-white border border-slate-300 text-slate-700"
-                      }`}
+              <div className="flex-1 space-y-2">
+                {/* Morning */}
+                {daySchedule.slots.filter((s) => s.timeSlot === "morning")
+                  .length > 0 && (
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`text-[9px] font-bold w-12 ${theme.textMuted}`}
                     >
-                      {slot.type === "unplanned" && "⚠️ "}
-                      {slot.timeSlot === "morning" && "☀️ "}
-                      {slot.timeSlot === "afternoon" && "🌙 "}
-                      {slot.project}
-                      {slot.type === "unplanned" && (
-                        <span className="opacity-60">· REACTIVE</span>
-                      )}
-                      {slot.type === "planned" && (
-                        <span className="opacity-60">· PLANNED</span>
-                      )}
+                      AM
+                    </span>
+                    <div className="flex flex-wrap gap-2">
+                      {daySchedule.slots
+                        .filter((s) => s.timeSlot === "morning")
+                        .map((slot, idx) => (
+                          <div
+                            key={idx}
+                            className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wide transition-all inline-flex items-center gap-1 ${
+                              slot.completed
+                                ? isRetro
+                                  ? "bg-green-900/30 border border-green-700 text-green-400"
+                                  : "bg-green-50 border border-green-300 text-green-700"
+                                : slot.type === "unplanned"
+                                  ? isRetro
+                                    ? "bg-amber-900/30 border border-amber-700 text-amber-400"
+                                    : "bg-amber-50 border border-amber-300 text-amber-700"
+                                  : isRetro
+                                    ? "bg-slate-900/30 border border-slate-700 text-slate-400"
+                                    : "bg-slate-50 border border-slate-300 text-slate-500"
+                            }`}
+                          >
+                            {slot.type === "unplanned" && !slot.completed && (
+                              <span className="opacity-60">!</span>
+                            )}
+                            {slot.project}
+                            <span className="opacity-60">·</span>
+                            <span className="opacity-60">
+                              {slot.type === "unplanned"
+                                ? "REACTIVE"
+                                : "PLANNED"}
+                            </span>
+                          </div>
+                        ))}
                     </div>
-                  ))}
-                </div>
+                  </div>
+                )}
+
+                {/* Afternoon */}
+                {daySchedule.slots.filter((s) => s.timeSlot === "afternoon")
+                  .length > 0 && (
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`text-[9px] font-bold w-12 ${theme.textMuted}`}
+                    >
+                      PM
+                    </span>
+                    <div className="flex flex-wrap gap-2">
+                      {daySchedule.slots
+                        .filter((s) => s.timeSlot === "afternoon")
+                        .map((slot, idx) => (
+                          <div
+                            key={idx}
+                            className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wide transition-all inline-flex items-center gap-1 ${
+                              slot.completed
+                                ? isRetro
+                                  ? "bg-green-900/30 border border-green-700 text-green-400"
+                                  : "bg-green-50 border border-green-300 text-green-700"
+                                : slot.type === "unplanned"
+                                  ? isRetro
+                                    ? "bg-amber-900/30 border border-amber-700 text-amber-400"
+                                    : "bg-amber-50 border border-amber-300 text-amber-700"
+                                  : isRetro
+                                    ? "bg-slate-900/30 border border-slate-700 text-slate-400"
+                                    : "bg-slate-50 border border-slate-300 text-slate-500"
+                            }`}
+                          >
+                            {slot.type === "unplanned" && !slot.completed && (
+                              <span className="opacity-60">!</span>
+                            )}
+                            {slot.project}
+                            <span className="opacity-60">·</span>
+                            <span className="opacity-60">
+                              {slot.type === "unplanned"
+                                ? "REACTIVE"
+                                : "PLANNED"}
+                            </span>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           );
