@@ -171,10 +171,10 @@ const MerrickMonitor = () => {
       name: "RANDY_PEM_DASH",
       type: "DASH",
       status: "LIVE",
-      users: 5,
+      users: 18,
       trend: "STABLE",
       activity: [0, 0, 1, 0, 0],
-      teams: ["Tech"],
+      teams: ["Specialists", "Content/On-Page"],
     },
     {
       id: 3,
