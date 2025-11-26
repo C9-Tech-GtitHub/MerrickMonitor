@@ -257,7 +257,8 @@ const MerrickMonitor = () => {
 
   // Calculate how many tools each team uses
   const getToolCountForTeam = (teamName) => {
-    return toolFleetWithUsers.filter((tool) => tool.teams?.includes(teamName))
+    // Use mock data for team counts since GitHub data doesn't have team info
+    return mockToolFleet.filter((tool) => tool.teams?.includes(teamName))
       .length;
   };
 
@@ -987,7 +988,7 @@ const MerrickMonitor = () => {
                 </button>
               </div>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               {teams
                 .filter((t) => t.name !== "Company-Wide")
                 .map((team) => (
