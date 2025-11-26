@@ -18,6 +18,9 @@ import {
   Lock,
 } from "lucide-react";
 import { githubService } from "./services/githubService";
+import WeeklyAgenda from "./components/WeeklyAgenda";
+import WeekHistory from "./components/WeekHistory";
+import WorkloadTracker from "./components/WorkloadTracker";
 
 const MerrickMonitor = () => {
   const [date, setDate] = useState(new Date());
@@ -103,6 +106,15 @@ const MerrickMonitor = () => {
 
     const opts = { month: "short", day: "numeric" };
     return `${monday.toLocaleDateString("en-US", opts)} - ${friday.toLocaleDateString("en-US", opts)}`;
+  };
+
+  const getCurrentWeekKey = () => {
+    const now = new Date();
+    const dayOfWeek = now.getDay() || 7;
+    const monday = new Date(now);
+    monday.setDate(now.getDate() - (dayOfWeek - 1));
+    monday.setHours(0, 0, 0, 0);
+    return monday.toISOString().split("T")[0];
   };
 
   // Password Handler
@@ -492,26 +504,12 @@ const MerrickMonitor = () => {
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-4">
       {/* Left Column (8 cols) */}
       <div className="lg:col-span-8 space-y-6">
-        {/* Ops Load Section */}
-        <section
-          className={`p-6 transition-colors duration-300 ${theme.cardBg} ${isRetro ? "border" : "rounded-xl"} ${theme.border}`}
-        >
-          <h2
-            className={`text-xs font-bold uppercase mb-4 flex items-center gap-2 ${theme.accent}`}
-          >
-            <Activity className="w-4 h-4" />
-            Maintenance Load
-          </h2>
-          <div className="flex justify-between text-xs mb-3 tracking-wide">
-            <span className={theme.textMuted}>Stable Ops</span>
-            <span
-              className={`font-bold ${isRetro ? "text-green-400" : "text-indigo-600"}`}
-            >
-              Reactive Fixes: {reactiveLoad}%
-            </span>
-          </div>
-          <ProgressBar percent={100 - reactiveLoad} />
-        </section>
+        {/* Workload Tracker - Replaces Ops Load Section */}
+        <WorkloadTracker
+          theme={theme}
+          isRetro={isRetro}
+          currentWeek={getCurrentWeekKey()}
+        />
 
         {/* Live Tool Fleet Table */}
         <section
@@ -857,7 +855,7 @@ const MerrickMonitor = () => {
               </div>
               {/* Tab Navigation */}
               <div className="flex justify-end gap-6 text-xs mt-2">
-                {["OVERVIEW", "ADOPTION"].map((tab) => (
+                {["OVERVIEW", "ADOPTION", "AGENDA", "HISTORY"].map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
@@ -1039,6 +1037,36 @@ const MerrickMonitor = () => {
         <div className="px-4 md:px-6 pb-6 min-h-[500px]">
           {activeTab === "OVERVIEW" && <OverviewView />}
           {activeTab === "ADOPTION" && <AdoptionView />}
+          {activeTab === "AGENDA" && (
+            <div
+              className={`p-6 animate-in fade-in duration-300 ${theme.cardBg} ${isRetro ? "border" : "rounded-xl"} ${theme.border}`}
+            >
+              <h2
+                className={`text-xs font-bold uppercase mb-8 flex items-center gap-2 ${theme.accent}`}
+              >
+                <Calendar className="w-4 h-4" />
+                Weekly Agenda
+              </h2>
+              <WeeklyAgenda
+                theme={theme}
+                isRetro={isRetro}
+                toolFleet={toolFleetWithUsers}
+              />
+            </div>
+          )}
+          {activeTab === "HISTORY" && (
+            <div
+              className={`p-6 animate-in fade-in duration-300 ${theme.cardBg} ${isRetro ? "border" : "rounded-xl"} ${theme.border}`}
+            >
+              <h2
+                className={`text-xs font-bold uppercase mb-8 flex items-center gap-2 ${theme.accent}`}
+              >
+                <Calendar className="w-4 h-4" />
+                Week History
+              </h2>
+              <WeekHistory theme={theme} isRetro={isRetro} />
+            </div>
+          )}
         </div>
       </div>
     </div>
