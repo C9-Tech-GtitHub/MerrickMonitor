@@ -55,7 +55,7 @@
       "teams": [
         "Sales"
       ],
-      "commits": 57,
+      "commits": 46,
       "activity": [
         false,
         false,
@@ -163,11 +163,11 @@
       "name": "Merrick Monitor",
       "type": "DASH",
       "status": "ACTIVE",
-      "description": "Engineering operations dashboard",
+      "description": "Surveillance dashboard for monitoring activity",
       "teams": [
         "Management"
       ],
-      "commits": 39,
+      "commits": 66,
       "activity": [
         false,
         false,
@@ -223,5 +223,5 @@
       "openIssues": 0
     }
   ],
-  "lastUpdated": "2025-11-26T20:53:58.780Z"
+  "lastUpdated": "2025-11-26T22:44:41.540Z"
 }
