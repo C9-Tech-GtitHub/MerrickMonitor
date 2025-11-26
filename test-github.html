@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Service Test</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #000;
+            color: #0f0;
+            padding: 20px;
+        }
+        pre {
+            background: #111;
+            padding: 10px;
+            border: 1px solid #0f0;
+            overflow-x: auto;
+        }
+        button {
+            background: #0f0;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: monospace;
+            font-weight: bold;
+        }
+        .loading { opacity: 0.5; }
+    </style>
+</head>
+<body>
+    <h1>GitHub Service Test</h1>
+    <button onclick="testGitHubService()">Load GitHub Data</button>
+    <div id="status">Ready...</div>
+    <pre id="output"></pre>
+
+    <script type="module">
+        import { githubService } from './src/services/githubService.js';
+
+        window.testGitHubService = async function() {
+            const statusEl = document.getElementById('status');
+            const outputEl = document.getElementById('output');
+
+            statusEl.textContent = 'Loading...';
+            statusEl.className = 'loading';
+
+            try {
+                const data = await githubService.getAllToolsData();
+                statusEl.textContent = `✓ Loaded ${data.length} tools`;
+                statusEl.className = '';
+                outputEl.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                statusEl.textContent = `✗ Error: ${error.message}`;
+                outputEl.textContent = error.stack;
+            }
+        };
+
+        // Auto-load on page load
+        window.testGitHubService();
+    </script>
+</body>
+</html>

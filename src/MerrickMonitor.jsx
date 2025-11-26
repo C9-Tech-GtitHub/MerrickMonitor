@@ -17,6 +17,7 @@ import {
   Layout,
   Lock,
 } from "lucide-react";
+import { githubService } from "./services/githubService";
 
 const MerrickMonitor = () => {
   const [date, setDate] = useState(new Date());
@@ -26,6 +27,9 @@ const MerrickMonitor = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
   const [showError, setShowError] = useState(false);
+  const [toolFleet, setToolFleet] = useState([]);
+  const [archivedRepos, setArchivedRepos] = useState([]);
+  const [isLoadingData, setIsLoadingData] = useState(true);
 
   const CORRECT_PASSWORD = "peek";
 
@@ -38,6 +42,41 @@ const MerrickMonitor = () => {
       clearInterval(cursorTimer);
     };
   }, []);
+
+  // Fetch GitHub data when authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadGitHubData();
+      // Refresh data every 5 minutes
+      const refreshInterval = setInterval(
+        () => {
+          loadGitHubData();
+        },
+        5 * 60 * 1000,
+      );
+
+      return () => clearInterval(refreshInterval);
+    }
+  }, [isAuthenticated]);
+
+  const loadGitHubData = async () => {
+    setIsLoadingData(true);
+    try {
+      const [toolsData, archivedData] = await Promise.all([
+        githubService.getAllToolsData(),
+        githubService.getArchivedRepos(),
+      ]);
+      setToolFleet(toolsData);
+      setArchivedRepos(archivedData);
+    } catch (error) {
+      console.error("Failed to load GitHub data:", error);
+      // Fallback to mock data if GitHub fails
+      setToolFleet(mockToolFleet);
+      setArchivedRepos([]);
+    } finally {
+      setIsLoadingData(false);
+    }
+  };
 
   // Date Helpers
   const formatTime = (d) =>
@@ -104,9 +143,9 @@ const MerrickMonitor = () => {
       : "selection:bg-indigo-100 selection:text-indigo-900",
   };
 
-  // --- MOCK DATA ---
+  // --- MOCK DATA (Fallback) ---
 
-  const toolFleet = [
+  const mockToolFleet = [
     {
       id: 1,
       name: "ON_PAGE_JOSH_BOT",
@@ -430,18 +469,29 @@ const MerrickMonitor = () => {
               Live Tool Fleet
             </h2>
             <div className="flex items-center gap-3">
+              <button
+                onClick={loadGitHubData}
+                disabled={isLoadingData}
+                className={`text-[10px] uppercase tracking-wider flex items-center gap-1 transition-opacity ${theme.textMuted} ${isLoadingData ? "opacity-50 cursor-not-allowed" : "hover:opacity-70 cursor-pointer"}`}
+                title="Refresh GitHub data"
+              >
+                <Activity
+                  className={`w-3 h-3 ${isLoadingData ? "animate-spin" : ""}`}
+                />
+                {isLoadingData ? "Loading..." : "Refresh"}
+              </button>
               <span
                 className={`text-[10px] uppercase tracking-wider flex items-center gap-1 ${theme.textMuted}`}
               >
                 <Github className="w-3 h-3" /> Activity
               </span>
               <span
-                className={`text-xs animate-pulse flex items-center gap-1.5 ${theme.success}`}
+                className={`text-xs flex items-center gap-1.5 ${theme.success} ${isLoadingData ? "animate-pulse" : ""}`}
               >
                 <span
                   className={`w-1.5 h-1.5 rounded-full ${isRetro ? "bg-green-500" : "bg-emerald-500"}`}
                 ></span>
-                Online
+                {isLoadingData ? "Syncing" : "Live"}
               </span>
             </div>
           </div>
@@ -472,11 +522,23 @@ const MerrickMonitor = () => {
                     <td
                       className={`p-3 font-medium transition-colors ${theme.textBold}`}
                     >
-                      <div>{tool.name}</div>
+                      {tool.repoUrl ? (
+                        <a
+                          href={tool.repoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`hover:underline flex items-center gap-1 ${isRetro ? "hover:text-green-300" : "hover:text-indigo-700"}`}
+                        >
+                          {tool.name}
+                          <Github className="w-3 h-3 opacity-50" />
+                        </a>
+                      ) : (
+                        <div>{tool.name}</div>
+                      )}
                       <div
                         className={`text-[10px] font-normal ${theme.textMuted}`}
                       >
-                        {tool.type}
+                        {tool.type} {tool.repoName && `• ${tool.repoName}`}
                       </div>
                     </td>
                     <td className="p-3">
@@ -660,6 +722,82 @@ const MerrickMonitor = () => {
     </div>
   );
 
+  const ArchivedView = () => (
+    <div
+      className={`p-6 animate-in fade-in duration-300 ${theme.cardBg} ${isRetro ? "border" : "rounded-xl"} ${theme.border}`}
+    >
+      <h2
+        className={`text-xs font-bold uppercase mb-8 flex items-center gap-2 ${theme.accent}`}
+      >
+        <GitCommit className="w-4 h-4" />
+        Archived Projects
+      </h2>
+      {archivedRepos.length === 0 ? (
+        <div className={`text-center py-12 ${theme.textMuted}`}>
+          <p className="text-sm">No archived projects</p>
+        </div>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr
+                className={`border-b text-xs uppercase tracking-wider ${theme.tableHeader}`}
+              >
+                <th className="p-3 font-normal">Project Name</th>
+                <th className="p-3 font-normal">Repository</th>
+                <th className="p-3 font-normal">Type</th>
+                <th className="p-3 font-normal">Archived Date</th>
+                <th className="p-3 font-normal">Description</th>
+              </tr>
+            </thead>
+            <tbody
+              className={`text-xs md:text-sm ${isRetro ? "font-mono" : ""}`}
+            >
+              {archivedRepos.map((repo) => (
+                <tr
+                  key={repo.id}
+                  className={`border-b transition-colors ${isRetro ? "border-green-900/40 hover:bg-green-900/10" : "border-slate-100 hover:bg-slate-50"}`}
+                >
+                  <td className={`p-3 font-medium ${theme.textBold}`}>
+                    {repo.name}
+                  </td>
+                  <td className="p-3">
+                    {repo.repoUrl ? (
+                      <a
+                        href={repo.repoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`hover:underline flex items-center gap-1 ${isRetro ? "hover:text-green-300" : "hover:text-indigo-700"}`}
+                      >
+                        {repo.repoName}
+                        <Github className="w-3 h-3 opacity-50" />
+                      </a>
+                    ) : (
+                      <span className={theme.textMuted}>{repo.repoName}</span>
+                    )}
+                  </td>
+                  <td className="p-3">
+                    <span
+                      className={`text-[10px] px-2 py-0.5 rounded border ${isRetro ? "border-green-900 text-green-700" : "border-slate-200 text-slate-600"}`}
+                    >
+                      {repo.type}
+                    </span>
+                  </td>
+                  <td className={`p-3 ${theme.textMuted}`}>
+                    {repo.archivedDate}
+                  </td>
+                  <td className={`p-3 ${theme.textMuted}`}>
+                    {repo.description}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <div
       className={`min-h-screen p-4 md:p-8 overflow-hidden relative transition-colors duration-500 ${theme.bg} ${theme.text} ${theme.font} ${theme.selection}`}
@@ -731,7 +869,7 @@ const MerrickMonitor = () => {
               </div>
               {/* Tab Navigation */}
               <div className="flex justify-end gap-6 text-xs mt-2">
-                {["OVERVIEW", "ADOPTION"].map((tab) => (
+                {["OVERVIEW", "ADOPTION", "ARCHIVED"].map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
@@ -894,6 +1032,7 @@ const MerrickMonitor = () => {
         <div className="px-4 md:px-6 pb-6 min-h-[500px]">
           {activeTab === "OVERVIEW" && <OverviewView />}
           {activeTab === "ADOPTION" && <AdoptionView />}
+          {activeTab === "ARCHIVED" && <ArchivedView />}
         </div>
       </div>
     </div>
