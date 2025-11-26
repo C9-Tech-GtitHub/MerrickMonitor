@@ -59,20 +59,48 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
     saveReactiveTasks(reactiveTasks.filter((t) => t.id !== id));
   };
 
-  // Get weekly agenda
-  const getWeeklyAgenda = () => {
-    const weekKey = getCurrentWeekKey();
-    const savedAgendas = JSON.parse(
-      localStorage.getItem("weeklyAgendas") || "{}",
-    );
-    return savedAgendas[weekKey] || [];
+  // Get weekly agenda from GitHub/localStorage
+  const [weeklyAgenda, setWeeklyAgenda] = useState([]);
+
+  useEffect(() => {
+    loadWeeklyAgenda();
+  }, [currentWeek]);
+
+  const loadWeeklyAgenda = async () => {
+    try {
+      const response = await fetch("/src/data/weeklyAgendas.json");
+      if (response.ok) {
+        const allAgendas = await response.json();
+        const weekKey = getCurrentWeekKey();
+        const weekData = allAgendas[weekKey];
+        setWeeklyAgenda(weekData?.goals || []);
+      } else {
+        // Fallback to localStorage
+        const weekKey = getCurrentWeekKey();
+        const savedAgendas = JSON.parse(
+          localStorage.getItem("weeklyAgendas") || "{}",
+        );
+        setWeeklyAgenda(savedAgendas[weekKey]?.goals || []);
+      }
+    } catch (error) {
+      console.error("Failed to load weekly agenda:", error);
+      const weekKey = getCurrentWeekKey();
+      const savedAgendas = JSON.parse(
+        localStorage.getItem("weeklyAgendas") || "{}",
+      );
+      setWeeklyAgenda(savedAgendas[weekKey]?.goals || []);
+    }
   };
 
   // Calculate workload metrics
   const calculateWorkload = () => {
-    const agenda = getWeeklyAgenda();
-    const plannedCount = agenda.length;
-    const reactiveCount = reactiveTasks.length;
+    // Count planned vs reactive from agenda
+    const plannedCount = weeklyAgenda.filter(
+      (g) => g.type === "planned",
+    ).length;
+    const reactiveCount =
+      weeklyAgenda.filter((g) => g.type === "reactive").length +
+      reactiveTasks.length;
     const totalWork = plannedCount + reactiveCount;
 
     const plannedPercent =

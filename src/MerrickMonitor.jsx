@@ -34,6 +34,7 @@ const MerrickMonitor = () => {
   const [archivedRepos, setArchivedRepos] = useState([]);
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [teamViewMode, setTeamViewMode] = useState("members"); // 'members' or 'tools'
+  const [weeklyAgenda, setWeeklyAgenda] = useState([]);
 
   const CORRECT_PASSWORD = "peek";
 
@@ -51,10 +52,12 @@ const MerrickMonitor = () => {
   useEffect(() => {
     if (isAuthenticated) {
       loadGitHubData();
+      loadWeeklyAgenda();
       // Refresh data every 5 minutes
       const refreshInterval = setInterval(
         () => {
           loadGitHubData();
+          loadWeeklyAgenda();
         },
         5 * 60 * 1000,
       );
@@ -79,6 +82,21 @@ const MerrickMonitor = () => {
       setArchivedRepos([]);
     } finally {
       setIsLoadingData(false);
+    }
+  };
+
+  const loadWeeklyAgenda = async () => {
+    try {
+      const response = await fetch("/src/data/weeklyAgendas.json");
+      if (response.ok) {
+        const allAgendas = await response.json();
+        const currentWeekKey = getCurrentWeekKey();
+        const weekData = allAgendas[currentWeekKey];
+        setWeeklyAgenda(weekData?.goals || []);
+      }
+    } catch (error) {
+      console.error("Failed to load weekly agenda:", error);
+      setWeeklyAgenda([]);
     }
   };
 
@@ -362,22 +380,32 @@ const MerrickMonitor = () => {
   const systems = getSystemHealth();
   const weekStats = getWeekGitHubStats();
 
-  const weeklySchedule = {
-    MON: [
-      { id: 1, task: "Patch: Josh Bot", type: "MAINT", status: "DONE" },
-      { id: 2, task: "User Training", type: "ADOPT", status: "DONE" },
-    ],
-    TUE: [{ id: 3, task: "LSI Logic Tweak", type: "FEAT", status: "IN_PROG" }],
-    WED: [
-      { id: 4, task: "Randy Dash Update", type: "MAINT", status: "PENDING" },
-    ],
-    THU: [
-      { id: 5, task: "Seasonal Sally Fix", type: "MAINT", status: "PENDING" },
-    ],
-    FRI: [
-      { id: 6, task: "Schema Scan Check", type: "MAINT", status: "PENDING" },
-    ],
+  // Build weekly schedule from agenda data
+  const getWeeklySchedule = () => {
+    const schedule = {
+      MON: [],
+      TUE: [],
+      WED: [],
+      THU: [],
+      FRI: [],
+    };
+
+    weeklyAgenda.forEach((goal) => {
+      if (goal.day && schedule[goal.day]) {
+        schedule[goal.day].push({
+          id: goal.id,
+          task: goal.text,
+          type: goal.type === "reactive" ? "REACTIVE" : "PLANNED",
+          status: goal.completed ? "DONE" : "PENDING",
+          timeSlot: goal.timeSlot,
+        });
+      }
+    });
+
+    return schedule;
   };
+
+  const weeklySchedule = getWeeklySchedule();
 
   const reactiveLoad = 15;
   const totalUsers = toolFleetWithUsers.reduce(
@@ -720,27 +748,93 @@ const MerrickMonitor = () => {
                     )}
                   </div>
                   <div
-                    className={`flex-1 space-y-2 border-l pl-4 ${isToday ? (isRetro ? "border-green-500" : "border-indigo-400") : isRetro ? "border-green-900" : "border-slate-200"}`}
+                    className={`flex-1 space-y-3 border-l pl-4 ${isToday ? (isRetro ? "border-green-500" : "border-indigo-400") : isRetro ? "border-green-900" : "border-slate-200"}`}
                   >
                     {tasks.length > 0 ? (
-                      tasks.map((t) => (
-                        <div key={t.id} className="text-xs group">
-                          <span
-                            className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${t.status === "DONE" ? (isRetro ? "text-green-500 line-through opacity-50" : "text-slate-400 line-through") : theme.accent}`}
-                          >
-                            {t.type}
-                          </span>
-                          <span
-                            className={
-                              t.status === "DONE"
-                                ? theme.textMuted
-                                : theme.textBold
-                            }
-                          >
-                            {t.task}
-                          </span>
-                        </div>
-                      ))
+                      <>
+                        {/* Morning Tasks */}
+                        {tasks.filter((t) => t.timeSlot === "morning").length >
+                          0 && (
+                          <div className="space-y-1">
+                            <div
+                              className={`text-[8px] uppercase font-bold tracking-wider ${theme.textMuted}`}
+                            >
+                              ☀️ Morning
+                            </div>
+                            {tasks
+                              .filter((t) => t.timeSlot === "morning")
+                              .map((t) => (
+                                <div key={t.id} className="text-xs group">
+                                  <span
+                                    className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
+                                      t.status === "DONE"
+                                        ? isRetro
+                                          ? "text-green-500 line-through opacity-50"
+                                          : "text-slate-400 line-through"
+                                        : t.type === "REACTIVE"
+                                          ? isRetro
+                                            ? "bg-green-500 text-black"
+                                            : "bg-orange-500 text-white"
+                                          : theme.accent
+                                    }`}
+                                  >
+                                    {t.type}
+                                  </span>
+                                  <span
+                                    className={
+                                      t.status === "DONE"
+                                        ? theme.textMuted
+                                        : theme.textBold
+                                    }
+                                  >
+                                    {t.task}
+                                  </span>
+                                </div>
+                              ))}
+                          </div>
+                        )}
+                        {/* Afternoon Tasks */}
+                        {tasks.filter((t) => t.timeSlot === "afternoon")
+                          .length > 0 && (
+                          <div className="space-y-1">
+                            <div
+                              className={`text-[8px] uppercase font-bold tracking-wider ${theme.textMuted}`}
+                            >
+                              🌙 Afternoon
+                            </div>
+                            {tasks
+                              .filter((t) => t.timeSlot === "afternoon")
+                              .map((t) => (
+                                <div key={t.id} className="text-xs group">
+                                  <span
+                                    className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
+                                      t.status === "DONE"
+                                        ? isRetro
+                                          ? "text-green-500 line-through opacity-50"
+                                          : "text-slate-400 line-through"
+                                        : t.type === "REACTIVE"
+                                          ? isRetro
+                                            ? "bg-green-500 text-black"
+                                            : "bg-orange-500 text-white"
+                                          : theme.accent
+                                    }`}
+                                  >
+                                    {t.type}
+                                  </span>
+                                  <span
+                                    className={
+                                      t.status === "DONE"
+                                        ? theme.textMuted
+                                        : theme.textBold
+                                    }
+                                  >
+                                    {t.task}
+                                  </span>
+                                </div>
+                              ))}
+                          </div>
+                        )}
+                      </>
                     ) : (
                       <span className={`text-[10px] italic ${theme.textMuted}`}>
                         -- No Activity --

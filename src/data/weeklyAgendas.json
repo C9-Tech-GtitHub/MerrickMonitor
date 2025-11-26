@@ -4,43 +4,93 @@
     "goals": [
       {
         "id": 1732464001,
-        "text": "Finalize Bootstrap",
+        "text": "Sheet Freak",
         "completed": true,
         "type": "planned",
         "timeSlot": "morning",
+        "day": "MON",
         "createdAt": "2025-11-24T00:00:00.000Z"
       },
       {
         "id": 1732464002,
-        "text": "Start work on On-Page Josh Bot",
+        "text": "On-Page Josh Bot",
         "completed": true,
         "type": "planned",
         "timeSlot": "afternoon",
+        "day": "MON",
         "createdAt": "2025-11-24T00:00:00.000Z"
       },
       {
         "id": 1732464003,
-        "text": "Final work on Merrick Monitor (90% complete)",
-        "completed": false,
+        "text": "On-Page Josh Bot",
+        "completed": true,
         "type": "planned",
         "timeSlot": "morning",
-        "createdAt": "2025-11-24T00:00:00.000Z"
+        "day": "TUE",
+        "createdAt": "2025-11-25T00:00:00.000Z"
       },
       {
         "id": 1732464004,
-        "text": "Finish new On-Page Josh Bot",
-        "completed": false,
+        "text": "On-Page Josh Bot",
+        "completed": true,
         "type": "planned",
         "timeSlot": "afternoon",
-        "createdAt": "2025-11-24T00:00:00.000Z"
+        "day": "TUE",
+        "createdAt": "2025-11-25T00:00:00.000Z"
       },
       {
         "id": 1732464005,
-        "text": "Build Merrick Monitor dashboard",
+        "text": "Merrick Monitor dashboard",
         "completed": false,
         "type": "reactive",
         "timeSlot": "morning",
-        "createdAt": "2025-11-24T00:00:00.000Z"
+        "day": "WED",
+        "createdAt": "2025-11-26T00:00:00.000Z"
+      },
+      {
+        "id": 1732464006,
+        "text": "Merrick Monitor dashboard",
+        "completed": false,
+        "type": "reactive",
+        "timeSlot": "afternoon",
+        "day": "WED",
+        "createdAt": "2025-11-26T00:00:00.000Z"
+      },
+      {
+        "id": 1732464007,
+        "text": "Finish Merrick Monitor",
+        "completed": false,
+        "type": "reactive",
+        "timeSlot": "morning",
+        "day": "THU",
+        "createdAt": "2025-11-27T00:00:00.000Z"
+      },
+      {
+        "id": 1732464008,
+        "text": "On-Page Josh Bot",
+        "completed": false,
+        "type": "planned",
+        "timeSlot": "afternoon",
+        "day": "THU",
+        "createdAt": "2025-11-27T00:00:00.000Z"
+      },
+      {
+        "id": 1732464009,
+        "text": "On-Page Josh Bot",
+        "completed": false,
+        "type": "planned",
+        "timeSlot": "morning",
+        "day": "FRI",
+        "createdAt": "2025-11-28T00:00:00.000Z"
+      },
+      {
+        "id": 1732464010,
+        "text": "On-Page Josh Bot",
+        "completed": false,
+        "type": "planned",
+        "timeSlot": "afternoon",
+        "day": "FRI",
+        "createdAt": "2025-11-28T00:00:00.000Z"
       }
     ]
   }
