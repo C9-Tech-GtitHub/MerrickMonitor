@@ -30,6 +30,7 @@ const MerrickMonitor = () => {
   const [toolFleet, setToolFleet] = useState([]);
   const [archivedRepos, setArchivedRepos] = useState([]);
   const [isLoadingData, setIsLoadingData] = useState(true);
+  const [teamViewMode, setTeamViewMode] = useState("members"); // 'members' or 'tools'
 
   const CORRECT_PASSWORD = "peek";
 
@@ -243,6 +244,12 @@ const MerrickMonitor = () => {
     ...tool,
     users: calculateUserCount(tool.teams),
   }));
+
+  // Calculate how many tools each team uses
+  const getToolCountForTeam = (teamName) => {
+    return toolFleetWithUsers.filter((tool) => tool.teams?.includes(teamName))
+      .length;
+  };
 
   const systems = [
     {
@@ -1006,22 +1013,61 @@ const MerrickMonitor = () => {
           <div
             className={`p-6 transition-all duration-300 ${theme.cardBg} ${isRetro ? "border" : "rounded-xl"} ${theme.border}`}
           >
-            <h2
-              className={`text-xs font-bold uppercase mb-6 flex items-center gap-2 ${theme.accent}`}
-            >
-              <Users className="w-4 h-4" />
-              Team Structure
-            </h2>
+            <div className="flex items-center justify-between mb-6">
+              <h2
+                className={`text-xs font-bold uppercase flex items-center gap-2 ${theme.accent}`}
+              >
+                <Users className="w-4 h-4" />
+                Team
+              </h2>
+              <div
+                className={`flex items-center gap-2 p-1 rounded ${isRetro ? "border border-green-900" : "bg-slate-100"}`}
+              >
+                <button
+                  onClick={() => setTeamViewMode("members")}
+                  className={`px-2 py-1 rounded text-[9px] font-bold uppercase tracking-wider transition-all ${
+                    teamViewMode === "members"
+                      ? isRetro
+                        ? "bg-green-900 text-green-100"
+                        : "bg-white shadow text-slate-800"
+                      : isRetro
+                        ? "text-green-800 hover:text-green-600"
+                        : "text-slate-500 hover:text-slate-700"
+                  }`}
+                >
+                  Members
+                </button>
+                <button
+                  onClick={() => setTeamViewMode("tools")}
+                  className={`px-2 py-1 rounded text-[9px] font-bold uppercase tracking-wider transition-all ${
+                    teamViewMode === "tools"
+                      ? isRetro
+                        ? "bg-green-900 text-green-100"
+                        : "bg-white shadow text-slate-800"
+                      : isRetro
+                        ? "text-green-800 hover:text-green-600"
+                        : "text-slate-500 hover:text-slate-700"
+                  }`}
+                >
+                  Tools
+                </button>
+              </div>
+            </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {teams
                 .filter((t) => t.name !== "Company-Wide")
                 .map((team) => (
                   <div
                     key={team.id}
-                    className={`p-4 transition-all ${isRetro ? "border bg-green-900/5 hover:bg-green-900/10" : "bg-slate-50 rounded-lg hover:shadow-md"}`}
+                    className={`p-4 transition-all cursor-pointer ${isRetro ? "border bg-green-900/5 hover:bg-green-900/10" : "bg-slate-50 rounded-lg hover:shadow-md"}`}
                     style={{
                       borderColor: isRetro ? team.color + "40" : "transparent",
                     }}
+                    onClick={() =>
+                      setTeamViewMode(
+                        teamViewMode === "members" ? "tools" : "members",
+                      )
+                    }
                   >
                     <div
                       className="text-xs font-bold mb-2 uppercase tracking-wide"
@@ -1030,10 +1076,12 @@ const MerrickMonitor = () => {
                       {team.name}
                     </div>
                     <div className={`text-2xl font-bold ${theme.textBold}`}>
-                      {team.count}
+                      {teamViewMode === "members"
+                        ? team.count
+                        : getToolCountForTeam(team.name)}
                     </div>
                     <div className={`text-[9px] mt-1 ${theme.textMuted}`}>
-                      MEMBERS
+                      {teamViewMode === "members" ? "MEMBERS" : "TOOLS"}
                     </div>
                   </div>
                 ))}
