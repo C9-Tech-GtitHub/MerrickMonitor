@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Activity, Calendar, AlertTriangle, Plus, X } from "lucide-react";
 
+// Helper function to get current week key
+function getCurrentWeekKey() {
+  const now = new Date();
+  const dayOfWeek = now.getDay() || 7;
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - (dayOfWeek - 1));
+  monday.setHours(0, 0, 0, 0);
+  return monday.toISOString().split("T")[0];
+}
+
 /**
  * Workload Tracker Component
  * Toggles between Maintenance Load and Weekly Workload
@@ -451,14 +461,5 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
     </section>
   );
 };
-
-function getCurrentWeekKey() {
-  const now = new Date();
-  const dayOfWeek = now.getDay() || 7;
-  const monday = new Date(now);
-  monday.setDate(now.getDate() - (dayOfWeek - 1));
-  monday.setHours(0, 0, 0, 0);
-  return monday.toISOString().split("T")[0];
-}
 
 export default WorkloadTracker;
