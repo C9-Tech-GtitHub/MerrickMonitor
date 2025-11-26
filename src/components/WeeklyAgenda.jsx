@@ -128,23 +128,6 @@ const WeeklyAgenda = ({ theme, isRetro }) => {
 
   return (
     <div className="space-y-6">
-      {/* Week Header */}
-      <div
-        className={`flex items-center justify-between pb-3 border-b ${theme.border}`}
-      >
-        <div>
-          <h3
-            className={`text-lg font-bold uppercase tracking-wide ${theme.textBold}`}
-          >
-            <Calendar className="inline w-4 h-4 mr-2" />
-            Weekly Agenda
-          </h3>
-          <p className={`text-xs mt-1 ${theme.textMuted}`}>
-            Week of {getWeekRange()}
-          </p>
-        </div>
-      </div>
-
       {/* Hardcoded Weekly Schedule */}
       <div className="space-y-3">
         <h4
@@ -171,6 +154,14 @@ const WeeklyAgenda = ({ theme, isRetro }) => {
           const afternoonSlot = daySchedule.slots.find(
             (s) => s.timeSlot === "afternoon",
           );
+
+          // Check if it's an all-day task (same project AM and PM)
+          const isAllDay =
+            morningSlot &&
+            afternoonSlot &&
+            morningSlot.project === afternoonSlot.project &&
+            morningSlot.type === afternoonSlot.type &&
+            morningSlot.completed === afternoonSlot.completed;
 
           return (
             <div
@@ -203,11 +194,9 @@ const WeeklyAgenda = ({ theme, isRetro }) => {
                 )}
               </div>
 
-              {/* Morning Column */}
-              <div
-                className={`col-span-5 border-r ${isRetro ? "border-green-900/40" : "border-slate-200"}`}
-              >
-                {morningSlot ? (
+              {/* All Day or Split Layout */}
+              {isAllDay ? (
+                <div className="col-span-10">
                   <div
                     className={`h-full w-full px-4 py-3 flex items-center justify-between ${getSlotStyles(morningSlot).bg}`}
                   >
@@ -232,42 +221,76 @@ const WeeklyAgenda = ({ theme, isRetro }) => {
                         : "PLANNED"}
                     </span>
                   </div>
-                ) : (
-                  <div className="h-full opacity-20 bg-green-950/20"></div>
-                )}
-              </div>
-
-              {/* Afternoon Column */}
-              <div className="col-span-5">
-                {afternoonSlot ? (
+                </div>
+              ) : (
+                <>
+                  {/* Morning Column */}
                   <div
-                    className={`h-full w-full px-4 py-3 flex items-center justify-between ${getSlotStyles(afternoonSlot).bg}`}
+                    className={`col-span-5 border-r ${isRetro ? "border-green-900/40" : "border-slate-200"}`}
                   >
-                    <span
-                      className={`font-mono text-sm tracking-wider ${getSlotStyles(afternoonSlot).text}`}
-                    >
-                      {afternoonSlot.project}
-                    </span>
-                    <span
-                      className={`text-[10px] uppercase border px-1.5 py-0.5 rounded tracking-wider ${
-                        afternoonSlot.type === "unplanned"
-                          ? isRetro
-                            ? "border-amber-600 text-amber-500 bg-amber-950/50"
-                            : "border-amber-300 text-amber-700"
-                          : isRetro
-                            ? "border-green-700 text-green-600"
-                            : "border-slate-300 text-slate-600"
-                      }`}
-                    >
-                      {afternoonSlot.type === "unplanned"
-                        ? "REACTIVE"
-                        : "PLANNED"}
-                    </span>
+                    {morningSlot ? (
+                      <div
+                        className={`h-full w-full px-4 py-3 flex items-center justify-between ${getSlotStyles(morningSlot).bg}`}
+                      >
+                        <span
+                          className={`font-mono text-sm tracking-wider ${getSlotStyles(morningSlot).text}`}
+                        >
+                          {morningSlot.project}
+                        </span>
+                        <span
+                          className={`text-[10px] uppercase border px-1.5 py-0.5 rounded tracking-wider ${
+                            morningSlot.type === "unplanned"
+                              ? isRetro
+                                ? "border-amber-600 text-amber-500 bg-amber-950/50"
+                                : "border-amber-300 text-amber-700"
+                              : isRetro
+                                ? "border-green-700 text-green-600"
+                                : "border-slate-300 text-slate-600"
+                          }`}
+                        >
+                          {morningSlot.type === "unplanned"
+                            ? "REACTIVE"
+                            : "PLANNED"}
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="h-full opacity-20 bg-green-950/20"></div>
+                    )}
                   </div>
-                ) : (
-                  <div className="h-full opacity-20 bg-green-950/20"></div>
-                )}
-              </div>
+
+                  {/* Afternoon Column */}
+                  <div className="col-span-5">
+                    {afternoonSlot ? (
+                      <div
+                        className={`h-full w-full px-4 py-3 flex items-center justify-between ${getSlotStyles(afternoonSlot).bg}`}
+                      >
+                        <span
+                          className={`font-mono text-sm tracking-wider ${getSlotStyles(afternoonSlot).text}`}
+                        >
+                          {afternoonSlot.project}
+                        </span>
+                        <span
+                          className={`text-[10px] uppercase border px-1.5 py-0.5 rounded tracking-wider ${
+                            afternoonSlot.type === "unplanned"
+                              ? isRetro
+                                ? "border-amber-600 text-amber-500 bg-amber-950/50"
+                                : "border-amber-300 text-amber-700"
+                              : isRetro
+                                ? "border-green-700 text-green-600"
+                                : "border-slate-300 text-slate-600"
+                          }`}
+                        >
+                          {afternoonSlot.type === "unplanned"
+                            ? "REACTIVE"
+                            : "PLANNED"}
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="h-full opacity-20 bg-green-950/20"></div>
+                    )}
+                  </div>
+                </>
+              )}
             </div>
           );
         })}
