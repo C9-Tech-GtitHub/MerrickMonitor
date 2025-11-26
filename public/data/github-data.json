@@ -33,7 +33,7 @@
         "Specialists",
         "Content"
       ],
-      "commits": 1,
+      "commits": 0,
       "activity": [
         false,
         false,
@@ -78,7 +78,7 @@
         "Content",
         "Specialists"
       ],
-      "commits": 2,
+      "commits": 0,
       "activity": [
         false,
         false,
@@ -100,7 +100,7 @@
       "teams": [
         "GMC"
       ],
-      "commits": 100,
+      "commits": 0,
       "activity": [
         false,
         false,
@@ -109,7 +109,7 @@
         false
       ],
       "repoUrl": "https://github.com/C9-Tech-GtitHub/Product-Enrichment-Manager",
-      "stars": 1,
+      "stars": 0,
       "forks": 0,
       "openIssues": 0
     },
@@ -125,7 +125,7 @@
       ],
       "commits": 8,
       "activity": [
-        true,
+        false,
         false,
         false,
         false,
@@ -167,12 +167,12 @@
       "teams": [
         "Management"
       ],
-      "commits": 37,
+      "commits": 39,
       "activity": [
         false,
         false,
         true,
-        true,
+        false,
         false
       ],
       "repoUrl": "https://github.com/C9-Tech-GtitHub/MerrickMonitor",
@@ -223,5 +223,5 @@
       "openIssues": 0
     }
   ],
-  "lastUpdated": "2025-11-26T20:51:59.210Z"
+  "lastUpdated": "2025-11-26T20:53:58.780Z"
 }
