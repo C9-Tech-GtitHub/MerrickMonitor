@@ -393,7 +393,24 @@ const MerrickMonitor = () => {
   // Convert shared weekly schedule to Weekly Log format
   const weeklyScheduleForLog = convertToWeeklyLogFormat(weeklySchedule);
 
-  const reactiveLoad = 15;
+  // Calculate reactive load from weekly schedule
+  const calculateReactiveLoad = () => {
+    let totalSlots = 0;
+    let reactiveSlots = 0;
+
+    weeklySchedule.forEach((day) => {
+      day.slots.forEach((slot) => {
+        totalSlots++;
+        if (slot.type === "unplanned") {
+          reactiveSlots++;
+        }
+      });
+    });
+
+    return totalSlots > 0 ? Math.round((reactiveSlots / totalSlots) * 100) : 0;
+  };
+
+  const reactiveLoad = calculateReactiveLoad();
   const totalUsers = toolFleetWithUsers.reduce(
     (acc, curr) => acc + curr.users,
     0,
