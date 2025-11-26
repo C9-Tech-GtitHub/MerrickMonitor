@@ -20,6 +20,10 @@ import {
 import WeeklyAgenda from "./components/WeeklyAgenda";
 import WeekHistory from "./components/WeekHistory";
 import WorkloadTracker from "./components/WorkloadTracker";
+import {
+  weeklySchedule,
+  convertToWeeklyLogFormat,
+} from "./data/weeklySchedule";
 
 const MerrickMonitor = () => {
   const [date, setDate] = useState(new Date());
@@ -386,89 +390,8 @@ const MerrickMonitor = () => {
   const systems = getSystemHealth();
   const weekStats = getWeekGitHubStats();
 
-  // Hardcoded weekly schedule matching WeeklyAgenda component
-  const weeklySchedule = {
-    MON: [
-      {
-        id: 1,
-        task: "Sheet Freak",
-        type: "PLANNED",
-        status: "DONE",
-        timeSlot: "morning",
-      },
-      {
-        id: 2,
-        task: "On-Page Sheet",
-        type: "PLANNED",
-        status: "DONE",
-        timeSlot: "afternoon",
-      },
-    ],
-    TUE: [
-      {
-        id: 3,
-        task: "On-Page Sheet",
-        type: "PLANNED",
-        status: "DONE",
-        timeSlot: "morning",
-      },
-      {
-        id: 4,
-        task: "On-Page Sheet",
-        type: "PLANNED",
-        status: "DONE",
-        timeSlot: "afternoon",
-      },
-    ],
-    WED: [
-      {
-        id: 5,
-        task: "Merrick Monitor",
-        type: "REACTIVE",
-        status: "DONE",
-        timeSlot: "morning",
-      },
-      {
-        id: 6,
-        task: "Merrick Monitor",
-        type: "REACTIVE",
-        status: "DONE",
-        timeSlot: "afternoon",
-      },
-    ],
-    THU: [
-      {
-        id: 7,
-        task: "Merrick Monitor",
-        type: "REACTIVE",
-        status: "PENDING",
-        timeSlot: "morning",
-      },
-      {
-        id: 8,
-        task: "On-Page Sheet",
-        type: "PLANNED",
-        status: "PENDING",
-        timeSlot: "afternoon",
-      },
-    ],
-    FRI: [
-      {
-        id: 9,
-        task: "On-Page Sheet",
-        type: "PLANNED",
-        status: "PENDING",
-        timeSlot: "morning",
-      },
-      {
-        id: 10,
-        task: "On-Page Sheet",
-        type: "PLANNED",
-        status: "PENDING",
-        timeSlot: "afternoon",
-      },
-    ],
-  };
+  // Convert shared weekly schedule to Weekly Log format
+  const weeklyScheduleForLog = convertToWeeklyLogFormat(weeklySchedule);
 
   const reactiveLoad = 15;
   const totalUsers = toolFleetWithUsers.reduce(
@@ -793,7 +716,7 @@ const MerrickMonitor = () => {
             Current Week: {getWeekRange()}
           </div>
           <div className="space-y-4">
-            {Object.entries(weeklySchedule).map(([day, tasks]) => {
+            {Object.entries(weeklyScheduleForLog).map(([day, tasks]) => {
               const isToday = day === getCurrentDayShort();
               return (
                 <div
@@ -834,69 +757,31 @@ const MerrickMonitor = () => {
                           if (isAllDay) {
                             const t = morningTasks[0];
                             return (
-                              <div className="space-y-1">
-                                <div
-                                  className={`text-[8px] uppercase font-bold tracking-wider ${theme.textMuted}`}
-                                >
-                                  ☀️ Morning
-                                </div>
-                                <div className="text-xs group">
-                                  <span
-                                    className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
-                                      t.status === "DONE"
+                              <div className="text-xs group">
+                                <span
+                                  className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
+                                    t.status === "DONE"
+                                      ? isRetro
+                                        ? "text-green-500 line-through opacity-50"
+                                        : "text-slate-400 line-through"
+                                      : t.type === "REACTIVE"
                                         ? isRetro
-                                          ? "text-green-500 line-through opacity-50"
-                                          : "text-slate-400 line-through"
-                                        : t.type === "REACTIVE"
-                                          ? isRetro
-                                            ? "bg-green-500 text-black"
-                                            : "bg-orange-500 text-white"
-                                          : theme.accent
-                                    }`}
-                                  >
-                                    {t.type}
-                                  </span>
-                                  <span
-                                    className={
-                                      t.status === "DONE"
-                                        ? theme.textMuted
-                                        : theme.textBold
-                                    }
-                                  >
-                                    {t.task}
-                                  </span>
-                                </div>
-                                <div
-                                  className={`text-[8px] uppercase font-bold tracking-wider ${theme.textMuted}`}
+                                          ? "bg-green-500 text-black"
+                                          : "bg-orange-500 text-white"
+                                        : theme.accent
+                                  }`}
                                 >
-                                  🌙 Afternoon
-                                </div>
-                                <div className="text-xs group">
-                                  <span
-                                    className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
-                                      t.status === "DONE"
-                                        ? isRetro
-                                          ? "text-green-500 line-through opacity-50"
-                                          : "text-slate-400 line-through"
-                                        : t.type === "REACTIVE"
-                                          ? isRetro
-                                            ? "bg-green-500 text-black"
-                                            : "bg-orange-500 text-white"
-                                          : theme.accent
-                                    }`}
-                                  >
-                                    {t.type}
-                                  </span>
-                                  <span
-                                    className={
-                                      t.status === "DONE"
-                                        ? theme.textMuted
-                                        : theme.textBold
-                                    }
-                                  >
-                                    {t.task}
-                                  </span>
-                                </div>
+                                  {t.type}
+                                </span>
+                                <span
+                                  className={
+                                    t.status === "DONE"
+                                      ? theme.textMuted
+                                      : theme.textBold
+                                  }
+                                >
+                                  {t.task}
+                                </span>
                               </div>
                             );
                           }

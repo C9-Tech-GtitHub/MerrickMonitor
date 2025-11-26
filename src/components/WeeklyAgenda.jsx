@@ -1,99 +1,13 @@
 import React from "react";
 import { Calendar } from "lucide-react";
+import { weeklySchedule } from "../data/weeklySchedule";
 
 /**
  * Weekly Agenda Component
- * Displays hardcoded week schedule in table format
+ * Displays week schedule in table format
  */
 const WeeklyAgenda = ({ theme, isRetro }) => {
-  // Hardcoded weekly schedule
-  const hardcodedAgenda = [
-    {
-      day: "MON",
-      slots: [
-        {
-          timeSlot: "morning",
-          project: "Sheet Freak",
-          type: "planned",
-          completed: true,
-        },
-        {
-          timeSlot: "afternoon",
-          project: "On-Page Sheet",
-          type: "planned",
-          completed: true,
-        },
-      ],
-    },
-    {
-      day: "TUE",
-      slots: [
-        {
-          timeSlot: "morning",
-          project: "On-Page Sheet",
-          type: "planned",
-          completed: true,
-        },
-        {
-          timeSlot: "afternoon",
-          project: "On-Page Sheet",
-          type: "planned",
-          completed: true,
-        },
-      ],
-    },
-    {
-      day: "WED",
-      slots: [
-        {
-          timeSlot: "morning",
-          project: "Merrick Monitor",
-          type: "unplanned",
-          completed: true,
-        },
-        {
-          timeSlot: "afternoon",
-          project: "Merrick Monitor",
-          type: "unplanned",
-          completed: true,
-        },
-      ],
-    },
-    {
-      day: "THU",
-      slots: [
-        {
-          timeSlot: "morning",
-          project: "Merrick Monitor",
-          type: "unplanned",
-          completed: false,
-        },
-        {
-          timeSlot: "afternoon",
-          project: "On-Page Sheet",
-          type: "planned",
-          completed: false,
-        },
-      ],
-    },
-    {
-      day: "FRI",
-      slots: [
-        {
-          timeSlot: "morning",
-          project: "On-Page Sheet",
-          type: "planned",
-          completed: false,
-        },
-        {
-          timeSlot: "afternoon",
-          project: "On-Page Sheet",
-          type: "planned",
-          completed: false,
-        },
-      ],
-    },
-  ];
+  const hardcodedAgenda = weeklySchedule;
 
   const getSlotStyles = (slot) => {
     if (!slot)
@@ -198,7 +112,7 @@ const WeeklyAgenda = ({ theme, isRetro }) => {
               {isAllDay ? (
                 <div className="col-span-10">
                   <div
-                    className={`h-full w-full px-4 py-3 flex items-center justify-center gap-3 ${getSlotStyles(morningSlot).bg}`}
+                    className={`h-full w-full px-4 py-3 flex flex-col items-center justify-center gap-1 ${getSlotStyles(morningSlot).bg}`}
                   >
                     <span
                       className={`font-mono text-sm tracking-wider ${getSlotStyles(morningSlot).text}`}
