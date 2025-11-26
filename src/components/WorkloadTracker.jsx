@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Activity, Calendar, AlertTriangle, Plus, X } from "lucide-react";
+import { weeklySchedule } from "../data/weeklySchedule";
 
 // Helper function to get current week key
 function getCurrentWeekKey() {
@@ -69,56 +70,32 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
     saveReactiveTasks(reactiveTasks.filter((t) => t.id !== id));
   };
 
-  // Get weekly agenda from GitHub/localStorage
-  const [weeklyAgenda, setWeeklyAgenda] = useState([]);
-
-  useEffect(() => {
-    loadWeeklyAgenda();
-  }, [currentWeek]);
-
-  const loadWeeklyAgenda = async () => {
-    try {
-      const response = await fetch("/MerrickMonitor/data/weeklyAgendas.json");
-      if (response.ok) {
-        const allAgendas = await response.json();
-        const weekKey = getCurrentWeekKey();
-        const weekData = allAgendas[weekKey];
-        setWeeklyAgenda(weekData?.goals || []);
-      } else {
-        // Fallback to localStorage
-        const weekKey = getCurrentWeekKey();
-        const savedAgendas = JSON.parse(
-          localStorage.getItem("weeklyAgendas") || "{}",
-        );
-        setWeeklyAgenda(savedAgendas[weekKey]?.goals || []);
-      }
-    } catch (error) {
-      console.error("Failed to load weekly agenda:", error);
-      const weekKey = getCurrentWeekKey();
-      const savedAgendas = JSON.parse(
-        localStorage.getItem("weeklyAgendas") || "{}",
-      );
-      setWeeklyAgenda(savedAgendas[weekKey]?.goals || []);
-    }
-  };
-
-  // Calculate workload metrics
+  // Calculate workload metrics from weekly schedule
   const calculateWorkload = () => {
-    // Count planned vs reactive from agenda
-    const plannedCount = weeklyAgenda.filter(
-      (g) => g.type === "planned",
-    ).length;
-    const reactiveCount =
-      weeklyAgenda.filter((g) => g.type === "reactive").length +
-      reactiveTasks.length;
-    const totalWork = plannedCount + reactiveCount;
+    // Count all slots from weekly schedule
+    let plannedCount = 0;
+    let reactiveCount = 0;
+    let completedPlanned = 0;
+    let completedReactive = 0;
 
+    weeklySchedule.forEach((day) => {
+      day.slots.forEach((slot) => {
+        if (slot.type === "planned") {
+          plannedCount++;
+          if (slot.completed) completedPlanned++;
+        } else if (slot.type === "unplanned") {
+          reactiveCount++;
+          if (slot.completed) completedReactive++;
+        }
+      });
+    });
+
+    const totalWork = plannedCount + reactiveCount;
     const plannedPercent =
       totalWork > 0 ? Math.round((plannedCount / totalWork) * 100) : 100;
     const reactivePercent =
       totalWork > 0 ? Math.round((reactiveCount / totalWork) * 100) : 0;
 
-    const completedPlanned = weeklyAgenda.filter((g) => g.completed).length;
     const completionRate =
       plannedCount > 0
         ? Math.round((completedPlanned / plannedCount) * 100)
