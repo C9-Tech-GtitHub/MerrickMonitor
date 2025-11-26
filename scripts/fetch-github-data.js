@@ -134,13 +134,20 @@ async function getWeeklyActivity(repoName) {
   const activity = [false, false, false, false, false];
 
   commits.forEach((commit) => {
+    // Parse commit date and work in local timezone
     const commitDate = new Date(commit.commit.author.date);
+
+    // Get the day of week for the commit in local timezone
+    const commitDayOfWeek = commitDate.getDay() || 7;
+
+    // Check if commit is in current week
     if (commitDate >= monday) {
-      const daysSinceMonday = Math.floor(
-        (commitDate - monday) / (1000 * 60 * 60 * 24),
-      );
-      if (daysSinceMonday >= 0 && daysSinceMonday < 5) {
-        activity[daysSinceMonday] = true;
+      // Map to weekday index (Mon=0, Tue=1, Wed=2, Thu=3, Fri=4)
+      const weekdayIndex = commitDayOfWeek - 1;
+
+      // Only track Mon-Fri (0-4)
+      if (weekdayIndex >= 0 && weekdayIndex < 5) {
+        activity[weekdayIndex] = true;
       }
     }
   });

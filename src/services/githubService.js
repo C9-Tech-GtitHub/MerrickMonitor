@@ -83,14 +83,14 @@ export class GitHubService {
         return cached.data;
       }
 
-      // Get current week's Monday
+      // Get current week's Monday in local timezone
       const now = new Date();
       const dayOfWeek = now.getDay() || 7; // Convert Sunday (0) to 7
       const monday = new Date(now);
       monday.setDate(now.getDate() - (dayOfWeek - 1));
       monday.setHours(0, 0, 0, 0);
 
-      // Get commits since Monday
+      // Get commits since Monday (GitHub API uses UTC)
       const sinceDate = monday.toISOString();
 
       const response = await fetch(
@@ -113,13 +113,21 @@ export class GitHubService {
       const activity = [0, 0, 0, 0, 0];
 
       commits.forEach((commit) => {
+        // Parse commit date and convert to local timezone
         const commitDate = new Date(commit.commit.author.date);
-        const daysSinceMonday = Math.floor(
-          (commitDate - monday) / (1000 * 60 * 60 * 24),
-        );
 
-        if (daysSinceMonday >= 0 && daysSinceMonday < 5) {
-          activity[daysSinceMonday] = 1;
+        // Get the local day of week for the commit
+        const commitDayOfWeek = commitDate.getDay() || 7; // Convert Sunday (0) to 7
+
+        // Check if commit is in current week by comparing dates
+        if (commitDate >= monday) {
+          // Map to weekday index (Mon=0, Tue=1, Wed=2, Thu=3, Fri=4)
+          const weekdayIndex = commitDayOfWeek - 1; // Mon=0, Tue=1, etc.
+
+          // Only track Mon-Fri (0-4)
+          if (weekdayIndex >= 0 && weekdayIndex < 5) {
+            activity[weekdayIndex] = 1;
+          }
         }
       });
 

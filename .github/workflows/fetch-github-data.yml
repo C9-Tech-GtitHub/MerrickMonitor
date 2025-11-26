@@ -2,8 +2,8 @@ name: Fetch GitHub Data
 
 on:
   schedule:
-    # Run every 6 hours
-    - cron: "0 */6 * * *"
+    # Run twice a day: 8am and 6pm UTC (7pm and 5am AEDT Melbourne time)
+    - cron: "0 8,18 * * *"
   workflow_dispatch: # Allow manual trigger
 
 jobs:
