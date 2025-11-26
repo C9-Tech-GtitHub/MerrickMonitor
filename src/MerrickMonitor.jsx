@@ -145,96 +145,116 @@ const MerrickMonitor = () => {
 
   // --- MOCK DATA (Fallback) ---
 
+  // Team structure: 28 total employees
+  const teams = [
+    { id: 1, name: "Tech", color: "#3b82f6", count: 5 },
+    { id: 2, name: "GMC/Product", color: "#8b5cf6", count: 3 },
+    { id: 3, name: "Content/On-Page", color: "#10b981", count: 2 },
+    { id: 4, name: "Sales/Lead", color: "#f59e0b", count: 2 },
+    { id: 5, name: "Specialists", color: "#ec4899", count: 16 },
+    { id: 6, name: "Company-Wide", color: "#6366f1", count: 28 },
+  ];
+
   const mockToolFleet = [
     {
       id: 1,
       name: "ON_PAGE_JOSH_BOT",
       type: "BOT",
       status: "LIVE",
-      users: 12,
+      users: 18,
       trend: "UP",
       activity: [1, 0, 0, 0, 0],
+      teams: ["Specialists", "Content/On-Page"],
     },
     {
       id: 2,
       name: "RANDY_PEM_DASH",
       type: "DASH",
       status: "LIVE",
-      users: 45,
+      users: 5,
       trend: "STABLE",
       activity: [0, 0, 1, 0, 0],
+      teams: ["Tech"],
     },
     {
       id: 3,
       name: "INTERLINKING_SYS",
       type: "SEO",
       status: "LIVE",
-      users: 8,
+      users: 16,
       trend: "UP",
       activity: [0, 0, 0, 0, 0],
+      teams: ["Specialists"],
     },
     {
       id: 4,
       name: "LSI_ANALYZER",
       type: "SEO",
       status: "BETA",
-      users: 3,
+      users: 8,
       trend: "FLAT",
       activity: [0, 1, 0, 0, 0],
+      teams: ["Content/On-Page", "Specialists"],
     },
     {
       id: 5,
       name: "GMC_TITLE_DASH",
       type: "DASH",
       status: "LIVE",
-      users: 22,
+      users: 3,
       trend: "UP",
       activity: [0, 0, 0, 0, 0],
+      teams: ["GMC/Product"],
     },
     {
       id: 6,
       name: "META_CHECKER",
       type: "TOOL",
       status: "LIVE",
-      users: 156,
+      users: 28,
       trend: "UP",
       activity: [1, 1, 0, 0, 0],
+      teams: ["Company-Wide"],
     },
     {
       id: 7,
       name: "SEASONAL_SALLY",
       type: "BOT",
       status: "MAINT",
-      users: 4,
+      users: 2,
       trend: "DOWN",
       activity: [0, 0, 0, 1, 0],
+      teams: ["Sales/Lead"],
     },
     {
       id: 8,
       name: "METAOBJECTS_AUTO",
       type: "AUTO",
       status: "LIVE",
-      users: 19,
+      users: 3,
       trend: "STABLE",
       activity: [0, 0, 0, 0, 0],
+      teams: ["GMC/Product"],
     },
     {
       id: 9,
       name: "SCHEMA_SCANNER",
       type: "TOOL",
       status: "LIVE",
-      users: 89,
+      users: 18,
       trend: "UP",
       activity: [0, 0, 0, 0, 1],
+      teams: ["Specialists", "Content/On-Page"],
     },
     {
       id: 10,
       name: "COMPETITOR_SCRAPE",
       type: "SCRAPE",
       status: "LIVE",
-      users: 12,
+      users: 7,
       trend: "STABLE",
       activity: [1, 0, 0, 0, 0],
+      teams: ["Tech", "Specialists"],
     },
   ];
 
@@ -366,6 +386,35 @@ const MerrickMonitor = () => {
         className={`px-2 py-0.5 text-[10px] rounded border font-medium ${getColors()}`}
       >
         {status}
+      </span>
+    );
+  };
+
+  const TeamBadge = ({ teamName }) => {
+    const team = teams.find((t) => t.name === teamName);
+    if (!team) return null;
+
+    if (isRetro) {
+      return (
+        <span
+          className="px-1.5 py-0.5 text-[9px] rounded border border-green-800 text-green-500 bg-green-900/20 font-medium uppercase tracking-wide"
+          style={{ borderColor: team.color + "40", color: team.color }}
+        >
+          {teamName}
+        </span>
+      );
+    }
+
+    return (
+      <span
+        className="px-1.5 py-0.5 text-[9px] rounded font-medium uppercase tracking-wide"
+        style={{
+          backgroundColor: team.color + "15",
+          color: team.color,
+          border: `1px solid ${team.color}30`,
+        }}
+      >
+        {teamName}
       </span>
     );
   };
@@ -503,6 +552,7 @@ const MerrickMonitor = () => {
                 >
                   <th className="p-3 font-normal w-12">ID</th>
                   <th className="p-3 font-normal">Tool Name</th>
+                  <th className="p-3 font-normal">Teams</th>
                   <th className="p-3 font-normal">Activity (M-F)</th>
                   <th className="p-3 font-normal">Status</th>
                   <th className="p-3 font-normal text-right">Users</th>
@@ -539,6 +589,13 @@ const MerrickMonitor = () => {
                         className={`text-[10px] font-normal ${theme.textMuted}`}
                       >
                         {tool.type} {tool.repoName && `• ${tool.repoName}`}
+                      </div>
+                    </td>
+                    <td className="p-3">
+                      <div className="flex flex-wrap gap-1">
+                        {tool.teams?.map((teamName, idx) => (
+                          <TeamBadge key={idx} teamName={teamName} />
+                        ))}
                       </div>
                     </td>
                     <td className="p-3">
@@ -918,11 +975,10 @@ const MerrickMonitor = () => {
             <div
               className={`text-[10px] mb-1 uppercase tracking-wider font-bold ${theme.textMuted}`}
             >
-              Total Users
+              Total Employees
             </div>
             <div className={`text-2xl font-bold ${theme.textBold}`}>
-              {totalUsers}{" "}
-              <span className={`text-xs ${theme.textMuted}`}>ACROSS_FLEET</span>
+              28 <span className={`text-xs ${theme.textMuted}`}>TEAM</span>
             </div>
           </div>
           <div
@@ -935,6 +991,46 @@ const MerrickMonitor = () => {
             </div>
             <div className={`text-2xl font-bold ${theme.success}`}>
               98% <span className={`text-xs ${theme.textMuted}`}>NOMINAL</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Team Overview Section */}
+        <div className="px-4 md:px-6 mb-8">
+          <div
+            className={`p-6 transition-all duration-300 ${theme.cardBg} ${isRetro ? "border" : "rounded-xl"} ${theme.border}`}
+          >
+            <h2
+              className={`text-xs font-bold uppercase mb-6 flex items-center gap-2 ${theme.accent}`}
+            >
+              <Users className="w-4 h-4" />
+              Team Structure
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              {teams
+                .filter((t) => t.name !== "Company-Wide")
+                .map((team) => (
+                  <div
+                    key={team.id}
+                    className={`p-4 transition-all ${isRetro ? "border bg-green-900/5 hover:bg-green-900/10" : "bg-slate-50 rounded-lg hover:shadow-md"}`}
+                    style={{
+                      borderColor: isRetro ? team.color + "40" : "transparent",
+                    }}
+                  >
+                    <div
+                      className="text-xs font-bold mb-2 uppercase tracking-wide"
+                      style={{ color: team.color }}
+                    >
+                      {team.name}
+                    </div>
+                    <div className={`text-2xl font-bold ${theme.textBold}`}>
+                      {team.count}
+                    </div>
+                    <div className={`text-[9px] mt-1 ${theme.textMuted}`}>
+                      MEMBERS
+                    </div>
+                  </div>
+                ))}
             </div>
           </div>
         </div>
