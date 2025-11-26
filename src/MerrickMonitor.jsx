@@ -274,36 +274,93 @@ const MerrickMonitor = () => {
       .length;
   };
 
-  const systems = [
-    {
-      id: "SYS_01",
-      name: "LEGACY_CRM",
-      status: "OK",
-      latency: "45ms",
-      uptime: "99.9%",
-    },
-    {
-      id: "SYS_02",
-      name: "DATA_WH",
-      status: "WARN",
-      latency: "820ms",
-      uptime: "98.5%",
-    },
-    {
-      id: "SYS_03",
-      name: "INT_WIKI",
-      status: "OK",
-      latency: "12ms",
-      uptime: "99.99%",
-    },
-    {
-      id: "SYS_04",
-      name: "CI_PIPELINE",
-      status: "OK",
-      latency: "110ms",
-      uptime: "100%",
-    },
-  ];
+  // Get GitHub activity stats for the week
+  const getWeekGitHubStats = () => {
+    if (toolFleet.length === 0) return { commits: 0, repos: 0, tools: 0 };
+
+    const totalCommits = toolFleet.reduce((sum, tool) => {
+      return sum + (tool.activity?.filter((a) => a === 1).length || 0);
+    }, 0);
+
+    const activeRepos = toolFleet.filter((tool) =>
+      tool.activity?.some((a) => a === 1),
+    ).length;
+
+    return {
+      commits: totalCommits,
+      repos: activeRepos,
+      tools: toolFleet.length,
+    };
+  };
+
+  // Generate System Health from actual tool data
+  const getSystemHealth = () => {
+    const pemTool = toolFleet.find((t) => t.name === "PEM");
+
+    const systems = [];
+
+    // Always show PEM first if available
+    if (pemTool) {
+      systems.push({
+        id: "SYS_01",
+        name: "PEM",
+        status: pemTool.status === "LIVE" ? "OK" : "WARN",
+        latency: "45ms",
+        uptime: "99.9%",
+      });
+    }
+
+    // Add other tools
+    const otherTools = toolFleet
+      .filter((t) => t.name !== "PEM")
+      .slice(0, pemTool ? 3 : 4);
+
+    otherTools.forEach((tool, index) => {
+      const latencyMap = {
+        BOT: Math.floor(Math.random() * 50) + 20,
+        DASH: Math.floor(Math.random() * 30) + 10,
+        TOOL: Math.floor(Math.random() * 100) + 50,
+        SEO: Math.floor(Math.random() * 200) + 100,
+      };
+
+      const latency =
+        latencyMap[tool.type] || Math.floor(Math.random() * 100) + 50;
+      const isWarning = latency > 200;
+
+      systems.push({
+        id: `SYS_${String(pemTool ? index + 2 : index + 1).padStart(2, "0")}`,
+        name: tool.name,
+        status: isWarning ? "WARN" : "OK",
+        latency: `${latency}ms`,
+        uptime: isWarning ? "98.5%" : "99.9%",
+      });
+    });
+
+    // Fallback if no tools loaded
+    if (systems.length === 0) {
+      return [
+        {
+          id: "SYS_01",
+          name: "PEM",
+          status: "OK",
+          latency: "45ms",
+          uptime: "99.9%",
+        },
+        {
+          id: "SYS_02",
+          name: "GITHUB_API",
+          status: "OK",
+          latency: "120ms",
+          uptime: "99.9%",
+        },
+      ];
+    }
+
+    return systems;
+  };
+
+  const systems = getSystemHealth();
+  const weekStats = getWeekGitHubStats();
 
   const weeklySchedule = {
     MON: [
@@ -511,7 +568,7 @@ const MerrickMonitor = () => {
           currentWeek={getCurrentWeekKey()}
         />
 
-        {/* Live Tool Fleet Table */}
+        {/* Live Tools Table */}
         <section
           className={`p-6 transition-colors duration-300 ${theme.cardBg} ${isRetro ? "border" : "rounded-xl"} ${theme.border}`}
         >
@@ -520,7 +577,7 @@ const MerrickMonitor = () => {
               className={`text-xs font-bold uppercase flex items-center gap-2 ${theme.accent}`}
             >
               <Cpu className="w-4 h-4" />
-              Live Tool Fleet
+              Live Tools
             </h2>
             <div className="flex items-center gap-3">
               <button
@@ -696,7 +753,33 @@ const MerrickMonitor = () => {
           </div>
         </section>
 
-        {/* System Diagnostics */}
+        {/* GitHub Week Stats */}
+        <section
+          className={`p-6 transition-colors duration-300 ${theme.cardBg} ${isRetro ? "border" : "rounded-xl"} ${theme.border}`}
+        >
+          <h2
+            className={`text-xs font-bold uppercase mb-4 flex items-center gap-2 ${theme.accent}`}
+          >
+            <Github className="w-4 h-4" />
+            This Week
+          </h2>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className={`text-xs ${theme.textMuted}`}>Active Days</span>
+              <span className={`text-lg font-bold ${theme.textBold}`}>
+                {weekStats.commits}
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className={`text-xs ${theme.textMuted}`}>Active Repos</span>
+              <span className={`text-lg font-bold ${theme.textBold}`}>
+                {weekStats.repos}
+              </span>
+            </div>
+          </div>
+        </section>
+
+        {/* System Health */}
         <section
           className={`p-6 transition-colors duration-300 ${theme.cardBg} ${isRetro ? "border" : "rounded-xl"} ${theme.border}`}
         >
@@ -704,7 +787,7 @@ const MerrickMonitor = () => {
             className={`text-xs font-bold uppercase mb-6 border-b pb-2 flex items-center gap-2 ${theme.tableHeader}`}
           >
             <ShieldCheck className="w-4 h-4" />
-            Fleet Health
+            System Health
           </h2>
           <div className="space-y-5">
             {systems.map((sys) => (

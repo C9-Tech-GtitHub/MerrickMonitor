@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Load Week Data - Merrick Monitor</title>
+  <style>
+    body {
+      font-family: monospace;
+      background: #0a0f0a;
+      color: #00ff00;
+      padding: 40px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .container {
+      border: 2px solid #00ff00;
+      padding: 30px;
+      background: #0a1a0a;
+    }
+    h1 {
+      color: #00ff00;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+    .subtitle {
+      color: #00cc00;
+      margin-bottom: 30px;
+      font-size: 12px;
+    }
+    .info {
+      background: #001a00;
+      border: 1px solid #00ff00;
+      padding: 20px;
+      margin: 20px 0;
+      line-height: 1.8;
+    }
+    button {
+      background: #00ff00;
+      color: #000;
+      border: none;
+      padding: 15px 30px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      text-transform: uppercase;
+      margin: 10px 5px 0 0;
+      font-family: monospace;
+    }
+    button:hover {
+      background: #00cc00;
+    }
+    .success {
+      color: #00ff00;
+      font-weight: bold;
+    }
+    .warning {
+      color: #ffaa00;
+    }
+    ul {
+      margin: 15px 0;
+      padding-left: 20px;
+    }
+    li {
+      margin: 8px 0;
+    }
+    .task-completed { color: #00ff00; }
+    .task-pending { color: #00aaff; }
+    .task-reactive { color: #ffaa00; }
+    pre {
+      background: #000;
+      padding: 15px;
+      overflow-x: auto;
+      border: 1px solid #00ff00;
+      font-size: 11px;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin: 20px 0;
+    }
+    .stat-box {
+      background: #001a00;
+      border: 1px solid #00ff00;
+      padding: 15px;
+      text-align: center;
+    }
+    .stat-label {
+      font-size: 10px;
+      color: #00cc00;
+      margin-bottom: 8px;
+    }
+    .stat-value {
+      font-size: 24px;
+      font-weight: bold;
+      color: #00ff00;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🖥️ Merrick Monitor - Week Data Loader</h1>
+    <div class="subtitle">Auto-generated from your plain language description</div>
+
+    <div class="stats">
+      <div class="stat-box">
+        <div class="stat-label">PLANNED TASKS</div>
+        <div class="stat-value" id="plannedCount">4</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">REACTIVE TASKS</div>
+        <div class="stat-value" id="reactiveCount">1</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">COMPLETED</div>
+        <div class="stat-value" id="completedCount">2</div>
+      </div>
+    </div>
+
+    <div class="info">
+      <p><strong>📋 PLANNED TASKS (WEEKLY AGENDA):</strong></p>
+      <ul id="plannedList">
+        <li class="task-completed">✅ Finalize Bootstrap</li>
+        <li class="task-completed">✅ Start work on On-Page Josh Bot</li>
+        <li class="task-pending">🔄 Final work on Merrick Monitor (90% complete)</li>
+        <li class="task-pending">🎯 Finish new On-Page Josh Bot</li>
+      </ul>
+
+      <p style="margin-top: 20px;"><strong>⚠️ REACTIVE TASKS (UNPLANNED WORK):</strong></p>
+      <ul id="reactiveList">
+        <li class="task-reactive">⚠️ Build Merrick Monitor dashboard</li>
+      </ul>
+    </div>
+
+    <button onclick="loadData()">🚀 LOAD DATA INTO MERRICK MONITOR</button>
+    <button onclick="viewCurrentData()">👁️ VIEW CURRENT DATA</button>
+    <button onclick="clearData()">🗑️ CLEAR THIS WEEK</button>
+
+    <div id="output" style="margin-top: 20px;"></div>
+  </div>
+
+  <script>
+    // Week data parsed from your description
+    const WEEK_DATA = {
+      weekKey: getCurrentWeekKey(),
+      plannedTasks: [
+        {
+          id: 1732531200000,
+          text: "Finalize Bootstrap",
+          completed: true,
+          createdAt: "2025-11-25T08:00:00.000Z"
+        },
+        {
+          id: 1732531200001,
+          text: "Start work on On-Page Josh Bot",
+          completed: true,
+          createdAt: "2025-11-25T10:00:00.000Z"
+        },
+        {
+          id: 1732790400000,
+          text: "Final work on Merrick Monitor (90% complete)",
+          completed: false,
+          createdAt: "2025-11-25T08:00:00.000Z"
+        },
+        {
+          id: 1732876800000,
+          text: "Finish new On-Page Josh Bot",
+          completed: false,
+          createdAt: "2025-11-25T08:00:00.000Z"
+        }
+      ],
+      reactiveTasks: [
+        {
+          id: 1732704000000,
+          name: "Build Merrick Monitor dashboard",
+          addedAt: "2025-11-27T09:00:00.000Z"
+        }
+      ]
+    };
+
+    // Helper functions
+    function getCurrentWeekKey() {
+      const now = new Date();
+      const dayOfWeek = now.getDay() || 7;
+      const monday = new Date(now);
+      monday.setDate(now.getDate() - (dayOfWeek - 1));
+      monday.setHours(0, 0, 0, 0);
+      return monday.toISOString().split("T")[0];
+    }
+
+    function getWeekRange() {
+      const curr = new Date();
+      const day = curr.getDay() || 7;
+      const monday = new Date(curr);
+      monday.setDate(curr.getDate() - (day - 1));
+      const friday = new Date(monday);
+      friday.setDate(monday.getDate() + 4);
+      const opts = { month: 'short', day: 'numeric' };
+      return `${monday.toLocaleDateString('en-US', opts)} - ${friday.toLocaleDateString('en-US', opts)}`;
+    }
+
+    function loadData() {
+      const weekKey = WEEK_DATA.weekKey;
+
+      // Save to localStorage
+      const savedAgendas = JSON.parse(localStorage.getItem("weeklyAgendas") || "{}");
+      savedAgendas[weekKey] = WEEK_DATA.plannedTasks;
+      localStorage.setItem("weeklyAgendas", JSON.stringify(savedAgendas));
+
+      const savedReactiveTasks = JSON.parse(localStorage.getItem("reactiveTasks") || "{}");
+      savedReactiveTasks[weekKey] = WEEK_DATA.reactiveTasks;
+      localStorage.setItem("reactiveTasks", JSON.stringify(savedReactiveTasks));
+
+      document.getElementById("output").innerHTML = `
+        <div class="info success">
+          <p>✅ DATA LOADED SUCCESSFULLY!</p>
+          <p><strong>Week:</strong> ${getWeekRange()} (${weekKey})</p>
+          <p><strong>Planned Tasks:</strong> ${WEEK_DATA.plannedTasks.length}</p>
+          <p><strong>Reactive Tasks:</strong> ${WEEK_DATA.reactiveTasks.length}</p>
+          <p><strong>Completed:</strong> ${WEEK_DATA.plannedTasks.filter(t => t.completed).length}</p>
+          <p style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #00ff00;">
+            🔄 <strong>REFRESH YOUR MERRICK MONITOR</strong> to see the data!
+          </p>
+        </div>
+      `;
+    }
+
+    function viewCurrentData() {
+      const weekKey = WEEK_DATA.weekKey;
+      const savedAgendas = JSON.parse(localStorage.getItem("weeklyAgendas") || "{}");
+      const savedReactiveTasks = JSON.parse(localStorage.getItem("reactiveTasks") || "{}");
+
+      document.getElementById("output").innerHTML = `
+        <div class="info">
+          <p><strong>Current Week:</strong> ${weekKey}</p>
+          <p><strong>Week Range:</strong> ${getWeekRange()}</p>
+          <p><strong>Weekly Agenda (${(savedAgendas[weekKey] || []).length} tasks):</strong></p>
+          <pre>${JSON.stringify(savedAgendas[weekKey] || [], null, 2)}</pre>
+          <p><strong>Reactive Tasks (${(savedReactiveTasks[weekKey] || []).length} tasks):</strong></p>
+          <pre>${JSON.stringify(savedReactiveTasks[weekKey] || [], null, 2)}</pre>
+        </div>
+      `;
+    }
+
+    function clearData() {
+      if (!confirm('Are you sure you want to clear this week\'s data?')) return;
+
+      const weekKey = WEEK_DATA.weekKey;
+      const savedAgendas = JSON.parse(localStorage.getItem("weeklyAgendas") || "{}");
+      const savedReactiveTasks = JSON.parse(localStorage.getItem("reactiveTasks") || "{}");
+
+      delete savedAgendas[weekKey];
+      delete savedReactiveTasks[weekKey];
+
+      localStorage.setItem("weeklyAgendas", JSON.stringify(savedAgendas));
+      localStorage.setItem("reactiveTasks", JSON.stringify(savedReactiveTasks));
+
+      document.getElementById("output").innerHTML = `
+        <div class="info warning">
+          <p>⚠️ DATA CLEARED FOR THIS WEEK</p>
+          <p>Week key: ${weekKey}</p>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>

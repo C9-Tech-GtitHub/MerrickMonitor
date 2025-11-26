@@ -1,0 +1,47 @@
+{
+  "2025-11-24": {
+    "weekRange": "Nov 24 - Nov 28",
+    "goals": [
+      {
+        "id": 1732464001,
+        "text": "Finalize Bootstrap",
+        "completed": true,
+        "type": "planned",
+        "timeSlot": "morning",
+        "createdAt": "2025-11-24T00:00:00.000Z"
+      },
+      {
+        "id": 1732464002,
+        "text": "Start work on On-Page Josh Bot",
+        "completed": true,
+        "type": "planned",
+        "timeSlot": "afternoon",
+        "createdAt": "2025-11-24T00:00:00.000Z"
+      },
+      {
+        "id": 1732464003,
+        "text": "Final work on Merrick Monitor (90% complete)",
+        "completed": false,
+        "type": "planned",
+        "timeSlot": "morning",
+        "createdAt": "2025-11-24T00:00:00.000Z"
+      },
+      {
+        "id": 1732464004,
+        "text": "Finish new On-Page Josh Bot",
+        "completed": false,
+        "type": "planned",
+        "timeSlot": "afternoon",
+        "createdAt": "2025-11-24T00:00:00.000Z"
+      },
+      {
+        "id": 1732464005,
+        "text": "Build Merrick Monitor dashboard",
+        "completed": false,
+        "type": "reactive",
+        "timeSlot": "morning",
+        "createdAt": "2025-11-24T00:00:00.000Z"
+      }
+    ]
+  }
+}
