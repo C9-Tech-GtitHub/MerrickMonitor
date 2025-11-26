@@ -298,22 +298,22 @@ const MerrickMonitor = () => {
       .length;
   };
 
-  // Get GitHub activity stats for the week
+  // Get GitHub activity stats for the week (hardcoded based on your schedule)
   const getWeekGitHubStats = () => {
-    if (toolFleet.length === 0) return { commits: 0, repos: 0, tools: 0 };
+    // Based on your hardcoded schedule:
+    // MON: Sheet Freak, On-Page Sheet
+    // TUE: On-Page Sheet
+    // WED: Merrick Monitor
+    // THU: Merrick Monitor, On-Page Sheet (planned for today)
+    // FRI: On-Page Sheet (planned)
 
-    const totalCommits = toolFleet.reduce((sum, tool) => {
-      return sum + (tool.activity?.filter((a) => a === 1).length || 0);
-    }, 0);
-
-    const activeRepos = toolFleet.filter((tool) =>
-      tool.activity?.some((a) => a === 1),
-    ).length;
+    const activeDays = 3; // MON, TUE, WED completed
+    const activeRepos = 3; // Sheet Freak, On-Page Sheet, Merrick Monitor
 
     return {
-      commits: totalCommits,
+      commits: activeDays,
       repos: activeRepos,
-      tools: toolFleet.length,
+      tools: toolFleet.length || 8,
     };
   };
 
@@ -386,32 +386,68 @@ const MerrickMonitor = () => {
   const systems = getSystemHealth();
   const weekStats = getWeekGitHubStats();
 
-  // Build weekly schedule from agenda data
-  const getWeeklySchedule = () => {
-    const schedule = {
-      MON: [],
-      TUE: [],
-      WED: [],
-      THU: [],
-      FRI: [],
-    };
-
-    weeklyAgenda.forEach((goal) => {
-      if (goal.day && schedule[goal.day]) {
-        schedule[goal.day].push({
-          id: goal.id,
-          task: goal.text,
-          type: goal.type === "reactive" ? "REACTIVE" : "PLANNED",
-          status: goal.completed ? "DONE" : "PENDING",
-          timeSlot: goal.timeSlot,
-        });
-      }
-    });
-
-    return schedule;
+  // Hardcoded weekly schedule matching WeeklyAgenda component
+  const weeklySchedule = {
+    MON: [
+      {
+        id: 1,
+        task: "Sheet Freak",
+        type: "PLANNED",
+        status: "DONE",
+        timeSlot: "morning",
+      },
+      {
+        id: 2,
+        task: "On-Page Sheet",
+        type: "PLANNED",
+        status: "DONE",
+        timeSlot: "afternoon",
+      },
+    ],
+    TUE: [
+      {
+        id: 3,
+        task: "On-Page Sheet",
+        type: "PLANNED",
+        status: "DONE",
+        timeSlot: "allday",
+      },
+    ],
+    WED: [
+      {
+        id: 4,
+        task: "Merrick Monitor",
+        type: "REACTIVE",
+        status: "DONE",
+        timeSlot: "allday",
+      },
+    ],
+    THU: [
+      {
+        id: 5,
+        task: "Merrick Monitor",
+        type: "REACTIVE",
+        status: "PENDING",
+        timeSlot: "morning",
+      },
+      {
+        id: 6,
+        task: "On-Page Sheet",
+        type: "PLANNED",
+        status: "PENDING",
+        timeSlot: "afternoon",
+      },
+    ],
+    FRI: [
+      {
+        id: 7,
+        task: "On-Page Sheet",
+        type: "PLANNED",
+        status: "PENDING",
+        timeSlot: "allday",
+      },
+    ],
   };
-
-  const weeklySchedule = getWeeklySchedule();
 
   const reactiveLoad = 15;
   const totalUsers = toolFleetWithUsers.reduce(
