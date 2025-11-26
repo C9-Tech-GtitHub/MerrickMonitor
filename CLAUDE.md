@@ -1,10 +1,10 @@
 # Merrick Monitor - Claude Configuration
 
-> Engineering operations dashboard for tracking KPIs
+> Surveillance dashboard for tracking development activity
 
 ## Project Overview
 
-**Merrick Monitor** is a personal engineering operations dashboard for tracking key performance indicators across delivery, quality, and adoption metrics with a retro terminal aesthetic.
+**Merrick Monitor** is a personal surveillance dashboard for tracking key performance indicators across delivery, quality, and adoption metrics with a retro terminal aesthetic.
 
 **Tech Stack:**
 - React 18 + Vite

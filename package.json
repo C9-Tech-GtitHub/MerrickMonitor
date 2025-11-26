@@ -1,7 +1,7 @@
 {
   "name": "merrick-monitor",
   "version": "1.0.0",
-  "description": "Engineering & Operations Dashboard for tracking KPIs",
+  "description": "Merrick Monitor - Surveillance dashboard for tracking development activity",
   "type": "module",
   "scripts": {
     "dev": "vite",

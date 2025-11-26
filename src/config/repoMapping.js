@@ -45,7 +45,7 @@ export const REPO_MAPPING = {
   MERRICK_MONITOR: {
     repo: "MerrickMonitor",
     type: "DASH",
-    description: "Engineering operations dashboard",
+    description: "Surveillance dashboard for monitoring activity",
     teams: ["Management"],
   },
 };

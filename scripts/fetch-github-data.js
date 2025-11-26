@@ -1,6 +1,6 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -52,7 +52,7 @@ const REPO_MAPPING = {
   MERRICK_MONITOR: {
     repo: "MerrickMonitor",
     type: "DASH",
-    description: "Engineering operations dashboard",
+    description: "Surveillance dashboard for monitoring activity",
     teams: ["Management"],
   },
 };
@@ -88,13 +88,13 @@ async function fetchWithRetry(url, options, retries = 3) {
       }
       if (response.status === 403 || response.status === 429) {
         console.warn(`Rate limited, waiting before retry ${i + 1}/${retries}`);
-        await new Promise(resolve => setTimeout(resolve, 2000 * (i + 1)));
+        await new Promise((resolve) => setTimeout(resolve, 2000 * (i + 1)));
         continue;
       }
       return response;
     } catch (error) {
       if (i === retries - 1) throw error;
-      await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
+      await new Promise((resolve) => setTimeout(resolve, 1000 * (i + 1)));
     }
   }
 }
@@ -107,13 +107,15 @@ async function getRepoCommits(repoName) {
 
   const response = await fetchWithRetry(url, {
     headers: {
-      'Authorization': `token ${GITHUB_TOKEN}`,
-      'Accept': 'application/vnd.github.v3+json',
+      Authorization: `token ${GITHUB_TOKEN}`,
+      Accept: "application/vnd.github.v3+json",
     },
   });
 
   if (!response.ok) {
-    console.error(`Failed to fetch commits for ${repoName}: ${response.status}`);
+    console.error(
+      `Failed to fetch commits for ${repoName}: ${response.status}`,
+    );
     return [];
   }
 
@@ -131,10 +133,12 @@ async function getWeeklyActivity(repoName) {
 
   const activity = [false, false, false, false, false];
 
-  commits.forEach(commit => {
+  commits.forEach((commit) => {
     const commitDate = new Date(commit.commit.author.date);
     if (commitDate >= monday) {
-      const daysSinceMonday = Math.floor((commitDate - monday) / (1000 * 60 * 60 * 24));
+      const daysSinceMonday = Math.floor(
+        (commitDate - monday) / (1000 * 60 * 60 * 24),
+      );
       if (daysSinceMonday >= 0 && daysSinceMonday < 5) {
         activity[daysSinceMonday] = true;
       }
@@ -149,13 +153,15 @@ async function getRepoStats(repoName) {
 
   const response = await fetchWithRetry(url, {
     headers: {
-      'Authorization': `token ${GITHUB_TOKEN}`,
-      'Accept': 'application/vnd.github.v3+json',
+      Authorization: `token ${GITHUB_TOKEN}`,
+      Accept: "application/vnd.github.v3+json",
     },
   });
 
   if (!response.ok) {
-    console.error(`Failed to fetch repo stats for ${repoName}: ${response.status}`);
+    console.error(
+      `Failed to fetch repo stats for ${repoName}: ${response.status}`,
+    );
     return { stars: 0, forks: 0, openIssues: 0 };
   }
 
@@ -168,7 +174,7 @@ async function getRepoStats(repoName) {
 }
 
 async function fetchAllData() {
-  console.log('Fetching GitHub data...');
+  console.log("Fetching GitHub data...");
 
   const toolFleet = [];
   let id = 1;
@@ -183,9 +189,12 @@ async function fetchAllData() {
 
     toolFleet.push({
       id: id++,
-      name: toolName.split('_').map(w => w.charAt(0) + w.slice(1).toLowerCase()).join(' '),
+      name: toolName
+        .split("_")
+        .map((w) => w.charAt(0) + w.slice(1).toLowerCase())
+        .join(" "),
       type: config.type,
-      status: 'ACTIVE',
+      status: "ACTIVE",
       description: config.description,
       teams: config.teams,
       commits: commits.length,
@@ -195,7 +204,7 @@ async function fetchAllData() {
     });
 
     // Small delay to avoid rate limiting
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
   }
 
   // Fetch archived repos
@@ -209,7 +218,7 @@ async function fetchAllData() {
       id: id++,
       name: toolName,
       type: config.type,
-      status: 'ARCHIVED',
+      status: "ARCHIVED",
       description: config.description,
       archivedDate: config.archivedDate,
       commits: 0,
@@ -218,7 +227,7 @@ async function fetchAllData() {
       ...stats,
     });
 
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
   }
 
   const data = {
@@ -228,17 +237,25 @@ async function fetchAllData() {
   };
 
   // Write to public/data directory
-  const outputPath = path.join(__dirname, '..', 'public', 'data', 'github-data.json');
+  const outputPath = path.join(
+    __dirname,
+    "..",
+    "public",
+    "data",
+    "github-data.json",
+  );
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
   fs.writeFileSync(outputPath, JSON.stringify(data, null, 2));
 
   console.log(`✅ Data written to ${outputPath}`);
   console.log(`   - Active repos: ${toolFleet.length}`);
   console.log(`   - Archived repos: ${archived.length}`);
-  console.log(`   - Total commits (30d): ${toolFleet.reduce((sum, t) => sum + t.commits, 0)}`);
+  console.log(
+    `   - Total commits (30d): ${toolFleet.reduce((sum, t) => sum + t.commits, 0)}`,
+  );
 }
 
-fetchAllData().catch(error => {
-  console.error('Error fetching GitHub data:', error);
+fetchAllData().catch((error) => {
+  console.error("Error fetching GitHub data:", error);
   process.exit(1);
 });
