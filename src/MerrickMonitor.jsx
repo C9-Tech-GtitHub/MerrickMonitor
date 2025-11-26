@@ -410,28 +410,42 @@ const MerrickMonitor = () => {
         task: "On-Page Sheet",
         type: "PLANNED",
         status: "DONE",
-        timeSlot: "allday",
+        timeSlot: "morning",
+      },
+      {
+        id: 4,
+        task: "On-Page Sheet",
+        type: "PLANNED",
+        status: "DONE",
+        timeSlot: "afternoon",
       },
     ],
     WED: [
       {
-        id: 4,
+        id: 5,
         task: "Merrick Monitor",
         type: "REACTIVE",
         status: "DONE",
-        timeSlot: "allday",
+        timeSlot: "morning",
+      },
+      {
+        id: 6,
+        task: "Merrick Monitor",
+        type: "REACTIVE",
+        status: "DONE",
+        timeSlot: "afternoon",
       },
     ],
     THU: [
       {
-        id: 5,
+        id: 7,
         task: "Merrick Monitor",
         type: "REACTIVE",
         status: "PENDING",
         timeSlot: "morning",
       },
       {
-        id: 6,
+        id: 8,
         task: "On-Page Sheet",
         type: "PLANNED",
         status: "PENDING",
@@ -440,11 +454,18 @@ const MerrickMonitor = () => {
     ],
     FRI: [
       {
-        id: 7,
+        id: 9,
         task: "On-Page Sheet",
         type: "PLANNED",
         status: "PENDING",
-        timeSlot: "allday",
+        timeSlot: "morning",
+      },
+      {
+        id: 10,
+        task: "On-Page Sheet",
+        type: "PLANNED",
+        status: "PENDING",
+        timeSlot: "afternoon",
       },
     ],
   };
