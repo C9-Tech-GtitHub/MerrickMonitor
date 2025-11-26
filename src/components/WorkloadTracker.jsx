@@ -118,7 +118,7 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
     const reactivePercent =
       totalWork > 0 ? Math.round((reactiveCount / totalWork) * 100) : 0;
 
-    const completedPlanned = agenda.filter((g) => g.completed).length;
+    const completedPlanned = weeklyAgenda.filter((g) => g.completed).length;
     const completionRate =
       plannedCount > 0
         ? Math.round((completedPlanned / plannedCount) * 100)
