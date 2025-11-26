@@ -27,6 +27,10 @@
 
 ## Development
 
+**Environment Setup:**
+1. Copy `.env.example` to `.env`
+2. Add your GitHub Personal Access Token to `.env` (optional but recommended to avoid rate limits)
+
 **Start dev server:**
 ```bash
 npm run dev
@@ -36,6 +40,13 @@ npm run dev
 ```bash
 npm run build
 ```
+
+## Deployment Workflow
+
+**Push fixes to GitHub:**
+When fixing bugs or making changes:
+1. Build the project: `npm run build`
+2. Commit and push: `git add -A && git commit -m "description" && git push`
 
 ## Styling Guidelines
 

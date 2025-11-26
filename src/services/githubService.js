@@ -16,6 +16,23 @@ export class GitHubService {
   }
 
   /**
+   * Get headers for GitHub API requests
+   */
+  getHeaders() {
+    const headers = {
+      Accept: "application/vnd.github.v3+json",
+    };
+
+    // Add token if available (from import.meta.env in Vite)
+    const token = import.meta.env.VITE_GITHUB_TOKEN;
+    if (token) {
+      headers["Authorization"] = `token ${token}`;
+    }
+
+    return headers;
+  }
+
+  /**
    * Get commit activity for the current week (Monday-Friday)
    * Returns array of [Mon, Tue, Wed, Thu, Fri] with 1 for activity, 0 for none
    */
@@ -40,13 +57,18 @@ export class GitHubService {
 
       const response = await fetch(
         `https://api.github.com/repos/${this.owner}/${repoName}/commits?since=${sinceDate}&per_page=100`,
+        { headers: this.getHeaders() },
       );
 
       if (!response.ok) {
-        console.warn(
-          `Failed to fetch commits for ${repoName}:`,
-          response.status,
-        );
+        if (response.status === 403) {
+          console.warn(`GitHub API rate limit exceeded for ${repoName}`);
+        } else {
+          console.warn(
+            `Failed to fetch commits for ${repoName}:`,
+            response.status,
+          );
+        }
         return [0, 0, 0, 0, 0];
       }
 
@@ -90,10 +112,18 @@ export class GitHubService {
 
       const response = await fetch(
         `https://api.github.com/repos/${this.owner}/${repoName}`,
+        { headers: this.getHeaders() },
       );
 
       if (!response.ok) {
-        console.warn(`Failed to fetch stats for ${repoName}:`, response.status);
+        if (response.status === 403) {
+          console.warn(`GitHub API rate limit exceeded for ${repoName}`);
+        } else {
+          console.warn(
+            `Failed to fetch stats for ${repoName}:`,
+            response.status,
+          );
+        }
         return null;
       }
 
@@ -131,6 +161,7 @@ export class GitHubService {
 
       const response = await fetch(
         `https://api.github.com/repos/${this.owner}/${repoName}/commits?since=${thirtyDaysAgo.toISOString()}&per_page=100`,
+        { headers: this.getHeaders() },
       );
 
       if (!response.ok) {
