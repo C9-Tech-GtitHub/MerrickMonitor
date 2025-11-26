@@ -17,7 +17,6 @@ import {
   Layout,
   Lock,
 } from "lucide-react";
-import { githubService } from "./services/githubService";
 import WeeklyAgenda from "./components/WeeklyAgenda";
 import WeekHistory from "./components/WeekHistory";
 import WorkloadTracker from "./components/WorkloadTracker";
