@@ -766,9 +766,11 @@ const MerrickMonitor = () => {
                                         : "text-slate-400 line-through"
                                       : t.type === "REACTIVE"
                                         ? isRetro
-                                          ? "bg-green-500 text-black"
-                                          : "bg-orange-500 text-white"
-                                        : theme.accent
+                                          ? "border border-amber-600 text-amber-500 bg-amber-950/50"
+                                          : "border border-amber-300 text-amber-700"
+                                        : isRetro
+                                          ? "border border-green-700 text-green-600"
+                                          : "border border-slate-300 text-slate-600"
                                   }`}
                                 >
                                   {t.type}
@@ -794,7 +796,7 @@ const MerrickMonitor = () => {
                                   <div
                                     className={`text-[8px] uppercase font-bold tracking-wider ${theme.textMuted}`}
                                   >
-                                    ☀️ Morning
+                                    Morning
                                   </div>
                                   {morningTasks.map((t) => (
                                     <div key={t.id} className="text-xs group">
@@ -806,9 +808,11 @@ const MerrickMonitor = () => {
                                               : "text-slate-400 line-through"
                                             : t.type === "REACTIVE"
                                               ? isRetro
-                                                ? "bg-green-500 text-black"
-                                                : "bg-orange-500 text-white"
-                                              : theme.accent
+                                                ? "border border-amber-600 text-amber-500 bg-amber-950/50"
+                                                : "border border-amber-300 text-amber-700"
+                                              : isRetro
+                                                ? "border border-green-700 text-green-600"
+                                                : "border border-slate-300 text-slate-600"
                                         }`}
                                       >
                                         {t.type}
@@ -832,7 +836,7 @@ const MerrickMonitor = () => {
                                   <div
                                     className={`text-[8px] uppercase font-bold tracking-wider ${theme.textMuted}`}
                                   >
-                                    🌙 Afternoon
+                                    Afternoon
                                   </div>
                                   {afternoonTasks.map((t) => (
                                     <div key={t.id} className="text-xs group">
@@ -844,9 +848,11 @@ const MerrickMonitor = () => {
                                               : "text-slate-400 line-through"
                                             : t.type === "REACTIVE"
                                               ? isRetro
-                                                ? "bg-green-500 text-black"
-                                                : "bg-orange-500 text-white"
-                                              : theme.accent
+                                                ? "border border-amber-600 text-amber-500 bg-amber-950/50"
+                                                : "border border-amber-300 text-amber-700"
+                                              : isRetro
+                                                ? "border border-green-700 text-green-600"
+                                                : "border border-slate-300 text-slate-600"
                                         }`}
                                       >
                                         {t.type}
@@ -1065,7 +1071,7 @@ const MerrickMonitor = () => {
               </div>
               {/* Tab Navigation */}
               <div className="flex justify-end gap-6 text-xs mt-2">
-                {["OVERVIEW", "ADOPTION", "AGENDA", "HISTORY"].map((tab) => (
+                {["OVERVIEW", "ADOPTION", "AGENDA"].map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
@@ -1262,19 +1268,6 @@ const MerrickMonitor = () => {
                 isRetro={isRetro}
                 toolFleet={toolFleetWithUsers}
               />
-            </div>
-          )}
-          {activeTab === "HISTORY" && (
-            <div
-              className={`p-6 animate-in fade-in duration-300 ${theme.cardBg} ${isRetro ? "border" : "rounded-xl"} ${theme.border}`}
-            >
-              <h2
-                className={`text-xs font-bold uppercase mb-8 flex items-center gap-2 ${theme.accent}`}
-              >
-                <Calendar className="w-4 h-4" />
-                Week History
-              </h2>
-              <WeekHistory theme={theme} isRetro={isRetro} />
             </div>
           )}
         </div>
