@@ -1128,15 +1128,15 @@ const MerrickMonitor = () => {
           </div>
 
           <div
-            className={`p-4 transition-all duration-300 ${theme.cardBg} ${isRetro ? "border border-green-900 bg-green-900/5" : "rounded-xl"}`}
+            className={`p-4 transition-all duration-300 ${theme.cardBg} ${isRetro ? "border border-yellow-900 bg-yellow-900/5" : "rounded-xl border border-amber-200"}`}
           >
             <div
-              className={`text-[10px] mb-1 uppercase tracking-wider font-bold ${theme.textMuted}`}
+              className={`text-[10px] mb-1 uppercase tracking-wider font-bold ${isRetro ? "text-yellow-700" : "text-amber-700"}`}
             >
-              Maintenance Load
+              Reactive Load
             </div>
             <div
-              className={`text-2xl font-bold ${isRetro ? (reactiveLoad > 30 ? "text-green-400" : "text-green-600") : reactiveLoad > 30 ? "text-amber-600" : "text-slate-700"}`}
+              className={`text-2xl font-bold ${isRetro ? "text-yellow-500" : "text-amber-600"}`}
             >
               {reactiveLoad}%
             </div>
@@ -1150,8 +1150,10 @@ const MerrickMonitor = () => {
               Live Tools
             </div>
             <div className={`text-2xl font-bold ${theme.textBold}`}>
-              {toolFleetWithUsers.length}{" "}
-              <span className={`text-xs ${theme.textMuted}`}>ONLINE</span>
+              8 <span className={`text-xs ${theme.textMuted}`}>LIVE</span>
+            </div>
+            <div className={`text-[9px] mt-1 ${theme.textMuted}`}>
+              2 in development
             </div>
           </div>
           <div
