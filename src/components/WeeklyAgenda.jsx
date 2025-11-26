@@ -3,7 +3,7 @@ import { Calendar } from "lucide-react";
 
 /**
  * Weekly Agenda Component
- * Displays hardcoded week schedule
+ * Displays hardcoded week schedule in table format
  */
 const WeeklyAgenda = ({ theme, isRetro }) => {
   // Hardcoded weekly schedule
@@ -95,6 +95,37 @@ const WeeklyAgenda = ({ theme, isRetro }) => {
     },
   ];
 
+  const getSlotStyles = (slot) => {
+    if (!slot)
+      return { bg: "bg-transparent", text: "text-green-900/20", border: "" };
+
+    if (slot.completed) {
+      return {
+        bg: isRetro ? "bg-green-950/10" : "bg-green-50",
+        text: isRetro ? "text-green-900" : "text-green-700",
+        border: "",
+      };
+    }
+
+    if (slot.type === "unplanned") {
+      return {
+        bg: isRetro
+          ? "bg-amber-950/30 shadow-[inset_0_0_20px_rgba(245,158,11,0.1)]"
+          : "bg-amber-50",
+        text: isRetro
+          ? "text-amber-400 font-bold drop-shadow-[0_0_5px_rgba(245,158,11,0.5)]"
+          : "text-amber-700",
+        border: "",
+      };
+    }
+
+    return {
+      bg: "bg-transparent",
+      text: isRetro ? "text-green-400" : "text-slate-700",
+      border: "",
+    };
+  };
+
   return (
     <div className="space-y-6">
       {/* Week Header */}
@@ -121,111 +152,121 @@ const WeeklyAgenda = ({ theme, isRetro }) => {
         >
           ~ Project Activity This Week
         </h4>
+
+        {/* Table Header */}
+        <div
+          className={`grid grid-cols-12 gap-0 px-4 py-2 text-[10px] uppercase tracking-widest font-bold ${theme.textMuted}`}
+        >
+          <div className="col-span-2">Day</div>
+          <div className="col-span-5">Morning</div>
+          <div className="col-span-5">Afternoon</div>
+        </div>
+
+        {/* Table Rows */}
         {hardcodedAgenda.map((daySchedule) => {
           const isToday = daySchedule.day === getCurrentDayShort();
+          const morningSlot = daySchedule.slots.find(
+            (s) => s.timeSlot === "morning",
+          );
+          const afternoonSlot = daySchedule.slots.find(
+            (s) => s.timeSlot === "afternoon",
+          );
 
           return (
             <div
               key={daySchedule.day}
-              className={`flex gap-4 p-3 rounded transition-all ${
+              className={`grid grid-cols-12 gap-0 border rounded-md overflow-hidden transition-all ${
                 isToday
                   ? isRetro
-                    ? "bg-green-900/20 border border-green-800"
-                    : "bg-indigo-50 border border-indigo-200"
+                    ? "border-green-500 shadow-[0_0_15px_rgba(0,255,0,0.15)] bg-green-950/10"
+                    : "border-indigo-500 shadow-lg bg-indigo-50"
                   : isRetro
-                    ? "border border-green-900/40"
-                    : "border border-slate-200"
+                    ? "border-green-900/40 hover:border-green-700/60"
+                    : "border-slate-200 hover:border-slate-300"
               }`}
             >
+              {/* Day Column */}
               <div
-                className={`text-xs font-bold w-12 pt-0.5 ${
-                  isToday ? theme.accent : theme.textMuted
-                }`}
+                className={`col-span-2 flex flex-col items-start justify-center pl-4 py-3 border-r ${isRetro ? "border-green-900/40 bg-green-950/10" : "border-slate-200 bg-slate-50"}`}
               >
-                {daySchedule.day}
+                <span
+                  className={`text-lg font-bold tracking-wider ${isToday ? theme.accent : theme.textMuted}`}
+                >
+                  {daySchedule.day}
+                </span>
                 {isToday && (
-                  <div className="text-[8px] animate-pulse mt-0.5">TODAY</div>
+                  <span
+                    className={`text-[9px] font-bold tracking-widest mt-0.5 ${theme.accent}`}
+                  >
+                    TODAY
+                  </span>
                 )}
               </div>
-              <div className="flex-1 flex gap-6">
-                {/* Morning */}
-                <div className="flex items-center gap-2 flex-1">
-                  <span
-                    className={`text-[9px] font-bold w-8 ${theme.textMuted}`}
+
+              {/* Morning Column */}
+              <div
+                className={`col-span-5 border-r ${isRetro ? "border-green-900/40" : "border-slate-200"}`}
+              >
+                {morningSlot ? (
+                  <div
+                    className={`h-full w-full px-4 py-3 flex items-center justify-between ${getSlotStyles(morningSlot).bg}`}
                   >
-                    AM
-                  </span>
-                  <div className="flex flex-wrap gap-2">
-                    {daySchedule.slots
-                      .filter((s) => s.timeSlot === "morning")
-                      .map((slot, idx) => (
-                        <div
-                          key={idx}
-                          className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wide transition-all inline-flex items-center gap-1 ${
-                            slot.completed
-                              ? isRetro
-                                ? "bg-green-900/30 border border-green-700 text-green-400"
-                                : "bg-green-50 border border-green-300 text-green-700"
-                              : slot.type === "unplanned"
-                                ? isRetro
-                                  ? "bg-amber-900/30 border border-amber-700 text-amber-400"
-                                  : "bg-amber-50 border border-amber-300 text-amber-700"
-                                : isRetro
-                                  ? "bg-slate-900/30 border border-slate-700 text-slate-400"
-                                  : "bg-slate-50 border border-slate-300 text-slate-500"
-                          }`}
-                        >
-                          {slot.type === "unplanned" && !slot.completed && (
-                            <span className="opacity-60">!</span>
-                          )}
-                          {slot.project}
-                          <span className="opacity-60">·</span>
-                          <span className="opacity-60">
-                            {slot.type === "unplanned" ? "REACTIVE" : "PLANNED"}
-                          </span>
-                        </div>
-                      ))}
+                    <span
+                      className={`font-mono text-sm tracking-wider ${getSlotStyles(morningSlot).text}`}
+                    >
+                      {morningSlot.project}
+                    </span>
+                    <span
+                      className={`text-[10px] uppercase border px-1.5 py-0.5 rounded tracking-wider ${
+                        morningSlot.type === "unplanned"
+                          ? isRetro
+                            ? "border-amber-600 text-amber-500 bg-amber-950/50"
+                            : "border-amber-300 text-amber-700"
+                          : isRetro
+                            ? "border-green-700 text-green-600"
+                            : "border-slate-300 text-slate-600"
+                      }`}
+                    >
+                      {morningSlot.type === "unplanned"
+                        ? "REACTIVE"
+                        : "PLANNED"}
+                    </span>
                   </div>
-                </div>
-                {/* Afternoon */}
-                <div className="flex items-center gap-2 flex-1">
-                  <span
-                    className={`text-[9px] font-bold w-8 ${theme.textMuted}`}
+                ) : (
+                  <div className="h-full opacity-20 bg-green-950/20"></div>
+                )}
+              </div>
+
+              {/* Afternoon Column */}
+              <div className="col-span-5">
+                {afternoonSlot ? (
+                  <div
+                    className={`h-full w-full px-4 py-3 flex items-center justify-between ${getSlotStyles(afternoonSlot).bg}`}
                   >
-                    PM
-                  </span>
-                  <div className="flex flex-wrap gap-2">
-                    {daySchedule.slots
-                      .filter((s) => s.timeSlot === "afternoon")
-                      .map((slot, idx) => (
-                        <div
-                          key={idx}
-                          className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wide transition-all inline-flex items-center gap-1 ${
-                            slot.completed
-                              ? isRetro
-                                ? "bg-green-900/30 border border-green-700 text-green-400"
-                                : "bg-green-50 border border-green-300 text-green-700"
-                              : slot.type === "unplanned"
-                                ? isRetro
-                                  ? "bg-amber-900/30 border border-amber-700 text-amber-400"
-                                  : "bg-amber-50 border border-amber-300 text-amber-700"
-                                : isRetro
-                                  ? "bg-slate-900/30 border border-slate-700 text-slate-400"
-                                  : "bg-slate-50 border border-slate-300 text-slate-500"
-                          }`}
-                        >
-                          {slot.type === "unplanned" && !slot.completed && (
-                            <span className="opacity-60">!</span>
-                          )}
-                          {slot.project}
-                          <span className="opacity-60">·</span>
-                          <span className="opacity-60">
-                            {slot.type === "unplanned" ? "REACTIVE" : "PLANNED"}
-                          </span>
-                        </div>
-                      ))}
+                    <span
+                      className={`font-mono text-sm tracking-wider ${getSlotStyles(afternoonSlot).text}`}
+                    >
+                      {afternoonSlot.project}
+                    </span>
+                    <span
+                      className={`text-[10px] uppercase border px-1.5 py-0.5 rounded tracking-wider ${
+                        afternoonSlot.type === "unplanned"
+                          ? isRetro
+                            ? "border-amber-600 text-amber-500 bg-amber-950/50"
+                            : "border-amber-300 text-amber-700"
+                          : isRetro
+                            ? "border-green-700 text-green-600"
+                            : "border-slate-300 text-slate-600"
+                      }`}
+                    >
+                      {afternoonSlot.type === "unplanned"
+                        ? "REACTIVE"
+                        : "PLANNED"}
+                    </span>
                   </div>
-                </div>
+                ) : (
+                  <div className="h-full opacity-20 bg-green-950/20"></div>
+                )}
               </div>
             </div>
           );
