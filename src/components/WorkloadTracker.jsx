@@ -149,7 +149,7 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
             <span className="text-yellow-500">{"▓".repeat(reactiveLen)}</span>
           )}
           {showRnd && (
-            <span className="text-cyan-500">{"▓".repeat(rndLen)}</span>
+            <span className="text-purple-500">{"▓".repeat(rndLen)}</span>
           )}
           {"░".repeat(emptyLen)}
         </span>
@@ -170,7 +170,7 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
         )}
         {showRnd && rndPercent > 0 && (
           <div
-            className="h-full bg-cyan-500 transition-all duration-500"
+            className="h-full bg-purple-500 transition-all duration-500"
             style={{ width: `${rndPercent}%` }}
           />
         )}
