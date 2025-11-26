@@ -1,26 +1,26 @@
 {
-  "lastUpdated": "2025-01-26T00:00:00.000Z",
+  "lastUpdated": "2024-11-27T00:00:00.000Z",
   "tools": {
     "ON_PAGE_JOSH_BOT": {
-      "activity": [1, 0, 0, 0, 0],
+      "activity": [1, 1, 0, 0, 0],
       "stats": {
         "stars": 0,
         "forks": 0,
         "openIssues": 0,
-        "watchers": 1,
+        "watchers": 14,
         "language": "JavaScript",
         "isPrivate": true
       },
       "status": "LIVE",
-      "trend": "STABLE"
+      "trend": "UP"
     },
     "RANDY_PEM_DASH": {
-      "activity": [0, 0, 1, 0, 0],
+      "activity": [0, 0, 0, 0, 0],
       "stats": {
         "stars": 0,
         "forks": 0,
         "openIssues": 0,
-        "watchers": 1,
+        "watchers": 14,
         "language": "JavaScript",
         "isPrivate": true
       },
@@ -33,25 +33,25 @@
         "stars": 0,
         "forks": 0,
         "openIssues": 0,
-        "watchers": 1,
+        "watchers": 2,
         "language": "JavaScript",
         "isPrivate": true
       },
       "status": "LIVE",
-      "trend": "UP"
+      "trend": "STABLE"
     },
     "LSI_ANALYZER": {
-      "activity": [0, 1, 0, 0, 0],
+      "activity": [0, 0, 0, 0, 0],
       "stats": {
         "stars": 0,
         "forks": 0,
         "openIssues": 0,
-        "watchers": 1,
+        "watchers": 16,
         "language": "JavaScript",
         "isPrivate": true
       },
       "status": "LIVE",
-      "trend": "UP"
+      "trend": "STABLE"
     },
     "PEM": {
       "activity": [0, 0, 0, 0, 0],
@@ -59,12 +59,12 @@
         "stars": 0,
         "forks": 0,
         "openIssues": 0,
-        "watchers": 2,
+        "watchers": 3,
         "language": "JavaScript",
         "isPrivate": true
       },
       "status": "LIVE",
-      "trend": "UP"
+      "trend": "STABLE"
     },
     "SHEETFREAK": {
       "activity": [1, 1, 0, 0, 0],
@@ -72,7 +72,7 @@
         "stars": 0,
         "forks": 0,
         "openIssues": 0,
-        "watchers": 1,
+        "watchers": 16,
         "language": "JavaScript",
         "isPrivate": true
       },
@@ -85,7 +85,20 @@
         "stars": 0,
         "forks": 0,
         "openIssues": 0,
-        "watchers": 1,
+        "watchers": 5,
+        "language": "Markdown",
+        "isPrivate": true
+      },
+      "status": "LIVE",
+      "trend": "UP"
+    },
+    "MERRICK_MONITOR": {
+      "activity": [1, 1, 1, 1, 1],
+      "stats": {
+        "stars": 0,
+        "forks": 0,
+        "openIssues": 0,
+        "watchers": 2,
         "language": "JavaScript",
         "isPrivate": true
       },

@@ -102,12 +102,8 @@ export class GitHubService {
         if (response.status === 403) {
           console.warn(`GitHub API rate limit exceeded for ${repoName}`);
           throw new Error("Rate limit exceeded");
-        } else {
-          console.warn(
-            `Failed to fetch commits for ${repoName}:`,
-            response.status,
-          );
         }
+        // Silently fallback for 404s (repo doesn't exist or is private)
         return [0, 0, 0, 0, 0];
       }
 
@@ -159,12 +155,8 @@ export class GitHubService {
         if (response.status === 403) {
           console.warn(`GitHub API rate limit exceeded for ${repoName}`);
           throw new Error("Rate limit exceeded");
-        } else {
-          console.warn(
-            `Failed to fetch stats for ${repoName}:`,
-            response.status,
-          );
         }
+        // Silently fallback for 404s (repo doesn't exist or is private)
         return null;
       }
 
