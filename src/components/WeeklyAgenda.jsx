@@ -198,7 +198,7 @@ const WeeklyAgenda = ({ theme, isRetro }) => {
               {isAllDay ? (
                 <div className="col-span-10">
                   <div
-                    className={`h-full w-full px-4 py-3 flex items-center justify-between ${getSlotStyles(morningSlot).bg}`}
+                    className={`h-full w-full px-4 py-3 flex items-center justify-center gap-3 ${getSlotStyles(morningSlot).bg}`}
                   >
                     <span
                       className={`font-mono text-sm tracking-wider ${getSlotStyles(morningSlot).text}`}

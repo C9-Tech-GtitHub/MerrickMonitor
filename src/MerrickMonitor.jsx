@@ -815,19 +815,32 @@ const MerrickMonitor = () => {
                   >
                     {tasks.length > 0 ? (
                       <>
-                        {/* Morning Tasks */}
-                        {tasks.filter((t) => t.timeSlot === "morning").length >
-                          0 && (
-                          <div className="space-y-1">
-                            <div
-                              className={`text-[8px] uppercase font-bold tracking-wider ${theme.textMuted}`}
-                            >
-                              ☀️ Morning
-                            </div>
-                            {tasks
-                              .filter((t) => t.timeSlot === "morning")
-                              .map((t) => (
-                                <div key={t.id} className="text-xs group">
+                        {(() => {
+                          const morningTasks = tasks.filter(
+                            (t) => t.timeSlot === "morning",
+                          );
+                          const afternoonTasks = tasks.filter(
+                            (t) => t.timeSlot === "afternoon",
+                          );
+
+                          // Check if all-day (same task AM and PM)
+                          const isAllDay =
+                            morningTasks.length === 1 &&
+                            afternoonTasks.length === 1 &&
+                            morningTasks[0].task === afternoonTasks[0].task &&
+                            morningTasks[0].type === afternoonTasks[0].type &&
+                            morningTasks[0].status === afternoonTasks[0].status;
+
+                          if (isAllDay) {
+                            const t = morningTasks[0];
+                            return (
+                              <div className="space-y-1">
+                                <div
+                                  className={`text-[8px] uppercase font-bold tracking-wider ${theme.textMuted}`}
+                                >
+                                  ☀️ Morning
+                                </div>
+                                <div className="text-xs group">
                                   <span
                                     className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
                                       t.status === "DONE"
@@ -853,22 +866,12 @@ const MerrickMonitor = () => {
                                     {t.task}
                                   </span>
                                 </div>
-                              ))}
-                          </div>
-                        )}
-                        {/* Afternoon Tasks */}
-                        {tasks.filter((t) => t.timeSlot === "afternoon")
-                          .length > 0 && (
-                          <div className="space-y-1">
-                            <div
-                              className={`text-[8px] uppercase font-bold tracking-wider ${theme.textMuted}`}
-                            >
-                              🌙 Afternoon
-                            </div>
-                            {tasks
-                              .filter((t) => t.timeSlot === "afternoon")
-                              .map((t) => (
-                                <div key={t.id} className="text-xs group">
+                                <div
+                                  className={`text-[8px] uppercase font-bold tracking-wider ${theme.textMuted}`}
+                                >
+                                  🌙 Afternoon
+                                </div>
+                                <div className="text-xs group">
                                   <span
                                     className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
                                       t.status === "DONE"
@@ -894,9 +897,91 @@ const MerrickMonitor = () => {
                                     {t.task}
                                   </span>
                                 </div>
-                              ))}
-                          </div>
-                        )}
+                              </div>
+                            );
+                          }
+
+                          return (
+                            <>
+                              {/* Morning Tasks */}
+                              {morningTasks.length > 0 && (
+                                <div className="space-y-1">
+                                  <div
+                                    className={`text-[8px] uppercase font-bold tracking-wider ${theme.textMuted}`}
+                                  >
+                                    ☀️ Morning
+                                  </div>
+                                  {morningTasks.map((t) => (
+                                    <div key={t.id} className="text-xs group">
+                                      <span
+                                        className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
+                                          t.status === "DONE"
+                                            ? isRetro
+                                              ? "text-green-500 line-through opacity-50"
+                                              : "text-slate-400 line-through"
+                                            : t.type === "REACTIVE"
+                                              ? isRetro
+                                                ? "bg-green-500 text-black"
+                                                : "bg-orange-500 text-white"
+                                              : theme.accent
+                                        }`}
+                                      >
+                                        {t.type}
+                                      </span>
+                                      <span
+                                        className={
+                                          t.status === "DONE"
+                                            ? theme.textMuted
+                                            : theme.textBold
+                                        }
+                                      >
+                                        {t.task}
+                                      </span>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                              {/* Afternoon Tasks */}
+                              {afternoonTasks.length > 0 && (
+                                <div className="space-y-1">
+                                  <div
+                                    className={`text-[8px] uppercase font-bold tracking-wider ${theme.textMuted}`}
+                                  >
+                                    🌙 Afternoon
+                                  </div>
+                                  {afternoonTasks.map((t) => (
+                                    <div key={t.id} className="text-xs group">
+                                      <span
+                                        className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
+                                          t.status === "DONE"
+                                            ? isRetro
+                                              ? "text-green-500 line-through opacity-50"
+                                              : "text-slate-400 line-through"
+                                            : t.type === "REACTIVE"
+                                              ? isRetro
+                                                ? "bg-green-500 text-black"
+                                                : "bg-orange-500 text-white"
+                                              : theme.accent
+                                        }`}
+                                      >
+                                        {t.type}
+                                      </span>
+                                      <span
+                                        className={
+                                          t.status === "DONE"
+                                            ? theme.textMuted
+                                            : theme.textBold
+                                        }
+                                      >
+                                        {t.task}
+                                      </span>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </>
+                          );
+                        })()}
                       </>
                     ) : (
                       <span className={`text-[10px] italic ${theme.textMuted}`}>
