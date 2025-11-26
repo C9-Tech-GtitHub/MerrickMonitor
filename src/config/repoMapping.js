@@ -1,7 +1,7 @@
 // Maps dashboard tools to GitHub repositories
 export const REPO_MAPPING = {
   ON_PAGE_JOSH_BOT: {
-    repo: "SheetFreak-OnPage",
+    repo: "OnPageSheet",
     type: "BOT",
     description: "On-page SEO automation bot",
     teams: ["Specialists", "Content"],
@@ -41,6 +41,12 @@ export const REPO_MAPPING = {
     type: "TOOL",
     description: "Smart bootstrap system for Claude Code projects",
     teams: ["Tech"],
+  },
+  MERRICK_MONITOR: {
+    repo: "MerrickMonitor",
+    type: "DASH",
+    description: "Engineering operations dashboard",
+    teams: ["Management"],
   },
 };
 
