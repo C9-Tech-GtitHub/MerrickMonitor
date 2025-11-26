@@ -149,9 +149,9 @@ const MerrickMonitor = () => {
   // Team structure: 28 total employees
   const teams = [
     { id: 1, name: "Tech", color: "#3b82f6", count: 5 },
-    { id: 2, name: "GMC/Product", color: "#8b5cf6", count: 3 },
-    { id: 3, name: "Content/On-Page", color: "#10b981", count: 2 },
-    { id: 4, name: "Sales/Lead", color: "#f59e0b", count: 2 },
+    { id: 2, name: "GMC", color: "#8b5cf6", count: 3 },
+    { id: 3, name: "Content", color: "#10b981", count: 2 },
+    { id: 4, name: "Sales", color: "#f59e0b", count: 2 },
     { id: 5, name: "Specialists", color: "#ec4899", count: 14 },
     { id: 6, name: "Management", color: "#06b6d4", count: 2 },
     { id: 7, name: "Company-Wide", color: "#6366f1", count: 28 },
@@ -165,7 +165,7 @@ const MerrickMonitor = () => {
       status: "LIVE",
       trend: "UP",
       activity: [1, 0, 0, 0, 0],
-      teams: ["Specialists", "Content/On-Page"],
+      teams: ["Specialists", "Content"],
     },
     {
       id: 2,
@@ -174,7 +174,7 @@ const MerrickMonitor = () => {
       status: "LIVE",
       trend: "STABLE",
       activity: [0, 0, 1, 0, 0],
-      teams: ["Specialists", "Content/On-Page"],
+      teams: ["Specialists", "Content"],
     },
     {
       id: 3,
@@ -183,7 +183,7 @@ const MerrickMonitor = () => {
       status: "LIVE",
       trend: "UP",
       activity: [0, 0, 0, 0, 0],
-      teams: ["Sales/Lead"],
+      teams: ["Sales"],
     },
     {
       id: 4,
@@ -192,7 +192,7 @@ const MerrickMonitor = () => {
       status: "LIVE",
       trend: "UP",
       activity: [0, 1, 0, 0, 0],
-      teams: ["Content/On-Page", "Specialists"],
+      teams: ["Content", "Specialists"],
     },
     {
       id: 5,
@@ -201,7 +201,7 @@ const MerrickMonitor = () => {
       status: "LIVE",
       trend: "UP",
       activity: [0, 0, 0, 0, 0],
-      teams: ["GMC/Product"],
+      teams: ["GMC"],
     },
     {
       id: 6,
@@ -210,7 +210,7 @@ const MerrickMonitor = () => {
       status: "LIVE",
       trend: "UP",
       activity: [1, 1, 0, 0, 0],
-      teams: ["Specialists", "Content/On-Page"],
+      teams: ["Specialists", "Content"],
     },
     {
       id: 7,
