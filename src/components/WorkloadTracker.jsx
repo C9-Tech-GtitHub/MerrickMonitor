@@ -283,22 +283,12 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
           </div>
 
           {/* Workload Distribution */}
-          <div className="mb-4">
-            <div className="flex justify-between text-xs mb-2 tracking-wide">
-              <span className={theme.textMuted}>
-                Planned: {workload.plannedPercent}%
-              </span>
-              <span
-                className={`font-bold ${isRetro ? "text-yellow-500" : "text-amber-600"}`}
-              >
-                Reactive: {workload.reactivePercent}%
-              </span>
-              <span
-                className={`font-bold ${isRetro ? "text-cyan-400" : "text-cyan-600"}`}
-              >
-                R&D: {workload.rndPercent}%
-              </span>
-            </div>
+          <div>
+            <h3
+              className={`text-xs font-bold uppercase tracking-wider mb-3 ${theme.textMuted}`}
+            >
+              Workload Distribution
+            </h3>
             <ProgressBar
               percent={workload.plannedPercent}
               showReactive={true}
@@ -306,6 +296,30 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
               showRnd={true}
               rndPercent={workload.rndPercent}
             />
+            <div className="flex justify-between text-xs mt-2 tracking-wide">
+              <span className={`flex items-center gap-1 ${theme.textMuted}`}>
+                <span
+                  className={`w-2 h-2 rounded-sm ${isRetro ? "bg-green-500" : "bg-indigo-600"}`}
+                ></span>
+                Planned Work: {workload.plannedPercent}%
+              </span>
+              <span
+                className={`flex items-center gap-1 ${isRetro ? "text-yellow-500" : "text-amber-600"}`}
+              >
+                <span
+                  className={`w-2 h-2 rounded-sm ${isRetro ? "bg-yellow-500" : "bg-amber-500"}`}
+                ></span>
+                Reactive Work: {workload.reactivePercent}%
+              </span>
+              <span
+                className={`flex items-center gap-1 ${isRetro ? "text-purple-400" : "text-purple-600"}`}
+              >
+                <span
+                  className={`w-2 h-2 rounded-sm ${isRetro ? "bg-purple-500" : "bg-purple-500"}`}
+                ></span>
+                R&D: {workload.rndPercent}%
+              </span>
+            </div>
           </div>
         </>
       )}
