@@ -307,20 +307,6 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
               rndPercent={workload.rndPercent}
             />
           </div>
-
-          {/* Completion Progress */}
-          {workload.plannedCount > 0 && (
-            <div className="mb-4">
-              <div className="flex justify-between text-xs mb-2 tracking-wide">
-                <span className={theme.textMuted}>Agenda Completion</span>
-                <span className={`font-bold ${theme.accent}`}>
-                  {workload.completedPlanned}/{workload.plannedCount} (
-                  {workload.completionRate}%)
-                </span>
-              </div>
-              <ProgressBar percent={workload.completionRate} />
-            </div>
-          )}
         </>
       )}
     </section>
