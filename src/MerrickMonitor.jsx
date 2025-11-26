@@ -338,9 +338,9 @@ const MerrickMonitor = () => {
       });
     }
 
-    // Add other tools
+    // Add other tools (exclude PEM and Lead)
     const otherTools = toolFleet
-      .filter((t) => t.name !== "PEM")
+      .filter((t) => t.name !== "PEM" && !t.name.includes("Lead"))
       .slice(0, pemTool ? 3 : 4);
 
     otherTools.forEach((tool, index) => {
