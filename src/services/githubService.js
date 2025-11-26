@@ -272,24 +272,15 @@ export class GitHubService {
    * Get enriched tool data for all mapped repositories
    */
   async getAllToolsData() {
-    // Try to use static data first (for production/GitHub Pages)
-    const staticData = await this.loadStaticData();
-
     const tools = [];
     let id = 1;
+    let hasApiError = false;
 
     for (const [toolName, config] of Object.entries(REPO_MAPPING)) {
       let activity, stats, status, trend;
 
-      // Use static data if available, otherwise fetch from API
-      if (staticData && staticData.tools[toolName]) {
-        const toolData = staticData.tools[toolName];
-        activity = toolData.activity;
-        stats = toolData.stats;
-        status = toolData.status;
-        trend = toolData.trend;
-      } else {
-        // Fallback to API (only in development with token)
+      // Try API first
+      try {
         const [fetchedActivity, fetchedStats, commitsCount] = await Promise.all(
           [
             this.getWeeklyActivity(config.repo),
@@ -302,6 +293,13 @@ export class GitHubService {
         stats = fetchedStats;
         status = this.determineStatus(stats, commitsCount);
         trend = this.determineTrend(commitsCount, stats);
+      } catch (error) {
+        hasApiError = true;
+        // Set defaults, will try static data fallback after loop
+        activity = [0, 0, 0, 0, 0];
+        stats = null;
+        status = "LIVE";
+        trend = "STABLE";
       }
 
       // Estimate users based on watchers/stars (mock calculation)
@@ -323,6 +321,22 @@ export class GitHubService {
         repoUrl: `${GITHUB_CONFIG.baseUrl}/${config.repo}`,
         teams: config.teams || [],
       });
+    }
+
+    // If API failed, fallback to static data
+    if (hasApiError) {
+      const staticData = await this.loadStaticData();
+      if (staticData) {
+        tools.forEach((tool) => {
+          const staticTool = staticData.tools[tool.name];
+          if (staticTool && !tool.stats) {
+            tool.activity = staticTool.activity;
+            tool.stats = staticTool.stats;
+            tool.status = staticTool.status;
+            tool.trend = staticTool.trend;
+          }
+        });
+      }
     }
 
     return tools;
