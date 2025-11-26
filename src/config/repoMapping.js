@@ -6,10 +6,10 @@ export const REPO_MAPPING = {
     description: "On-page SEO automation bot",
     teams: ["Specialists", "Content"],
   },
-  RANDY_PEM_DASH: {
+  REVIEW_RANDY: {
     repo: "Randy",
     type: "DASH",
-    description: "Randy PEM Dashboard",
+    description: "Review Randy - Product review management",
     teams: ["Specialists", "Content"],
   },
   LEAD: {
