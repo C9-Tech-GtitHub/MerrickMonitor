@@ -90,11 +90,19 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
       });
     });
 
+    // Fixed 15% R&D allocation
+    const rndPercent = 15;
+
+    // Calculate percentages with R&D factored in
     const totalWork = plannedCount + reactiveCount;
+    const workPercent = 100 - rndPercent; // 85% for actual work
+
     const plannedPercent =
-      totalWork > 0 ? Math.round((plannedCount / totalWork) * 100) : 100;
+      totalWork > 0
+        ? Math.round((plannedCount / totalWork) * workPercent)
+        : workPercent;
     const reactivePercent =
-      totalWork > 0 ? Math.round((reactiveCount / totalWork) * 100) : 0;
+      totalWork > 0 ? Math.round((reactiveCount / totalWork) * workPercent) : 0;
 
     const completionRate =
       plannedCount > 0
@@ -107,6 +115,7 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
       totalWork,
       plannedPercent,
       reactivePercent,
+      rndPercent,
       completedPlanned,
       completionRate,
     };
@@ -121,6 +130,8 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
     percent,
     showReactive = false,
     reactivePercent = 0,
+    showRnd = false,
+    rndPercent = 0,
   }) => {
     if (isRetro) {
       const length = 20;
@@ -128,13 +139,17 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
       const reactiveLen = showReactive
         ? Math.round((length * reactivePercent) / 100)
         : 0;
-      const emptyLen = length - plannedLen - reactiveLen;
+      const rndLen = showRnd ? Math.round((length * rndPercent) / 100) : 0;
+      const emptyLen = length - plannedLen - reactiveLen - rndLen;
 
       return (
         <span className="opacity-90 tracking-wider">
           {"▓".repeat(plannedLen)}
           {showReactive && (
             <span className="text-yellow-500">{"▓".repeat(reactiveLen)}</span>
+          )}
+          {showRnd && (
+            <span className="text-cyan-500">{"▓".repeat(rndLen)}</span>
           )}
           {"░".repeat(emptyLen)}
         </span>
@@ -151,6 +166,12 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
           <div
             className="h-full bg-amber-500 transition-all duration-500"
             style={{ width: `${reactivePercent}%` }}
+          />
+        )}
+        {showRnd && rndPercent > 0 && (
+          <div
+            className="h-full bg-cyan-500 transition-all duration-500"
+            style={{ width: `${rndPercent}%` }}
           />
         )}
       </div>
@@ -228,7 +249,7 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
             >
               <div className={`text-xs ${theme.textMuted} mb-1`}>Planned</div>
               <div className={`text-lg font-bold ${theme.textBold}`}>
-                {workload.plannedCount}
+                {workload.plannedPercent}%
               </div>
             </div>
             <div
@@ -242,15 +263,21 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
               <div
                 className={`text-lg font-bold ${isRetro ? "text-yellow-500" : "text-amber-600"}`}
               >
-                {workload.reactiveCount}
+                {workload.reactivePercent}%
               </div>
             </div>
             <div
-              className={`text-center p-2 rounded ${isRetro ? "bg-green-900/10" : "bg-slate-50"}`}
+              className={`text-center p-2 rounded ${isRetro ? "bg-cyan-900/10 border border-cyan-900/30" : "bg-cyan-50 border border-cyan-200"}`}
             >
-              <div className={`text-xs ${theme.textMuted} mb-1`}>Total</div>
-              <div className={`text-lg font-bold ${theme.textBold}`}>
-                {workload.totalWork}
+              <div
+                className={`text-xs ${isRetro ? "text-cyan-700" : "text-cyan-700"} mb-1`}
+              >
+                R&D
+              </div>
+              <div
+                className={`text-lg font-bold ${isRetro ? "text-cyan-400" : "text-cyan-600"}`}
+              >
+                {workload.rndPercent}%
               </div>
             </div>
           </div>
@@ -259,18 +286,25 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
           <div className="mb-4">
             <div className="flex justify-between text-xs mb-2 tracking-wide">
               <span className={theme.textMuted}>
-                Planned Work: {workload.plannedPercent}%
+                Planned: {workload.plannedPercent}%
               </span>
               <span
                 className={`font-bold ${isRetro ? "text-yellow-500" : "text-amber-600"}`}
               >
-                Reactive Work: {workload.reactivePercent}%
+                Reactive: {workload.reactivePercent}%
+              </span>
+              <span
+                className={`font-bold ${isRetro ? "text-cyan-400" : "text-cyan-600"}`}
+              >
+                R&D: {workload.rndPercent}%
               </span>
             </div>
             <ProgressBar
               percent={workload.plannedPercent}
               showReactive={true}
               reactivePercent={workload.reactivePercent}
+              showRnd={true}
+              rndPercent={workload.rndPercent}
             />
           </div>
 
