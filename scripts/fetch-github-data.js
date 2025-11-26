@@ -31,7 +31,7 @@ const REPO_MAPPING = {
     description: "LSI keyword analysis tool",
     teams: ["Content", "Specialists"],
   },
-  PEM: {
+  "P.E.M": {
     repo: "Product-Enrichment-Manager",
     type: "TOOL",
     description: "Product Enrichment Manager - metadata management",

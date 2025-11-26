@@ -323,24 +323,24 @@ const MerrickMonitor = () => {
 
   // Generate System Health from actual tool data
   const getSystemHealth = () => {
-    const pemTool = toolFleet.find((t) => t.name === "PEM");
+    const pemTool = toolFleet.find((t) => t.name === "P.E.M");
 
     const systems = [];
 
-    // Always show PEM first if available
+    // Always show P.E.M first if available
     if (pemTool) {
       systems.push({
         id: "SYS_01",
-        name: "PEM",
+        name: "P.E.M",
         status: pemTool.status === "LIVE" ? "OK" : "WARN",
         latency: "45ms",
         uptime: "99.9%",
       });
     }
 
-    // Add other tools (exclude PEM and Lead) - limit to 2 tools (3 total with PEM)
+    // Add other tools (exclude P.E.M and Lead) - limit to 2 tools (3 total with P.E.M)
     const otherTools = toolFleet
-      .filter((t) => t.name !== "PEM" && !t.name.includes("Lead"))
+      .filter((t) => t.name !== "P.E.M" && !t.name.includes("Lead"))
       .slice(0, 2);
 
     otherTools.forEach((tool, index) => {
@@ -369,7 +369,7 @@ const MerrickMonitor = () => {
       return [
         {
           id: "SYS_01",
-          name: "PEM",
+          name: "P.E.M",
           status: "OK",
           latency: "45ms",
           uptime: "99.9%",
