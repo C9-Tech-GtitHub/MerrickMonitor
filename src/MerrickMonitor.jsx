@@ -87,7 +87,7 @@ const MerrickMonitor = () => {
 
   const loadWeeklyAgenda = async () => {
     try {
-      const response = await fetch("/src/data/weeklyAgendas.json");
+      const response = await fetch("/MerrickMonitor/data/weeklyAgendas.json");
       if (response.ok) {
         const allAgendas = await response.json();
         const currentWeekKey = getCurrentWeekKey();

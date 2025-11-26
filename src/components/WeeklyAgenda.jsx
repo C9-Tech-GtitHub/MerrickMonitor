@@ -30,7 +30,7 @@ const WeeklyAgenda = ({ theme, isRetro, toolFleet }) => {
   const loadAgenda = async () => {
     try {
       // Try to fetch from GitHub first
-      const response = await fetch("/src/data/weeklyAgendas.json");
+      const response = await fetch("/MerrickMonitor/data/weeklyAgendas.json");
       if (response.ok) {
         const allAgendas = await response.json();
         const weekAgenda = allAgendas[currentWeek]?.goals || [];
