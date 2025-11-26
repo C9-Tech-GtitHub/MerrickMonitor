@@ -12,7 +12,45 @@ export class GitHubService {
   constructor() {
     this.owner = GITHUB_CONFIG.owner;
     this.cache = new Map();
-    this.cacheTimeout = 5 * 60 * 1000; // 5 minutes
+    this.cacheTimeout = 30 * 60 * 1000; // 30 minutes cache for production
+    this.loadCacheFromLocalStorage();
+  }
+
+  /**
+   * Load cache from localStorage on initialization
+   */
+  loadCacheFromLocalStorage() {
+    try {
+      const savedCache = localStorage.getItem("github_cache");
+      if (savedCache) {
+        const parsed = JSON.parse(savedCache);
+        const now = Date.now();
+
+        // Only restore cache items that haven't expired
+        Object.entries(parsed).forEach(([key, value]) => {
+          if (now - value.timestamp < this.cacheTimeout) {
+            this.cache.set(key, value);
+          }
+        });
+      }
+    } catch (error) {
+      console.error("Failed to load cache from localStorage:", error);
+    }
+  }
+
+  /**
+   * Save cache to localStorage
+   */
+  saveCacheToLocalStorage() {
+    try {
+      const cacheObj = {};
+      this.cache.forEach((value, key) => {
+        cacheObj[key] = value;
+      });
+      localStorage.setItem("github_cache", JSON.stringify(cacheObj));
+    } catch (error) {
+      console.error("Failed to save cache to localStorage:", error);
+    }
   }
 
   /**
@@ -90,6 +128,7 @@ export class GitHubService {
 
       const result = { data: activity, timestamp: Date.now() };
       this.cache.set(cacheKey, result);
+      this.saveCacheToLocalStorage();
 
       return activity;
     } catch (error) {
@@ -143,6 +182,7 @@ export class GitHubService {
 
       const result = { data: stats, timestamp: Date.now() };
       this.cache.set(cacheKey, result);
+      this.saveCacheToLocalStorage();
 
       return stats;
     } catch (error) {
@@ -286,6 +326,7 @@ export class GitHubService {
    */
   clearCache() {
     this.cache.clear();
+    localStorage.removeItem("github_cache");
   }
 }
 
