@@ -785,82 +785,6 @@ const MerrickMonitor = () => {
     </div>
   );
 
-  const ArchivedView = () => (
-    <div
-      className={`p-6 animate-in fade-in duration-300 ${theme.cardBg} ${isRetro ? "border" : "rounded-xl"} ${theme.border}`}
-    >
-      <h2
-        className={`text-xs font-bold uppercase mb-8 flex items-center gap-2 ${theme.accent}`}
-      >
-        <GitCommit className="w-4 h-4" />
-        Archived Projects
-      </h2>
-      {archivedRepos.length === 0 ? (
-        <div className={`text-center py-12 ${theme.textMuted}`}>
-          <p className="text-sm">No archived projects</p>
-        </div>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr
-                className={`border-b text-xs uppercase tracking-wider ${theme.tableHeader}`}
-              >
-                <th className="p-3 font-normal">Project Name</th>
-                <th className="p-3 font-normal">Repository</th>
-                <th className="p-3 font-normal">Type</th>
-                <th className="p-3 font-normal">Archived Date</th>
-                <th className="p-3 font-normal">Description</th>
-              </tr>
-            </thead>
-            <tbody
-              className={`text-xs md:text-sm ${isRetro ? "font-mono" : ""}`}
-            >
-              {archivedRepos.map((repo) => (
-                <tr
-                  key={repo.id}
-                  className={`border-b transition-colors ${isRetro ? "border-green-900/40 hover:bg-green-900/10" : "border-slate-100 hover:bg-slate-50"}`}
-                >
-                  <td className={`p-3 font-medium ${theme.textBold}`}>
-                    {repo.name}
-                  </td>
-                  <td className="p-3">
-                    {repo.repoUrl ? (
-                      <a
-                        href={repo.repoUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`hover:underline flex items-center gap-1 ${isRetro ? "hover:text-green-300" : "hover:text-indigo-700"}`}
-                      >
-                        {repo.repoName}
-                        <Github className="w-3 h-3 opacity-50" />
-                      </a>
-                    ) : (
-                      <span className={theme.textMuted}>{repo.repoName}</span>
-                    )}
-                  </td>
-                  <td className="p-3">
-                    <span
-                      className={`text-[10px] px-2 py-0.5 rounded border ${isRetro ? "border-green-900 text-green-700" : "border-slate-200 text-slate-600"}`}
-                    >
-                      {repo.type}
-                    </span>
-                  </td>
-                  <td className={`p-3 ${theme.textMuted}`}>
-                    {repo.archivedDate}
-                  </td>
-                  <td className={`p-3 ${theme.textMuted}`}>
-                    {repo.description}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
-  );
-
   return (
     <div
       className={`min-h-screen p-4 md:p-8 overflow-hidden relative transition-colors duration-500 ${theme.bg} ${theme.text} ${theme.font} ${theme.selection}`}
@@ -932,7 +856,7 @@ const MerrickMonitor = () => {
               </div>
               {/* Tab Navigation */}
               <div className="flex justify-end gap-6 text-xs mt-2">
-                {["OVERVIEW", "ADOPTION", "ARCHIVED"].map((tab) => (
+                {["OVERVIEW", "ADOPTION"].map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
@@ -948,6 +872,35 @@ const MerrickMonitor = () => {
 
         {/* Top Stats Row (Always Visible) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 px-4 md:px-6">
+          {/* Currently Working On - Compact Version */}
+          <div
+            className={`p-4 transition-all duration-300 ${theme.cardBg} ${isRetro ? "border-2 border-green-500 bg-green-900/10" : "rounded-xl border-2 border-indigo-200 bg-gradient-to-r from-indigo-50 to-purple-50"}`}
+          >
+            <div className="flex items-center justify-between mb-1">
+              <div
+                className={`text-[10px] uppercase tracking-wider font-bold flex items-center gap-1 ${isRetro ? "text-green-300" : "text-indigo-600"}`}
+              >
+                <Zap className="w-3 h-3" />
+                Active Dev
+              </div>
+              <span
+                className={`text-[8px] px-1.5 py-0.5 rounded-full font-bold ${isRetro ? "bg-green-900 text-green-300 border border-green-700" : "bg-indigo-100 text-indigo-700"}`}
+              >
+                65%
+              </span>
+            </div>
+            <div
+              className={`text-sm font-bold mb-1 ${isRetro ? "text-green-400" : "text-slate-900"}`}
+            >
+              On-Page Josh Bot
+            </div>
+            <div
+              className={`text-[9px] ${isRetro ? "text-green-700" : "text-slate-500"}`}
+            >
+              SEO automation enhancement
+            </div>
+          </div>
+
           <div
             className={`p-4 transition-all duration-300 ${theme.cardBg} ${isRetro ? "border border-green-900 bg-green-900/5" : "rounded-xl"}`}
           >
@@ -985,35 +938,6 @@ const MerrickMonitor = () => {
             </div>
             <div className={`text-2xl font-bold ${theme.textBold}`}>
               28 <span className={`text-xs ${theme.textMuted}`}>TEAM</span>
-            </div>
-          </div>
-
-          {/* Currently Working On - Compact Version */}
-          <div
-            className={`p-4 transition-all duration-300 ${theme.cardBg} ${isRetro ? "border-2 border-green-500 bg-green-900/10" : "rounded-xl border-2 border-indigo-200 bg-gradient-to-r from-indigo-50 to-purple-50"}`}
-          >
-            <div className="flex items-center justify-between mb-1">
-              <div
-                className={`text-[10px] uppercase tracking-wider font-bold flex items-center gap-1 ${isRetro ? "text-green-300" : "text-indigo-600"}`}
-              >
-                <Zap className="w-3 h-3" />
-                Active Dev
-              </div>
-              <span
-                className={`text-[8px] px-1.5 py-0.5 rounded-full font-bold ${isRetro ? "bg-green-900 text-green-300 border border-green-700" : "bg-indigo-100 text-indigo-700"}`}
-              >
-                65%
-              </span>
-            </div>
-            <div
-              className={`text-sm font-bold mb-1 ${isRetro ? "text-green-400" : "text-slate-900"}`}
-            >
-              On-Page Josh Bot
-            </div>
-            <div
-              className={`text-[9px] ${isRetro ? "text-green-700" : "text-slate-500"}`}
-            >
-              SEO automation enhancement
             </div>
           </div>
         </div>
@@ -1103,7 +1027,6 @@ const MerrickMonitor = () => {
         <div className="px-4 md:px-6 pb-6 min-h-[500px]">
           {activeTab === "OVERVIEW" && <OverviewView />}
           {activeTab === "ADOPTION" && <AdoptionView />}
-          {activeTab === "ARCHIVED" && <ArchivedView />}
         </div>
       </div>
     </div>
