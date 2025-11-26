@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Terminal,
   Cpu,
@@ -12,186 +12,488 @@ import {
   Zap,
   Calendar,
   Github,
-  TrendingUp
-} from 'lucide-react';
+  TrendingUp,
+  Monitor,
+  Layout,
+  Lock,
+} from "lucide-react";
 
 const MerrickMonitor = () => {
   const [date, setDate] = useState(new Date());
   const [cursorVisible, setCursorVisible] = useState(true);
-  const [activeTab, setActiveTab] = useState('OVERVIEW');
+  const [activeTab, setActiveTab] = useState("OVERVIEW");
+  const [viewMode, setViewMode] = useState("RETRO"); // 'RETRO' or 'MINIMAL'
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [passwordInput, setPasswordInput] = useState("");
+  const [showError, setShowError] = useState(false);
+
+  const CORRECT_PASSWORD = "peek";
 
   // Blinking cursor & Time update
   useEffect(() => {
     const timer = setInterval(() => setDate(new Date()), 1000);
-    const cursorTimer = setInterval(() => setCursorVisible(v => !v), 800);
-    return () => { clearInterval(timer); clearInterval(cursorTimer); };
+    const cursorTimer = setInterval(() => setCursorVisible((v) => !v), 800);
+    return () => {
+      clearInterval(timer);
+      clearInterval(cursorTimer);
+    };
   }, []);
 
   // Date Helpers
-  const formatTime = (d) => d.toLocaleTimeString();
-  const formatDate = (d) => d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-  const getCurrentDayShort = () => date.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
+  const formatTime = (d) =>
+    d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  const formatDate = (d) =>
+    d.toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  const getCurrentDayShort = () =>
+    date.toLocaleDateString("en-US", { weekday: "short" }).toUpperCase();
 
   const getWeekRange = () => {
     const curr = new Date();
-    // Start of week (Monday) calculation
-    const day = curr.getDay() || 7; // Get current day number, converting Sun (0) to 7
-    if (day !== 1) curr.setHours(-24 * (day - 1)); // Set to Monday
+    const day = curr.getDay() || 7;
+    if (day !== 1) curr.setHours(-24 * (day - 1));
 
     const monday = new Date(curr);
     const friday = new Date(curr);
     friday.setDate(monday.getDate() + 4);
 
-    const opts = { month: 'short', day: 'numeric' };
-    return `${monday.toLocaleDateString('en-US', opts)} - ${friday.toLocaleDateString('en-US', opts)}`;
+    const opts = { month: "short", day: "numeric" };
+    return `${monday.toLocaleDateString("en-US", opts)} - ${friday.toLocaleDateString("en-US", opts)}`;
+  };
+
+  // Password Handler
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault();
+    if (passwordInput === CORRECT_PASSWORD) {
+      setIsAuthenticated(true);
+      setShowError(false);
+    } else {
+      setShowError(true);
+      setPasswordInput("");
+    }
+  };
+
+  // --- THEME ENGINE ---
+  const isRetro = viewMode === "RETRO";
+
+  const theme = {
+    bg: isRetro ? "bg-black" : "bg-slate-50",
+    text: isRetro ? "text-green-500" : "text-slate-600",
+    textBold: isRetro ? "text-green-400" : "text-slate-900",
+    textMuted: isRetro ? "text-green-700" : "text-slate-400",
+    border: isRetro ? "border-green-800" : "border-slate-200",
+    cardBg: isRetro ? "bg-black" : "bg-white shadow-sm border border-slate-200",
+    font: isRetro ? "font-mono" : "font-sans",
+    accent: isRetro ? "text-green-400" : "text-indigo-600",
+    accentBg: isRetro ? "bg-green-500" : "bg-indigo-600",
+    success: isRetro ? "text-green-500" : "text-emerald-600",
+    warning: isRetro ? "text-green-500" : "text-amber-600",
+    tableHeader: isRetro
+      ? "text-green-700 border-green-800"
+      : "text-slate-400 border-slate-100",
+    gridActive: isRetro
+      ? "bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.8)]"
+      : "bg-indigo-600",
+    gridInactive: isRetro ? "bg-green-900/30" : "bg-slate-200",
+    selection: isRetro
+      ? "selection:bg-green-900 selection:text-green-100"
+      : "selection:bg-indigo-100 selection:text-indigo-900",
   };
 
   // --- MOCK DATA ---
 
-  // Live Tools Data
   const toolFleet = [
-    { id: 1, name: "ON_PAGE_JOSH_BOT", type: "BOT", status: "LIVE", users: 12, trend: "UP", activity: [1, 0, 0, 0, 0] },
-    { id: 2, name: "RANDY_PEM_DASH", type: "DASH", status: "LIVE", users: 45, trend: "STABLE", activity: [0, 0, 1, 0, 0] },
-    { id: 3, name: "INTERLINKING_SYS", type: "SEO", status: "LIVE", users: 8, trend: "UP", activity: [0, 0, 0, 0, 0] },
-    { id: 4, name: "LSI_ANALYZER", type: "SEO", status: "BETA", users: 3, trend: "FLAT", activity: [0, 1, 0, 0, 0] },
-    { id: 5, name: "GMC_TITLE_DASH", type: "DASH", status: "LIVE", users: 22, trend: "UP", activity: [0, 0, 0, 0, 0] },
-    { id: 6, name: "META_CHECKER", type: "TOOL", status: "LIVE", users: 156, trend: "UP", activity: [1, 1, 0, 0, 0] },
-    { id: 7, name: "SEASONAL_SALLY", type: "BOT", status: "MAINT", users: 4, trend: "DOWN", activity: [0, 0, 0, 1, 0] },
-    { id: 8, name: "METAOBJECTS_AUTO", type: "AUTO", status: "LIVE", users: 19, trend: "STABLE", activity: [0, 0, 0, 0, 0] },
-    { id: 9, name: "SCHEMA_SCANNER", type: "TOOL", status: "LIVE", users: 89, trend: "UP", activity: [0, 0, 0, 0, 1] },
-    { id: 10, name: "COMPETITOR_SCRAPE", type: "SCRAPE", status: "LIVE", users: 12, trend: "STABLE", activity: [1, 0, 0, 0, 0] },
+    {
+      id: 1,
+      name: "ON_PAGE_JOSH_BOT",
+      type: "BOT",
+      status: "LIVE",
+      users: 12,
+      trend: "UP",
+      activity: [1, 0, 0, 0, 0],
+    },
+    {
+      id: 2,
+      name: "RANDY_PEM_DASH",
+      type: "DASH",
+      status: "LIVE",
+      users: 45,
+      trend: "STABLE",
+      activity: [0, 0, 1, 0, 0],
+    },
+    {
+      id: 3,
+      name: "INTERLINKING_SYS",
+      type: "SEO",
+      status: "LIVE",
+      users: 8,
+      trend: "UP",
+      activity: [0, 0, 0, 0, 0],
+    },
+    {
+      id: 4,
+      name: "LSI_ANALYZER",
+      type: "SEO",
+      status: "BETA",
+      users: 3,
+      trend: "FLAT",
+      activity: [0, 1, 0, 0, 0],
+    },
+    {
+      id: 5,
+      name: "GMC_TITLE_DASH",
+      type: "DASH",
+      status: "LIVE",
+      users: 22,
+      trend: "UP",
+      activity: [0, 0, 0, 0, 0],
+    },
+    {
+      id: 6,
+      name: "META_CHECKER",
+      type: "TOOL",
+      status: "LIVE",
+      users: 156,
+      trend: "UP",
+      activity: [1, 1, 0, 0, 0],
+    },
+    {
+      id: 7,
+      name: "SEASONAL_SALLY",
+      type: "BOT",
+      status: "MAINT",
+      users: 4,
+      trend: "DOWN",
+      activity: [0, 0, 0, 1, 0],
+    },
+    {
+      id: 8,
+      name: "METAOBJECTS_AUTO",
+      type: "AUTO",
+      status: "LIVE",
+      users: 19,
+      trend: "STABLE",
+      activity: [0, 0, 0, 0, 0],
+    },
+    {
+      id: 9,
+      name: "SCHEMA_SCANNER",
+      type: "TOOL",
+      status: "LIVE",
+      users: 89,
+      trend: "UP",
+      activity: [0, 0, 0, 0, 1],
+    },
+    {
+      id: 10,
+      name: "COMPETITOR_SCRAPE",
+      type: "SCRAPE",
+      status: "LIVE",
+      users: 12,
+      trend: "STABLE",
+      activity: [1, 0, 0, 0, 0],
+    },
   ];
 
   const systems = [
-    { id: "SYS_01", name: "LEGACY_CRM", status: "OK", latency: "45ms", uptime: "99.9%" },
-    { id: "SYS_02", name: "DATA_WH", status: "WARN", latency: "820ms", uptime: "98.5%" },
-    { id: "SYS_03", name: "INT_WIKI", status: "OK", latency: "12ms", uptime: "99.99%" },
-    { id: "SYS_04", name: "CI_PIPELINE", status: "OK", latency: "110ms", uptime: "100%" },
+    {
+      id: "SYS_01",
+      name: "LEGACY_CRM",
+      status: "OK",
+      latency: "45ms",
+      uptime: "99.9%",
+    },
+    {
+      id: "SYS_02",
+      name: "DATA_WH",
+      status: "WARN",
+      latency: "820ms",
+      uptime: "98.5%",
+    },
+    {
+      id: "SYS_03",
+      name: "INT_WIKI",
+      status: "OK",
+      latency: "12ms",
+      uptime: "99.99%",
+    },
+    {
+      id: "SYS_04",
+      name: "CI_PIPELINE",
+      status: "OK",
+      latency: "110ms",
+      uptime: "100%",
+    },
   ];
 
-  // Mon-Fri Schedule Data
   const weeklySchedule = {
     MON: [
       { id: 1, task: "Patch: Josh Bot", type: "MAINT", status: "DONE" },
-      { id: 2, task: "User Training", type: "ADOPT", status: "DONE" }
+      { id: 2, task: "User Training", type: "ADOPT", status: "DONE" },
     ],
-    TUE: [
-      { id: 3, task: "LSI Logic Tweak", type: "FEAT", status: "IN_PROG" }
-    ],
+    TUE: [{ id: 3, task: "LSI Logic Tweak", type: "FEAT", status: "IN_PROG" }],
     WED: [
-      { id: 4, task: "Randy Dash Update", type: "MAINT", status: "PENDING" }
+      { id: 4, task: "Randy Dash Update", type: "MAINT", status: "PENDING" },
     ],
     THU: [
-      { id: 5, task: "Seasonal Sally Fix", type: "MAINT", status: "PENDING" }
+      { id: 5, task: "Seasonal Sally Fix", type: "MAINT", status: "PENDING" },
     ],
     FRI: [
-      { id: 6, task: "Schema Scan Check", type: "MAINT", status: "PENDING" }
-    ]
+      { id: 6, task: "Schema Scan Check", type: "MAINT", status: "PENDING" },
+    ],
   };
 
   const reactiveLoad = 15;
   const totalUsers = toolFleet.reduce((acc, curr) => acc + curr.users, 0);
 
-  // --- HELPERS ---
+  // --- RENDER HELPERS ---
 
-  const renderProgressBar = (percent, length = 20) => {
-    const filledLen = Math.round((length * percent) / 100);
-    const emptyLen = length - filledLen;
-    return '▓'.repeat(filledLen) + '░'.repeat(emptyLen);
-  };
-
-  const renderSparkline = (data) => {
-    const chars = [' ', '▂', '▃', '▄', '▅', '▆', '▇', '█'];
-    const max = Math.max(...data);
-    return data.map(v => chars[Math.floor((v / max) * 7)]).join('');
-  };
-
-  const renderActivityGrid = (activity) => {
+  const ProgressBar = ({ percent }) => {
+    if (isRetro) {
+      const length = 20;
+      const filledLen = Math.round((length * percent) / 100);
+      const emptyLen = length - filledLen;
+      return (
+        <span className="opacity-90">
+          {"▓".repeat(filledLen) + "░".repeat(emptyLen)}
+        </span>
+      );
+    }
     return (
-      <div className="flex gap-1.5 font-mono text-[10px] items-center">
-        {['M', 'T', 'W', 'T', 'F'].map((day, idx) => (
+      <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+        <div
+          className="h-full bg-indigo-600 rounded-full transition-all duration-500"
+          style={{ width: `${percent}%` }}
+        />
+      </div>
+    );
+  };
+
+  const Sparkline = ({ data }) => {
+    if (isRetro) {
+      const chars = [" ", "▂", "▃", "▄", "▅", "▆", "▇", "█"];
+      const max = Math.max(...data);
+      const str = data.map((v) => chars[Math.floor((v / max) * 7)]).join("");
+      return <span className="font-mono tracking-widest">{str}</span>;
+    }
+    return (
+      <div className="flex items-end gap-0.5 h-6">
+        {data.map((v, i) => (
+          <div
+            key={i}
+            className="w-1 bg-indigo-200 rounded-t-sm"
+            style={{ height: `${(v / Math.max(...data)) * 100}%` }}
+          />
+        ))}
+      </div>
+    );
+  };
+
+  const ActivityGrid = ({ activity }) => {
+    return (
+      <div className="flex gap-1.5 items-center">
+        {["M", "T", "W", "T", "F"].map((day, idx) => (
           <div key={idx} className="flex flex-col items-center gap-0.5">
-             <div
-               className={`w-2 h-2 rounded-full ${activity[idx] ? 'bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.8)]' : 'bg-green-900/30'}`}
-             ></div>
+            <div
+              className={`w-2 h-2 rounded-full transition-colors duration-300 ${activity[idx] ? theme.gridActive : theme.gridInactive}`}
+            ></div>
           </div>
         ))}
       </div>
     );
   };
 
+  const StatusBadge = ({ status }) => {
+    const getColors = () => {
+      if (isRetro) {
+        if (status === "LIVE")
+          return "border-green-800 text-green-400 bg-green-900/20";
+        if (status === "BETA") return "border-yellow-900 text-yellow-600";
+        return "border-red-900 text-red-800";
+      }
+      if (status === "LIVE")
+        return "bg-emerald-100 text-emerald-700 border-emerald-200";
+      if (status === "BETA")
+        return "bg-amber-100 text-amber-700 border-amber-200";
+      return "bg-slate-100 text-slate-600 border-slate-200";
+    };
+
+    return (
+      <span
+        className={`px-2 py-0.5 text-[10px] rounded border font-medium ${getColors()}`}
+      >
+        {status}
+      </span>
+    );
+  };
+
+  // --- LOGIN SCREEN ---
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-black text-green-500 font-mono flex items-center justify-center p-4 selection:bg-green-900 selection:text-green-100">
+        <div className="pointer-events-none fixed inset-0 z-50 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[length:100%_4px,3px_100%]" />
+
+        <div className="max-w-md w-full border-2 border-green-900 p-8 bg-black shadow-[0_0_30px_rgba(34,197,94,0.1)] relative z-10">
+          <div className="flex items-center justify-center mb-8">
+            <Lock className="w-12 h-12 text-green-500" />
+          </div>
+          <h1 className="text-2xl font-bold text-center mb-2 text-green-400 uppercase tracking-widest">
+            ACCESS REQUIRED
+          </h1>
+          <p className="text-xs text-green-700 text-center mb-8 tracking-wide">
+            MERRICK MONITOR // AUTHENTICATION PORTAL
+          </p>
+
+          <form onSubmit={handlePasswordSubmit} className="space-y-6">
+            <div>
+              <label className="block text-xs text-green-600 mb-2 uppercase tracking-wider">
+                Enter Password
+              </label>
+              <input
+                type="password"
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+                className="w-full bg-black border-2 border-green-800 text-green-400 px-4 py-3 focus:outline-none focus:border-green-500 transition-colors font-mono"
+                placeholder="••••••••"
+                autoFocus
+              />
+              {showError && (
+                <p className="text-xs text-red-500 mt-2 animate-pulse">
+                  ACCESS DENIED - INVALID PASSWORD
+                </p>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-green-900 hover:bg-green-800 text-green-100 font-bold py-3 px-4 border-2 border-green-700 hover:border-green-500 transition-all uppercase tracking-widest"
+            >
+              → AUTHENTICATE
+            </button>
+          </form>
+
+          <div className="mt-8 text-center">
+            <div className="text-xs text-green-800">
+              {formatTime(date)}
+              <span
+                className={`ml-1 ${cursorVisible ? "opacity-100" : "opacity-0"} transition-opacity`}
+              >
+                _
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // --- VIEWS ---
 
   const OverviewView = () => (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-4">
       {/* Left Column (8 cols) */}
-      <div className="lg:col-span-8 space-y-8">
-
+      <div className="lg:col-span-8 space-y-6">
         {/* Ops Load Section */}
-        <section className="border border-green-800 p-5 bg-black">
-          <h2 className="text-sm font-bold uppercase mb-4 flex items-center gap-2 text-green-400">
+        <section
+          className={`p-6 transition-colors duration-300 ${theme.cardBg} ${isRetro ? "border" : "rounded-xl"} ${theme.border}`}
+        >
+          <h2
+            className={`text-xs font-bold uppercase mb-4 flex items-center gap-2 ${theme.accent}`}
+          >
             <Activity className="w-4 h-4" />
-            MAINTENANCE_LOAD
+            Maintenance Load
           </h2>
-          <div className="flex justify-between text-xs mb-2 tracking-wide">
-            <span className="text-green-600">STABLE_OPS</span>
-            <span className="text-green-400 font-bold">REACTIVE_FIXES: {reactiveLoad}%</span>
+          <div className="flex justify-between text-xs mb-3 tracking-wide">
+            <span className={theme.textMuted}>Stable Ops</span>
+            <span
+              className={`font-bold ${isRetro ? "text-green-400" : "text-indigo-600"}`}
+            >
+              Reactive Fixes: {reactiveLoad}%
+            </span>
           </div>
-          <div className="font-mono text-sm break-all leading-none tracking-tighter opacity-90 text-green-500">
-            {renderProgressBar(100 - reactiveLoad, 80)}
-          </div>
+          <ProgressBar percent={100 - reactiveLoad} />
         </section>
 
         {/* Live Tool Fleet Table */}
-        <section className="border border-green-800 p-5 bg-black">
+        <section
+          className={`p-6 transition-colors duration-300 ${theme.cardBg} ${isRetro ? "border" : "rounded-xl"} ${theme.border}`}
+        >
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-sm font-bold uppercase flex items-center gap-2 text-green-400">
+            <h2
+              className={`text-xs font-bold uppercase flex items-center gap-2 ${theme.accent}`}
+            >
               <Cpu className="w-4 h-4" />
-              LIVE_TOOL_FLEET
+              Live Tool Fleet
             </h2>
-            <div className="flex items-center gap-2">
-                <span className="text-[10px] text-green-700 uppercase tracking-wider flex items-center gap-1">
-                   <Github className="w-3 h-3" /> GH_ACTIVITY
-                </span>
-                <span className="text-xs text-green-600 animate-pulse ml-2">● SYSTEMS_ONLINE</span>
+            <div className="flex items-center gap-3">
+              <span
+                className={`text-[10px] uppercase tracking-wider flex items-center gap-1 ${theme.textMuted}`}
+              >
+                <Github className="w-3 h-3" /> Activity
+              </span>
+              <span
+                className={`text-xs animate-pulse flex items-center gap-1.5 ${theme.success}`}
+              >
+                <span
+                  className={`w-1.5 h-1.5 rounded-full ${isRetro ? "bg-green-500" : "bg-emerald-500"}`}
+                ></span>
+                Online
+              </span>
             </div>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-green-800 text-xs text-green-700 uppercase tracking-wider">
+                <tr
+                  className={`border-b text-xs uppercase tracking-wider ${theme.tableHeader}`}
+                >
                   <th className="p-3 font-normal w-12">ID</th>
-                  <th className="p-3 font-normal">TOOL_NAME</th>
-                  <th className="p-3 font-normal">ACTIVITY (M-F)</th>
-                  <th className="p-3 font-normal">STATUS</th>
-                  <th className="p-3 font-normal text-right">USERS</th>
+                  <th className="p-3 font-normal">Tool Name</th>
+                  <th className="p-3 font-normal">Activity (M-F)</th>
+                  <th className="p-3 font-normal">Status</th>
+                  <th className="p-3 font-normal text-right">Users</th>
                 </tr>
               </thead>
-              <tbody className="font-mono text-xs md:text-sm">
+              <tbody
+                className={`text-xs md:text-sm ${isRetro ? "font-mono" : ""}`}
+              >
                 {toolFleet.map((tool) => (
-                  <tr key={tool.id} className="border-b border-green-900/40 hover:bg-green-900/10 group transition-colors">
-                    <td className="p-3 text-green-700">{tool.id < 10 ? `0${tool.id}` : tool.id}</td>
-                    <td className="p-3 font-bold text-green-500 group-hover:text-green-300 transition-colors">
-                        <div>{tool.name}</div>
-                        <div className="text-[10px] text-green-800 font-normal">{tool.type}</div>
+                  <tr
+                    key={tool.id}
+                    className={`border-b transition-colors ${isRetro ? "border-green-900/40 hover:bg-green-900/10" : "border-slate-100 hover:bg-slate-50"}`}
+                  >
+                    <td className={`p-3 ${theme.textMuted}`}>
+                      {tool.id < 10 ? `0${tool.id}` : tool.id}
+                    </td>
+                    <td
+                      className={`p-3 font-medium transition-colors ${theme.textBold}`}
+                    >
+                      <div>{tool.name}</div>
+                      <div
+                        className={`text-[10px] font-normal ${theme.textMuted}`}
+                      >
+                        {tool.type}
+                      </div>
                     </td>
                     <td className="p-3">
-                        {renderActivityGrid(tool.activity)}
+                      <ActivityGrid activity={tool.activity} />
                     </td>
                     <td className="p-3">
-                      <span className={`px-2 py-0.5 text-[10px] rounded border ${
-                        tool.status === 'LIVE' ? 'border-green-800 text-green-400 bg-green-900/20' :
-                        tool.status === 'BETA' ? 'border-yellow-900 text-yellow-600' :
-                        'border-red-900 text-red-800'
-                      }`}>
-                        {tool.status}
-                      </span>
+                      <StatusBadge status={tool.status} />
                     </td>
                     <td className="p-3 text-right">
-                       <div className="flex items-center justify-end gap-2">
-                          <span className="text-green-300 font-bold">{tool.users}</span>
-                          {tool.trend === 'UP' && <TrendingUp className="w-3 h-3 text-green-500" />}
-                       </div>
+                      <div className="flex items-center justify-end gap-2">
+                        <span className={`font-bold ${theme.textBold}`}>
+                          {tool.users}
+                        </span>
+                        {tool.trend === "UP" && (
+                          <TrendingUp className={`w-3 h-3 ${theme.success}`} />
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -199,39 +501,71 @@ const MerrickMonitor = () => {
             </table>
           </div>
         </section>
-
       </div>
 
       {/* Right Column (4 cols) */}
-      <div className="lg:col-span-4 space-y-8">
-
+      <div className="lg:col-span-4 space-y-6">
         {/* Weekly Timeline */}
-        <section className="border border-green-800 p-5 bg-black">
-          <h2 className="text-sm font-bold uppercase mb-6 flex items-center gap-2 text-green-400">
-             <Calendar className="w-4 h-4" />
-             WEEKLY_LOG
+        <section
+          className={`p-6 transition-colors duration-300 ${theme.cardBg} ${isRetro ? "border" : "rounded-xl"} ${theme.border}`}
+        >
+          <h2
+            className={`text-xs font-bold uppercase mb-6 flex items-center gap-2 ${theme.accent}`}
+          >
+            <Calendar className="w-4 h-4" />
+            Weekly Log
           </h2>
-          <div className="text-xs text-green-600 mb-4 border-b border-green-900 pb-2">
-             CURRENT WEEK: {getWeekRange()}
+          <div
+            className={`text-xs mb-4 border-b pb-2 ${theme.tableHeader} ${theme.textMuted}`}
+          >
+            Current Week: {getWeekRange()}
           </div>
           <div className="space-y-4">
             {Object.entries(weeklySchedule).map(([day, tasks]) => {
               const isToday = day === getCurrentDayShort();
               return (
-                <div key={day} className={`flex gap-4 p-2 -mx-2 rounded transition-colors ${isToday ? 'bg-green-900/20 border border-green-900' : ''}`}>
-                   <div className={`text-xs font-bold w-8 pt-1 ${isToday ? 'text-green-400' : 'text-green-700'}`}>
-                      {day} {isToday && <span className="animate-pulse text-[8px] block">NOW</span>}
-                   </div>
-                   <div className={`flex-1 space-y-2 border-l pl-4 ${isToday ? 'border-green-500' : 'border-green-900'}`}>
-                      {tasks.length > 0 ? tasks.map(t => (
-                         <div key={t.id} className="text-xs group">
-                            <span className={`text-[9px] mr-2 px-1 ${t.status === 'DONE' ? 'text-green-500 line-through opacity-50' : 'text-green-400'}`}>
-                               {t.type}
-                            </span>
-                            <span className={t.status === 'DONE' ? 'text-green-800' : 'text-green-300'}>{t.task}</span>
-                         </div>
-                      )) : <span className="text-[10px] text-green-900 italic">-- No Activity --</span>}
-                   </div>
+                <div
+                  key={day}
+                  className={`flex gap-4 p-2 -mx-2 rounded transition-colors ${isToday ? (isRetro ? "bg-green-900/20 border border-green-900" : "bg-indigo-50 border border-indigo-100") : ""}`}
+                >
+                  <div
+                    className={`text-xs font-bold w-8 pt-1 ${isToday ? theme.accent : theme.textMuted}`}
+                  >
+                    {day}{" "}
+                    {isToday && (
+                      <span className="animate-pulse text-[8px] block">
+                        NOW
+                      </span>
+                    )}
+                  </div>
+                  <div
+                    className={`flex-1 space-y-2 border-l pl-4 ${isToday ? (isRetro ? "border-green-500" : "border-indigo-400") : isRetro ? "border-green-900" : "border-slate-200"}`}
+                  >
+                    {tasks.length > 0 ? (
+                      tasks.map((t) => (
+                        <div key={t.id} className="text-xs group">
+                          <span
+                            className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${t.status === "DONE" ? (isRetro ? "text-green-500 line-through opacity-50" : "text-slate-400 line-through") : theme.accent}`}
+                          >
+                            {t.type}
+                          </span>
+                          <span
+                            className={
+                              t.status === "DONE"
+                                ? theme.textMuted
+                                : theme.textBold
+                            }
+                          >
+                            {t.task}
+                          </span>
+                        </div>
+                      ))
+                    ) : (
+                      <span className={`text-[10px] italic ${theme.textMuted}`}>
+                        -- No Activity --
+                      </span>
+                    )}
+                  </div>
                 </div>
               );
             })}
@@ -239,124 +573,239 @@ const MerrickMonitor = () => {
         </section>
 
         {/* System Diagnostics */}
-        <section className="border border-green-800 p-5 bg-black">
-          <h2 className="text-sm font-bold uppercase mb-6 border-b border-green-800 pb-2 text-green-400">FLEET_HEALTH</h2>
+        <section
+          className={`p-6 transition-colors duration-300 ${theme.cardBg} ${isRetro ? "border" : "rounded-xl"} ${theme.border}`}
+        >
+          <h2
+            className={`text-xs font-bold uppercase mb-6 border-b pb-2 flex items-center gap-2 ${theme.tableHeader}`}
+          >
+            <ShieldCheck className="w-4 h-4" />
+            Fleet Health
+          </h2>
           <div className="space-y-5">
             {systems.map((sys) => (
-              <div key={sys.id} className="flex items-center justify-between text-xs group hover:bg-green-900/10 p-2 -mx-2 rounded transition-colors cursor-default">
+              <div
+                key={sys.id}
+                className={`flex items-center justify-between text-xs group p-2 -mx-2 rounded transition-colors cursor-default ${isRetro ? "hover:bg-green-900/10" : "hover:bg-slate-50"}`}
+              >
                 <div>
-                  <div className="font-bold mb-1 text-green-300 group-hover:text-green-100">{sys.name}</div>
-                  <div className="text-green-700 text-[10px] font-mono">LAT: {sys.latency}</div>
+                  <div className={`font-bold mb-1 ${theme.textBold}`}>
+                    {sys.name}
+                  </div>
+                  <div className={`text-[10px] font-mono ${theme.textMuted}`}>
+                    LAT: {sys.latency}
+                  </div>
                 </div>
                 <div className="text-right">
-                  <div className={`font-bold inline-block px-1 ${sys.status === 'WARN' ? 'bg-green-500 text-black' : 'text-green-500'}`}>
-                    [{sys.status}]
+                  <div
+                    className={`font-bold inline-block px-1.5 py-0.5 rounded text-[10px] ${sys.status === "WARN" ? (isRetro ? "bg-green-500 text-black" : "bg-amber-100 text-amber-700") : isRetro ? "text-green-500" : "bg-emerald-100 text-emerald-700"}`}
+                  >
+                    {sys.status}
                   </div>
                 </div>
               </div>
             ))}
           </div>
         </section>
-
       </div>
     </div>
   );
 
   const AdoptionView = () => (
-    <div className="border border-green-800 p-6 animate-in fade-in duration-300 bg-black">
-       <h2 className="text-sm font-bold uppercase mb-8 flex items-center gap-2 text-green-400">
-          <Users className="w-4 h-4" />
-          DETAILED_ADOPTION_METRICS
-       </h2>
-       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {toolFleet.map(tool => (
-             <div key={tool.id} className="border border-green-800 p-5 bg-green-900/5 hover:bg-green-900/20 transition-all hover:border-green-600">
-                <div className="text-xs text-green-600 mb-3">{tool.name}</div>
-                <div className="flex justify-between items-end mb-4">
-                   <div className="text-3xl font-bold text-green-300">{tool.users}</div>
-                   <div className="text-[10px] text-green-700 mb-1">ACTIVE USERS</div>
-                </div>
-                <div className="pt-4 border-t border-green-900 flex justify-between items-center">
-                   <div className="text-[10px] text-green-500 font-mono tracking-widest opacity-80">
-                      {renderSparkline([10, 25, 40, 30, 60, tool.users - 10, tool.users])}
-                   </div>
-                   <div className={`text-[10px] font-bold ${tool.trend === 'UP' ? 'text-green-400' : 'text-green-700'}`}>
-                      {tool.trend === 'UP' ? '↑ GROWTH' : tool.trend === 'DOWN' ? '↓ CHURN' : '→ STABLE'}
-                   </div>
-                </div>
-             </div>
-          ))}
-       </div>
+    <div
+      className={`p-6 animate-in fade-in duration-300 ${theme.cardBg} ${isRetro ? "border" : "rounded-xl"} ${theme.border}`}
+    >
+      <h2
+        className={`text-xs font-bold uppercase mb-8 flex items-center gap-2 ${theme.accent}`}
+      >
+        <Users className="w-4 h-4" />
+        Detailed Adoption Metrics
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {toolFleet.map((tool) => (
+          <div
+            key={tool.id}
+            className={`p-5 transition-all ${isRetro ? "border border-green-800 bg-green-900/5 hover:bg-green-900/20 hover:border-green-600" : "bg-slate-50 rounded-xl hover:bg-white hover:shadow-md border border-slate-100"}`}
+          >
+            <div className={`text-xs mb-3 font-semibold ${theme.textMuted}`}>
+              {tool.name}
+            </div>
+            <div className="flex justify-between items-end mb-4">
+              <div className={`text-3xl font-bold ${theme.textBold}`}>
+                {tool.users}
+              </div>
+              <div className={`text-[10px] mb-1 ${theme.textMuted}`}>
+                ACTIVE USERS
+              </div>
+            </div>
+            <div
+              className={`pt-4 border-t flex justify-between items-center ${isRetro ? "border-green-900" : "border-slate-200"}`}
+            >
+              <Sparkline
+                data={[10, 25, 40, 30, 60, tool.users - 10, tool.users]}
+              />
+              <div
+                className={`text-[10px] font-bold ${tool.trend === "UP" ? theme.success : theme.textMuted}`}
+              >
+                {tool.trend === "UP"
+                  ? "↑ GROWTH"
+                  : tool.trend === "DOWN"
+                    ? "↓ CHURN"
+                    : "→ STABLE"}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-black text-green-500 font-mono p-4 md:p-8 selection:bg-green-900 selection:text-green-100 overflow-hidden relative">
-
-      {/* Reduced Scanline Effect for Clarity */}
-      <div className="pointer-events-none fixed inset-0 z-50 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[length:100%_4px,3px_100%] pointer-events-none" />
+    <div
+      className={`min-h-screen p-4 md:p-8 overflow-hidden relative transition-colors duration-500 ${theme.bg} ${theme.text} ${theme.font} ${theme.selection}`}
+    >
+      {/* Scanline Effect (Only in Retro Mode) */}
+      {isRetro && (
+        <div className="pointer-events-none fixed inset-0 z-50 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[length:100%_4px,3px_100%] pointer-events-none" />
+      )}
 
       {/* Main Container */}
-      <div className="max-w-7xl mx-auto border-2 border-green-900 p-1 relative z-10 shadow-[0_0_30px_rgba(34,197,94,0.05)]">
-
+      <div
+        className={`max-w-7xl mx-auto p-1 relative z-10 transition-all duration-300 ${isRetro ? "border-2 border-green-900 shadow-[0_0_30px_rgba(34,197,94,0.05)]" : ""}`}
+      >
         {/* Header Section */}
-        <header className="border-b-2 border-green-900 p-6 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 bg-black">
+        <header
+          className={`p-6 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 transition-colors duration-300 ${isRetro ? "border-b-2 border-green-900 bg-black" : "bg-transparent"}`}
+        >
           <div>
-            <h1 className="text-3xl font-bold uppercase tracking-widest flex items-center gap-3 text-green-500">
-              <Terminal className="w-8 h-8" />
-              MERRICK MONITOR
+            <h1
+              className={`text-3xl font-bold uppercase tracking-widest flex items-center gap-3 ${theme.textBold}`}
+            >
+              {isRetro ? (
+                <Terminal className="w-8 h-8" />
+              ) : (
+                <Layout className="w-8 h-8" />
+              )}
+              Merrick Monitor
             </h1>
-            <p className="text-xs text-green-800 mt-2 tracking-wide">FLEET_STATUS: OPERATIONAL // v.2.2</p>
+            <p
+              className={`text-xs mt-2 tracking-wide font-medium ${theme.textMuted}`}
+            >
+              FLEET_STATUS: OPERATIONAL // v.2.2
+            </p>
           </div>
-          <div className="text-right">
-             <div className="font-bold text-2xl mb-1 text-green-400">
-               {formatTime(date)}
-               <span className={`${cursorVisible ? 'opacity-100' : 'opacity-0'} transition-opacity`}>_</span>
-             </div>
-             <div className="text-xs text-green-700 font-bold mb-2 uppercase tracking-wide">
+          <div className="flex flex-col items-end gap-4">
+            {/* Mode Toggle */}
+            <div
+              className={`flex items-center p-1 rounded-lg ${isRetro ? "border border-green-900" : "bg-slate-200/50"}`}
+            >
+              <button
+                onClick={() => setViewMode("RETRO")}
+                className={`px-3 py-1 rounded text-[10px] font-bold transition-all ${isRetro ? "bg-green-900 text-green-100" : "text-slate-500 hover:text-slate-700"}`}
+              >
+                <Terminal className="w-3 h-3 inline mr-1" /> TERMINAL
+              </button>
+              <button
+                onClick={() => setViewMode("MINIMAL")}
+                className={`px-3 py-1 rounded text-[10px] font-bold transition-all ${!isRetro ? "bg-white shadow text-slate-800" : "text-green-800 hover:text-green-600"}`}
+              >
+                <Monitor className="w-3 h-3 inline mr-1" /> CLEAN
+              </button>
+            </div>
+
+            <div className="text-right">
+              <div className={`font-bold text-2xl mb-1 ${theme.textBold}`}>
+                {formatTime(date)}
+                {isRetro && (
+                  <span
+                    className={`${cursorVisible ? "opacity-100" : "opacity-0"} transition-opacity`}
+                  >
+                    _
+                  </span>
+                )}
+              </div>
+              <div
+                className={`text-xs font-bold mb-2 uppercase tracking-wide ${theme.textMuted}`}
+              >
                 {formatDate(date)}
-             </div>
-             {/* Tab Navigation */}
-             <div className="flex justify-end gap-6 text-xs mt-2">
-                {['OVERVIEW', 'ADOPTION'].map(tab => (
-                   <button
-                      key={tab}
-                      onClick={() => setActiveTab(tab)}
-                      className={`uppercase tracking-widest hover:text-green-300 transition-colors py-1 ${activeTab === tab ? 'text-green-400 border-b-2 border-green-500 font-bold' : 'text-green-800'}`}
-                   >
-                      {tab}
-                   </button>
+              </div>
+              {/* Tab Navigation */}
+              <div className="flex justify-end gap-6 text-xs mt-2">
+                {["OVERVIEW", "ADOPTION"].map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`uppercase tracking-widest transition-colors py-1 font-bold ${activeTab === tab ? `${theme.accent} border-b-2 ${isRetro ? "border-green-500" : "border-indigo-600"}` : theme.textMuted}`}
+                  >
+                    {tab}
+                  </button>
                 ))}
-             </div>
+              </div>
+            </div>
           </div>
         </header>
 
         {/* Top Stats Row (Always Visible) */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8 px-6">
-          <div className="border border-green-900 p-4 bg-green-900/5">
-            <div className="text-[10px] text-green-700 mb-1 uppercase tracking-wider">MAINTENANCE_LOAD</div>
-            <div className={`text-2xl font-bold ${reactiveLoad > 30 ? 'text-green-400' : 'text-green-600'}`}>{reactiveLoad}%</div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8 px-4 md:px-6">
+          <div
+            className={`p-4 transition-all duration-300 ${theme.cardBg} ${isRetro ? "border border-green-900 bg-green-900/5" : "rounded-xl"}`}
+          >
+            <div
+              className={`text-[10px] mb-1 uppercase tracking-wider font-bold ${theme.textMuted}`}
+            >
+              Maintenance Load
+            </div>
+            <div
+              className={`text-2xl font-bold ${isRetro ? (reactiveLoad > 30 ? "text-green-400" : "text-green-600") : reactiveLoad > 30 ? "text-amber-600" : "text-slate-700"}`}
+            >
+              {reactiveLoad}%
+            </div>
           </div>
-          <div className="border border-green-900 p-4 bg-green-900/5">
-             <div className="text-[10px] text-green-700 mb-1 uppercase tracking-wider">LIVE_TOOLS</div>
-             <div className="text-2xl font-bold text-green-500">{toolFleet.length} <span className="text-xs text-green-800">ONLINE</span></div>
+          <div
+            className={`p-4 transition-all duration-300 ${theme.cardBg} ${isRetro ? "border border-green-900 bg-green-900/5" : "rounded-xl"}`}
+          >
+            <div
+              className={`text-[10px] mb-1 uppercase tracking-wider font-bold ${theme.textMuted}`}
+            >
+              Live Tools
+            </div>
+            <div className={`text-2xl font-bold ${theme.textBold}`}>
+              {toolFleet.length}{" "}
+              <span className={`text-xs ${theme.textMuted}`}>ONLINE</span>
+            </div>
           </div>
-          <div className="border border-green-900 p-4 bg-green-900/5">
-             <div className="text-[10px] text-green-700 mb-1 uppercase tracking-wider">TOTAL_USERS</div>
-             <div className="text-2xl font-bold text-green-500">{totalUsers} <span className="text-xs text-green-800">ACROSS_FLEET</span></div>
+          <div
+            className={`p-4 transition-all duration-300 ${theme.cardBg} ${isRetro ? "border border-green-900 bg-green-900/5" : "rounded-xl"}`}
+          >
+            <div
+              className={`text-[10px] mb-1 uppercase tracking-wider font-bold ${theme.textMuted}`}
+            >
+              Total Users
+            </div>
+            <div className={`text-2xl font-bold ${theme.textBold}`}>
+              {totalUsers}{" "}
+              <span className={`text-xs ${theme.textMuted}`}>ACROSS_FLEET</span>
+            </div>
           </div>
-           <div className="border border-green-900 p-4 bg-green-900/5">
-             <div className="text-[10px] text-green-700 mb-1 uppercase tracking-wider">SYSTEM_HEALTH</div>
-             <div className="text-2xl font-bold text-green-400">98% <span className="text-xs text-green-800">NOMINAL</span></div>
+          <div
+            className={`p-4 transition-all duration-300 ${theme.cardBg} ${isRetro ? "border border-green-900 bg-green-900/5" : "rounded-xl"}`}
+          >
+            <div
+              className={`text-[10px] mb-1 uppercase tracking-wider font-bold ${theme.textMuted}`}
+            >
+              System Health
+            </div>
+            <div className={`text-2xl font-bold ${theme.success}`}>
+              98% <span className={`text-xs ${theme.textMuted}`}>NOMINAL</span>
+            </div>
           </div>
         </div>
 
         {/* Content Area */}
-        <div className="px-6 pb-6 min-h-[500px]">
-           {activeTab === 'OVERVIEW' && <OverviewView />}
-           {activeTab === 'ADOPTION' && <AdoptionView />}
+        <div className="px-4 md:px-6 pb-6 min-h-[500px]">
+          {activeTab === "OVERVIEW" && <OverviewView />}
+          {activeTab === "ADOPTION" && <AdoptionView />}
         </div>
-
       </div>
     </div>
   );
