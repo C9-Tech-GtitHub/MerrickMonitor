@@ -134,7 +134,8 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
     rndPercent = 0,
   }) => {
     if (isRetro) {
-      const length = 20;
+      // Use dynamic length based on container width (approximate characters that fit)
+      const length = 100;
       const plannedLen = Math.round((length * percent) / 100);
       const reactiveLen = showReactive
         ? Math.round((length * reactivePercent) / 100)
@@ -143,7 +144,7 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
       const emptyLen = length - plannedLen - reactiveLen - rndLen;
 
       return (
-        <span className="opacity-90 tracking-wider">
+        <div className="opacity-90 tracking-tighter text-xs overflow-hidden break-all">
           {"▓".repeat(plannedLen)}
           {showReactive && (
             <span className="text-yellow-500">{"▓".repeat(reactiveLen)}</span>
@@ -152,7 +153,7 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
             <span className="text-purple-500">{"▓".repeat(rndLen)}</span>
           )}
           {"░".repeat(emptyLen)}
-        </span>
+        </div>
       );
     }
 
