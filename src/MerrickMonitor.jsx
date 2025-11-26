@@ -968,7 +968,19 @@ const MerrickMonitor = () => {
             className={`p-5 transition-all ${isRetro ? "border border-green-800 bg-green-900/5 hover:bg-green-900/20 hover:border-green-600" : "bg-slate-50 rounded-xl hover:bg-white hover:shadow-md border border-slate-100"}`}
           >
             <div className={`text-xs mb-3 font-semibold ${theme.textMuted}`}>
-              {tool.name}
+              {tool.repoUrl ? (
+                <a
+                  href={tool.repoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`hover:underline flex items-center gap-1 ${isRetro ? "hover:text-green-300" : "hover:text-indigo-700"}`}
+                >
+                  {tool.name}
+                  <Github className="w-3 h-3 opacity-50" />
+                </a>
+              ) : (
+                tool.name
+              )}
             </div>
             <div className="flex justify-between items-end mb-4">
               <div className={`text-3xl font-bold ${theme.textBold}`}>
