@@ -217,6 +217,7 @@ export class GitHubService {
         commitsCount,
         description: config.description,
         repoUrl: `${GITHUB_CONFIG.baseUrl}/${config.repo}`,
+        teams: config.teams || [],
       });
     }
 

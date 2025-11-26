@@ -7,15 +7,24 @@ import { Activity, Calendar, AlertTriangle, Plus, X } from "lucide-react";
  * Tracks planned work vs reactive/unplanned tasks
  */
 const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
-  const [viewMode, setViewMode] = useState("weekly"); // 'maintenance' or 'weekly'
+  const [viewMode, setViewMode] = useState(() => {
+    return localStorage.getItem("workloadViewMode") || "weekly";
+  });
   const [reactiveTasks, setReactiveTasks] = useState([]);
   const [isAddingTask, setIsAddingTask] = useState(false);
   const [newTaskName, setNewTaskName] = useState("");
 
+  // Persist viewMode to localStorage
+  useEffect(() => {
+    localStorage.setItem("workloadViewMode", viewMode);
+  }, [viewMode]);
+
   // Load reactive tasks from localStorage
   useEffect(() => {
     const weekKey = getCurrentWeekKey();
-    const savedTasks = JSON.parse(localStorage.getItem("reactiveTasks") || "{}");
+    const savedTasks = JSON.parse(
+      localStorage.getItem("reactiveTasks") || "{}",
+    );
     const weekTasks = savedTasks[weekKey] || [];
     setReactiveTasks(weekTasks);
   }, [currentWeek]);
@@ -23,7 +32,9 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
   // Save reactive tasks to localStorage
   const saveReactiveTasks = (tasks) => {
     const weekKey = getCurrentWeekKey();
-    const savedTasks = JSON.parse(localStorage.getItem("reactiveTasks") || "{}");
+    const savedTasks = JSON.parse(
+      localStorage.getItem("reactiveTasks") || "{}",
+    );
     savedTasks[weekKey] = tasks;
     localStorage.setItem("reactiveTasks", JSON.stringify(savedTasks));
     setReactiveTasks(tasks);
@@ -51,7 +62,9 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
   // Get weekly agenda
   const getWeeklyAgenda = () => {
     const weekKey = getCurrentWeekKey();
-    const savedAgendas = JSON.parse(localStorage.getItem("weeklyAgendas") || "{}");
+    const savedAgendas = JSON.parse(
+      localStorage.getItem("weeklyAgendas") || "{}",
+    );
     return savedAgendas[weekKey] || [];
   };
 
@@ -62,11 +75,16 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
     const reactiveCount = reactiveTasks.length;
     const totalWork = plannedCount + reactiveCount;
 
-    const plannedPercent = totalWork > 0 ? Math.round((plannedCount / totalWork) * 100) : 100;
-    const reactivePercent = totalWork > 0 ? Math.round((reactiveCount / totalWork) * 100) : 0;
+    const plannedPercent =
+      totalWork > 0 ? Math.round((plannedCount / totalWork) * 100) : 100;
+    const reactivePercent =
+      totalWork > 0 ? Math.round((reactiveCount / totalWork) * 100) : 0;
 
     const completedPlanned = agenda.filter((g) => g.completed).length;
-    const completionRate = plannedCount > 0 ? Math.round((completedPlanned / plannedCount) * 100) : 0;
+    const completionRate =
+      plannedCount > 0
+        ? Math.round((completedPlanned / plannedCount) * 100)
+        : 0;
 
     return {
       plannedCount,
@@ -84,17 +102,25 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
   // Maintenance mode constants (original)
   const maintenanceReactivePercent = 15;
 
-  const ProgressBar = ({ percent, showReactive = false, reactivePercent = 0 }) => {
+  const ProgressBar = ({
+    percent,
+    showReactive = false,
+    reactivePercent = 0,
+  }) => {
     if (isRetro) {
       const length = 20;
       const plannedLen = Math.round((length * percent) / 100);
-      const reactiveLen = showReactive ? Math.round((length * reactivePercent) / 100) : 0;
+      const reactiveLen = showReactive
+        ? Math.round((length * reactivePercent) / 100)
+        : 0;
       const emptyLen = length - plannedLen - reactiveLen;
 
       return (
         <span className="opacity-90 tracking-wider">
           {"▓".repeat(plannedLen)}
-          {showReactive && <span className="text-yellow-500">{"▓".repeat(reactiveLen)}</span>}
+          {showReactive && (
+            <span className="text-yellow-500">{"▓".repeat(reactiveLen)}</span>
+          )}
           {"░".repeat(emptyLen)}
         </span>
       );
@@ -182,21 +208,31 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
         <>
           {/* Stats Row */}
           <div className="grid grid-cols-3 gap-3 mb-4">
-            <div className={`text-center p-2 rounded ${isRetro ? "bg-green-900/10" : "bg-slate-50"}`}>
+            <div
+              className={`text-center p-2 rounded ${isRetro ? "bg-green-900/10" : "bg-slate-50"}`}
+            >
               <div className={`text-xs ${theme.textMuted} mb-1`}>Planned</div>
               <div className={`text-lg font-bold ${theme.textBold}`}>
                 {workload.plannedCount}
               </div>
             </div>
-            <div className={`text-center p-2 rounded ${isRetro ? "bg-yellow-900/10 border border-yellow-900/30" : "bg-amber-50 border border-amber-200"}`}>
-              <div className={`text-xs ${isRetro ? "text-yellow-700" : "text-amber-700"} mb-1`}>
+            <div
+              className={`text-center p-2 rounded ${isRetro ? "bg-yellow-900/10 border border-yellow-900/30" : "bg-amber-50 border border-amber-200"}`}
+            >
+              <div
+                className={`text-xs ${isRetro ? "text-yellow-700" : "text-amber-700"} mb-1`}
+              >
                 Reactive
               </div>
-              <div className={`text-lg font-bold ${isRetro ? "text-yellow-500" : "text-amber-600"}`}>
+              <div
+                className={`text-lg font-bold ${isRetro ? "text-yellow-500" : "text-amber-600"}`}
+              >
                 {workload.reactiveCount}
               </div>
             </div>
-            <div className={`text-center p-2 rounded ${isRetro ? "bg-green-900/10" : "bg-slate-50"}`}>
+            <div
+              className={`text-center p-2 rounded ${isRetro ? "bg-green-900/10" : "bg-slate-50"}`}
+            >
               <div className={`text-xs ${theme.textMuted} mb-1`}>Total</div>
               <div className={`text-lg font-bold ${theme.textBold}`}>
                 {workload.totalWork}
@@ -210,7 +246,9 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
               <span className={theme.textMuted}>
                 Planned Work: {workload.plannedPercent}%
               </span>
-              <span className={`font-bold ${isRetro ? "text-yellow-500" : "text-amber-600"}`}>
+              <span
+                className={`font-bold ${isRetro ? "text-yellow-500" : "text-amber-600"}`}
+              >
                 Reactive Work: {workload.reactivePercent}%
               </span>
             </div>
@@ -227,7 +265,8 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
               <div className="flex justify-between text-xs mb-2 tracking-wide">
                 <span className={theme.textMuted}>Agenda Completion</span>
                 <span className={`font-bold ${theme.accent}`}>
-                  {workload.completedPlanned}/{workload.plannedCount} ({workload.completionRate}%)
+                  {workload.completedPlanned}/{workload.plannedCount} (
+                  {workload.completionRate}%)
                 </span>
               </div>
               <ProgressBar percent={workload.completionRate} />
@@ -257,7 +296,11 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
                       : "border border-amber-300 text-amber-700 hover:bg-amber-50"
                 }`}
               >
-                {isAddingTask ? <X className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
+                {isAddingTask ? (
+                  <X className="w-3 h-3" />
+                ) : (
+                  <Plus className="w-3 h-3" />
+                )}
                 {isAddingTask ? "Cancel" : "Add"}
               </button>
             </div>
@@ -269,7 +312,9 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
                   type="text"
                   value={newTaskName}
                   onChange={(e) => setNewTaskName(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && handleAddReactiveTask()}
+                  onKeyPress={(e) =>
+                    e.key === "Enter" && handleAddReactiveTask()
+                  }
                   placeholder="New urgent request or bug fix..."
                   className={`w-full px-2 py-1.5 mb-2 text-xs ${
                     isRetro
@@ -304,11 +349,16 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
                     }`}
                   >
                     <div className="flex-1">
-                      <div className={`font-medium ${isRetro ? "text-yellow-400" : "text-amber-900"}`}>
+                      <div
+                        className={`font-medium ${isRetro ? "text-yellow-400" : "text-amber-900"}`}
+                      >
                         {task.name}
                       </div>
-                      <div className={`text-[10px] mt-0.5 ${isRetro ? "text-yellow-800" : "text-amber-600"}`}>
-                        Added: {new Date(task.addedAt).toLocaleDateString("en-US", {
+                      <div
+                        className={`text-[10px] mt-0.5 ${isRetro ? "text-yellow-800" : "text-amber-600"}`}
+                      >
+                        Added:{" "}
+                        {new Date(task.addedAt).toLocaleDateString("en-US", {
                           month: "short",
                           day: "numeric",
                           hour: "2-digit",
@@ -355,8 +405,8 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
               <div className="text-xs">
                 <div className="font-bold mb-1">High Reactive Load</div>
                 <div className={isRetro ? "text-yellow-600" : "text-amber-700"}>
-                  {workload.reactivePercent}% of your work this week is reactive. Consider
-                  blocking time for planned work.
+                  {workload.reactivePercent}% of your work this week is
+                  reactive. Consider blocking time for planned work.
                 </div>
               </div>
             </div>

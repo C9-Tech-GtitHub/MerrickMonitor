@@ -4,36 +4,43 @@ export const REPO_MAPPING = {
     repo: "SheetFreak-OnPage",
     type: "BOT",
     description: "On-page SEO automation bot",
+    teams: ["Specialists", "Content"],
   },
   RANDY_PEM_DASH: {
     repo: "Randy",
     type: "DASH",
     description: "Randy PEM Dashboard",
+    teams: ["Specialists", "Content"],
   },
   LEAD: {
     repo: "Lead",
     type: "TOOL",
     description: "Lead generation and management tool",
+    teams: ["Sales"],
   },
   LSI_ANALYZER: {
     repo: "LSI",
     type: "SEO",
     description: "LSI keyword analysis tool",
+    teams: ["Content", "Specialists"],
   },
   PEM: {
     repo: "Product-Enrichment-Manager",
     type: "TOOL",
     description: "Product Enrichment Manager - metadata management",
+    teams: ["GMC"],
   },
   SHEETFREAK: {
     repo: "SheetFreak",
     type: "TOOL",
     description: "CLI tool for programmatic Google Sheets control",
+    teams: ["Specialists", "Content"],
   },
   CLAUDE_CODE_BOOTSTRAP: {
     repo: "claude-code-bootstrap",
     type: "TOOL",
     description: "Smart bootstrap system for Claude Code projects",
+    teams: ["Tech"],
   },
 };
 
