@@ -73,7 +73,8 @@ const WeekHistory = ({ theme, isRetro }) => {
 
   // Calculate workload metrics for a week
   const calculateWeekMetrics = (weekKey) => {
-    const agenda = weeklyAgendas[weekKey] || [];
+    const agendaData = weeklyAgendas[weekKey] || [];
+    const agenda = Array.isArray(agendaData) ? agendaData : [];
     const reactive = getReactiveTasks(weekKey);
 
     const plannedCount = agenda.length;
@@ -117,7 +118,11 @@ const WeekHistory = ({ theme, isRetro }) => {
     );
   }
 
-  const currentAgenda = selectedWeek ? weeklyAgendas[selectedWeek] || [] : [];
+  const currentAgenda = selectedWeek
+    ? Array.isArray(weeklyAgendas[selectedWeek])
+      ? weeklyAgendas[selectedWeek]
+      : []
+    : [];
   const currentReactive = selectedWeek ? getReactiveTasks(selectedWeek) : [];
   const metrics = selectedWeek ? calculateWeekMetrics(selectedWeek) : null;
 
