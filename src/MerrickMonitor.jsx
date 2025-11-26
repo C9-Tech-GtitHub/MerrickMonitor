@@ -877,18 +877,29 @@ const MerrickMonitor = () => {
           <div
             className={`p-4 transition-all duration-300 ${theme.cardBg} ${isRetro ? "border-2 border-green-500 bg-green-900/10" : "rounded-xl border-2 border-indigo-200 bg-gradient-to-r from-indigo-50 to-purple-50"}`}
           >
-            <div className="flex items-center justify-between mb-1">
+            <div className="flex items-center gap-2 mb-1">
+              <Zap
+                className={`w-3 h-3 ${isRetro ? "text-green-300" : "text-indigo-600"}`}
+              />
               <div
-                className={`text-[10px] uppercase tracking-wider font-bold flex items-center gap-1 ${isRetro ? "text-green-300" : "text-indigo-600"}`}
+                className={`text-[10px] uppercase tracking-wider font-bold ${isRetro ? "text-green-300" : "text-indigo-600"}`}
               >
-                <Zap className="w-3 h-3" />
-                Active Dev
+                Currently Working On
               </div>
-              <span
-                className={`text-[8px] px-1.5 py-0.5 rounded-full font-bold ${isRetro ? "bg-green-900 text-green-300 border border-green-700" : "bg-indigo-100 text-indigo-700"}`}
-              >
-                65%
-              </span>
+              <div className="flex gap-0.5 ml-auto">
+                <span
+                  className={`w-1 h-1 rounded-full animate-pulse ${isRetro ? "bg-green-400" : "bg-indigo-600"}`}
+                  style={{ animationDelay: "0ms" }}
+                ></span>
+                <span
+                  className={`w-1 h-1 rounded-full animate-pulse ${isRetro ? "bg-green-400" : "bg-indigo-600"}`}
+                  style={{ animationDelay: "150ms" }}
+                ></span>
+                <span
+                  className={`w-1 h-1 rounded-full animate-pulse ${isRetro ? "bg-green-400" : "bg-indigo-600"}`}
+                  style={{ animationDelay: "300ms" }}
+                ></span>
+              </div>
             </div>
             <div
               className={`text-sm font-bold mb-1 ${isRetro ? "text-green-400" : "text-slate-900"}`}
