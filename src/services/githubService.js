@@ -101,6 +101,7 @@ export class GitHubService {
       if (!response.ok) {
         if (response.status === 403) {
           console.warn(`GitHub API rate limit exceeded for ${repoName}`);
+          throw new Error("Rate limit exceeded");
         } else {
           console.warn(
             `Failed to fetch commits for ${repoName}:`,
@@ -157,6 +158,7 @@ export class GitHubService {
       if (!response.ok) {
         if (response.status === 403) {
           console.warn(`GitHub API rate limit exceeded for ${repoName}`);
+          throw new Error("Rate limit exceeded");
         } else {
           console.warn(
             `Failed to fetch stats for ${repoName}:`,
