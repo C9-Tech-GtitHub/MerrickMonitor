@@ -801,6 +801,95 @@ const MerrickMonitor = () => {
           </div>
         </div>
 
+        {/* Currently Working On Section */}
+        <div className="px-4 md:px-6 mb-8">
+          <div
+            className={`p-6 transition-all duration-300 ${theme.cardBg} ${isRetro ? "border-2" : "rounded-xl"} ${isRetro ? "border-green-500" : "border-indigo-200"} ${isRetro ? "bg-green-900/10" : "bg-gradient-to-r from-indigo-50 to-purple-50"}`}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div
+                  className={`${isRetro ? "bg-green-500" : "bg-indigo-600"} p-2 rounded ${isRetro ? "" : "shadow-md"}`}
+                >
+                  <Zap
+                    className={`w-5 h-5 ${isRetro ? "text-black" : "text-white"}`}
+                  />
+                </div>
+                <div>
+                  <h3
+                    className={`text-sm font-bold uppercase tracking-wider ${isRetro ? "text-green-300" : "text-indigo-900"}`}
+                  >
+                    Currently Working On
+                  </h3>
+                  <p
+                    className={`text-[10px] ${isRetro ? "text-green-600" : "text-indigo-500"} mt-0.5`}
+                  >
+                    Active Development
+                  </p>
+                </div>
+              </div>
+              <div
+                className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${isRetro ? "bg-green-900 text-green-300 border border-green-700" : "bg-indigo-100 text-indigo-700"}`}
+              >
+                IN PROGRESS
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="flex-1">
+                <div
+                  className={`text-lg font-bold mb-2 ${isRetro ? "text-green-400" : "text-slate-900"}`}
+                >
+                  On-Page SEO Josh Bot
+                </div>
+                <p
+                  className={`text-sm mb-4 ${isRetro ? "text-green-600" : "text-slate-600"}`}
+                >
+                  Enhancing automated on-page SEO analysis with improved
+                  metadata detection and schema validation capabilities
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <span
+                    className={`px-2 py-1 text-[10px] rounded ${isRetro ? "bg-green-900/50 text-green-400 border border-green-800" : "bg-white text-indigo-600 border border-indigo-200"}`}
+                  >
+                    BOT
+                  </span>
+                  <span
+                    className={`px-2 py-1 text-[10px] rounded ${isRetro ? "bg-green-900/50 text-green-400 border border-green-800" : "bg-white text-indigo-600 border border-indigo-200"}`}
+                  >
+                    SEO AUTOMATION
+                  </span>
+                  <span
+                    className={`px-2 py-1 text-[10px] rounded ${isRetro ? "bg-green-900/50 text-green-400 border border-green-800" : "bg-white text-indigo-600 border border-indigo-200"}`}
+                  >
+                    METADATA
+                  </span>
+                </div>
+              </div>
+              <div
+                className={`hidden md:flex flex-col items-end gap-2 min-w-[120px]`}
+              >
+                <div
+                  className={`text-xs uppercase tracking-wider ${isRetro ? "text-green-700" : "text-slate-400"}`}
+                >
+                  Progress
+                </div>
+                <div className={`text-3xl font-bold ${theme.accent}`}>65%</div>
+                <div className="w-full mt-2">
+                  <div
+                    className={`h-2 rounded-full overflow-hidden ${isRetro ? "bg-green-900/30" : "bg-slate-200"}`}
+                  >
+                    <div
+                      className={`h-full ${isRetro ? "bg-green-500" : "bg-indigo-600"} transition-all duration-500`}
+                      style={{ width: "65%" }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Content Area */}
         <div className="px-4 md:px-6 pb-6 min-h-[500px]">
           {activeTab === "OVERVIEW" && <OverviewView />}
