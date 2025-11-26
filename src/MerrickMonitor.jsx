@@ -338,10 +338,10 @@ const MerrickMonitor = () => {
       });
     }
 
-    // Add other tools (exclude PEM and Lead)
+    // Add other tools (exclude PEM and Lead) - limit to 2 tools (3 total with PEM)
     const otherTools = toolFleet
       .filter((t) => t.name !== "PEM" && !t.name.includes("Lead"))
-      .slice(0, pemTool ? 3 : 4);
+      .slice(0, 2);
 
     otherTools.forEach((tool, index) => {
       const latencyMap = {
