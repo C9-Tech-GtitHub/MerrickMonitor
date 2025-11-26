@@ -161,17 +161,15 @@ const MerrickMonitor = () => {
       name: "ON_PAGE_JOSH_BOT",
       type: "BOT",
       status: "LIVE",
-      users: 18,
       trend: "UP",
       activity: [1, 0, 0, 0, 0],
       teams: ["Specialists", "Content/On-Page"],
     },
     {
       id: 2,
-      name: "RANDY_PEM_DASH",
+      name: "REVIEWIN_RANDY",
       type: "DASH",
       status: "LIVE",
-      users: 18,
       trend: "STABLE",
       activity: [0, 0, 1, 0, 0],
       teams: ["Specialists", "Content/On-Page"],
@@ -181,7 +179,6 @@ const MerrickMonitor = () => {
       name: "INTERLINKING_SYS",
       type: "SEO",
       status: "LIVE",
-      users: 16,
       trend: "UP",
       activity: [0, 0, 0, 0, 0],
       teams: ["Specialists"],
@@ -191,7 +188,6 @@ const MerrickMonitor = () => {
       name: "LSI_ANALYZER",
       type: "SEO",
       status: "BETA",
-      users: 8,
       trend: "FLAT",
       activity: [0, 1, 0, 0, 0],
       teams: ["Content/On-Page", "Specialists"],
@@ -201,7 +197,6 @@ const MerrickMonitor = () => {
       name: "GMC_TITLE_DASH",
       type: "DASH",
       status: "LIVE",
-      users: 3,
       trend: "UP",
       activity: [0, 0, 0, 0, 0],
       teams: ["GMC/Product"],
@@ -211,7 +206,6 @@ const MerrickMonitor = () => {
       name: "META_CHECKER",
       type: "TOOL",
       status: "LIVE",
-      users: 28,
       trend: "UP",
       activity: [1, 1, 0, 0, 0],
       teams: ["Company-Wide"],
@@ -221,7 +215,6 @@ const MerrickMonitor = () => {
       name: "SEASONAL_SALLY",
       type: "BOT",
       status: "MAINT",
-      users: 2,
       trend: "DOWN",
       activity: [0, 0, 0, 1, 0],
       teams: ["Sales/Lead"],
@@ -231,7 +224,6 @@ const MerrickMonitor = () => {
       name: "METAOBJECTS_AUTO",
       type: "AUTO",
       status: "LIVE",
-      users: 3,
       trend: "STABLE",
       activity: [0, 0, 0, 0, 0],
       teams: ["GMC/Product"],
@@ -241,7 +233,6 @@ const MerrickMonitor = () => {
       name: "SCHEMA_SCANNER",
       type: "TOOL",
       status: "LIVE",
-      users: 18,
       trend: "UP",
       activity: [0, 0, 0, 0, 1],
       teams: ["Specialists", "Content/On-Page"],
@@ -251,12 +242,34 @@ const MerrickMonitor = () => {
       name: "COMPETITOR_SCRAPE",
       type: "SCRAPE",
       status: "LIVE",
-      users: 7,
       trend: "STABLE",
       activity: [1, 0, 0, 0, 0],
       teams: ["Tech", "Specialists"],
     },
   ];
+
+  // Calculate user count based on team assignments
+  const calculateUserCount = (teamNames) => {
+    if (!teamNames || teamNames.length === 0) return 0;
+
+    // Get unique team members (avoiding double-counting)
+    const uniqueTeams = [...new Set(teamNames)];
+
+    // If it's company-wide, return total employees
+    if (uniqueTeams.includes("Company-Wide")) return 28;
+
+    // Sum up team members
+    return uniqueTeams.reduce((total, teamName) => {
+      const team = teams.find((t) => t.name === teamName);
+      return total + (team ? team.count : 0);
+    }, 0);
+  };
+
+  // Add user counts to tool fleet dynamically
+  const toolFleetWithUsers = toolFleet.map((tool) => ({
+    ...tool,
+    users: calculateUserCount(tool.teams),
+  }));
 
   const systems = [
     {
@@ -307,7 +320,10 @@ const MerrickMonitor = () => {
   };
 
   const reactiveLoad = 15;
-  const totalUsers = toolFleet.reduce((acc, curr) => acc + curr.users, 0);
+  const totalUsers = toolFleetWithUsers.reduce(
+    (acc, curr) => acc + curr.users,
+    0,
+  );
 
   // --- RENDER HELPERS ---
 
@@ -561,7 +577,7 @@ const MerrickMonitor = () => {
               <tbody
                 className={`text-xs md:text-sm ${isRetro ? "font-mono" : ""}`}
               >
-                {toolFleet.map((tool) => (
+                {toolFleetWithUsers.map((tool) => (
                   <tr
                     key={tool.id}
                     className={`border-b transition-colors ${isRetro ? "border-green-900/40 hover:bg-green-900/10" : "border-slate-100 hover:bg-slate-50"}`}
@@ -741,7 +757,7 @@ const MerrickMonitor = () => {
         Detailed Adoption Metrics
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {toolFleet.map((tool) => (
+        {toolFleetWithUsers.map((tool) => (
           <div
             key={tool.id}
             className={`p-5 transition-all ${isRetro ? "border border-green-800 bg-green-900/5 hover:bg-green-900/20 hover:border-green-600" : "bg-slate-50 rounded-xl hover:bg-white hover:shadow-md border border-slate-100"}`}
@@ -965,7 +981,7 @@ const MerrickMonitor = () => {
               Live Tools
             </div>
             <div className={`text-2xl font-bold ${theme.textBold}`}>
-              {toolFleet.length}{" "}
+              {toolFleetWithUsers.length}{" "}
               <span className={`text-xs ${theme.textMuted}`}>ONLINE</span>
             </div>
           </div>
