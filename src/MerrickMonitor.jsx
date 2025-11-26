@@ -152,8 +152,9 @@ const MerrickMonitor = () => {
     { id: 2, name: "GMC/Product", color: "#8b5cf6", count: 3 },
     { id: 3, name: "Content/On-Page", color: "#10b981", count: 2 },
     { id: 4, name: "Sales/Lead", color: "#f59e0b", count: 2 },
-    { id: 5, name: "Specialists", color: "#ec4899", count: 16 },
-    { id: 6, name: "Company-Wide", color: "#6366f1", count: 28 },
+    { id: 5, name: "Specialists", color: "#ec4899", count: 14 },
+    { id: 6, name: "Management", color: "#06b6d4", count: 2 },
+    { id: 7, name: "Company-Wide", color: "#6366f1", count: 28 },
   ];
 
   const mockToolFleet = [
@@ -219,6 +220,15 @@ const MerrickMonitor = () => {
       trend: "UP",
       activity: [0, 0, 0, 1, 0],
       teams: ["Tech"],
+    },
+    {
+      id: 8,
+      name: "MERRICK_MONITOR",
+      type: "DASH",
+      status: "LIVE",
+      trend: "UP",
+      activity: [1, 1, 1, 1, 1],
+      teams: ["Management"],
     },
   ];
 
