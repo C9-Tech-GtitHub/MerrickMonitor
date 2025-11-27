@@ -54,11 +54,16 @@ npm run build
 - The `gh-pages` branch is deprecated and should not exist
 - Authentication is handled by `worker-auth.js` Cloudflare Worker
 
-**Push fixes to GitHub:**
-When fixing bugs or making changes:
+**Deploy to Production:**
+The Pages project is NOT connected to GitHub for auto-deploy. Manual deployment required:
 1. Build the project: `npm run build`
-2. Commit and push: `git add -A && git commit -m "description" && git push`
-3. Cloudflare Pages will auto-deploy from the `main` branch
+2. Deploy: `npx wrangler pages deploy dist --project-name=merrick-monitor`
+3. Commit and push to GitHub: `git add -A && git commit -m "description" && git push`
+
+**One-liner deploy:**
+```bash
+npm run build && npx wrangler pages deploy dist --project-name=merrick-monitor && git add -A && git commit -m "Deploy update" && git push
+```
 
 **Common Issues:**
 - If assets fail to load with wrong MIME types, check that `base: "/"` in vite.config.js
