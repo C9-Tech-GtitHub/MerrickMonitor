@@ -1,4 +1,4 @@
-name = "merrick-monitor-auth"
+name = "merrick-monitor"
 main = "worker-auth.js"
 compatibility_date = "2024-11-27"
 
