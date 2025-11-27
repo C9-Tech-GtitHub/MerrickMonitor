@@ -43,31 +43,50 @@ npm run build
 
 ## Deployment
 
-**Hosting:** Cloudflare Pages
+**Hosting:** Cloudflare Pages with GitHub Integration
 - **URL:** https://merrick-monitor.c9-dev.com
-- **Auth:** Username: `merrick`, Password: `peek`
-- **Production Branch:** `main` (NOT gh-pages)
+- **Auth:** Username: `merrick`, Password: `peek` (handled by Worker)
+- **Production Branch:** `main`
 
-**Important Configuration:**
-- `vite.config.js` must have `base: "/"` (NOT `/MerrickMonitor/`)
-- Cloudflare Pages deploys from `main` branch
-- The `gh-pages` branch is deprecated and should not exist
-- Authentication is handled by `worker-auth.js` Cloudflare Worker
-
-**Deploy to Production:**
-The Pages project is NOT connected to GitHub for auto-deploy. Manual deployment required:
-1. Build the project: `npm run build`
-2. Deploy: `npx wrangler pages deploy dist --project-name=merrick-monitor`
-3. Commit and push to GitHub: `git add -A && git commit -m "description" && git push`
-
-**One-liner deploy:**
-```bash
-npm run build && npx wrangler pages deploy dist --project-name=merrick-monitor && git add -A && git commit -m "Deploy update" && git push
+**Architecture:**
+```
+GitHub Push → Cloudflare Pages (auto-build) → Worker Auth → Live Site
 ```
 
+**How It Works:**
+1. Push to `main` branch on GitHub
+2. Cloudflare Pages automatically detects the change
+3. Cloudflare builds and deploys (no manual steps needed)
+4. `worker-auth.js` provides authentication layer
+
+**To Deploy:**
+```bash
+git add -A
+git commit -m "Your changes"
+git push origin main
+```
+
+That's it! Cloudflare handles the rest automatically.
+
+**Cloudflare Pages Configuration:**
+Navigate to: Cloudflare Dashboard → Workers & Pages → merrick-monitor → Settings → Builds & deployments
+
+Required settings:
+- **Production branch:** `main`
+- **Build command:** `npm run build`
+- **Build output directory:** `dist`
+- **Deploy command:** LEAVE EMPTY (critical - do not use `npx wrangler deploy`)
+
+**Important Notes:**
+- `vite.config.js` must have `base: "/"` (NOT `/MerrickMonitor/`)
+- Never use `npx wrangler deploy` for Pages (that's for Workers only)
+- The `gh-pages` branch is deprecated and should not exist
+- Authentication is handled by separate Worker: `worker-auth.js`
+
 **Common Issues:**
-- If assets fail to load with wrong MIME types, check that `base: "/"` in vite.config.js
-- If old build is cached, ensure Cloudflare Pages is deploying from `main` not `gh-pages`
+- **Build fails with route conflict:** Remove any "deploy command" in Cloudflare Pages settings
+- **Assets fail to load:** Check that `base: "/"` in vite.config.js
+- **Old build cached:** Verify Cloudflare is deploying from `main` branch
 - Never commit `node_modules` to git (already in `.gitignore`)
 
 ## Styling Guidelines
