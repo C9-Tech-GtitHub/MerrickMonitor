@@ -30,9 +30,16 @@ const WeekHistory = ({ theme, isRetro }) => {
     setWeeklyAgendas(savedAgendas);
 
     // Get sorted list of weeks (newest first) - combine both agendas and reactive tasks
+    // Only include weeks that have actual data (non-empty agendas or reactive tasks)
     const allWeeks = new Set([
-      ...Object.keys(savedAgendas),
-      ...Object.keys(savedReactive),
+      ...Object.keys(savedAgendas).filter(
+        (key) =>
+          Array.isArray(savedAgendas[key]) && savedAgendas[key].length > 0,
+      ),
+      ...Object.keys(savedReactive).filter(
+        (key) =>
+          Array.isArray(savedReactive[key]) && savedReactive[key].length > 0,
+      ),
     ]);
     const weekKeys = Array.from(allWeeks).sort().reverse();
     setWeeks(weekKeys);
