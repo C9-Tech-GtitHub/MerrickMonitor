@@ -10,9 +10,9 @@
         "Specialists",
         "Content"
       ],
-      "commits": 3,
+      "commits": 0,
       "activity": [
-        true,
+        false,
         false,
         false,
         false,
@@ -25,15 +25,15 @@
     },
     {
       "id": 2,
-      "name": "Randy Pem Dash",
+      "name": "Review Randy",
       "type": "DASH",
       "status": "ACTIVE",
-      "description": "Randy PEM Dashboard",
+      "description": "Review Randy - Product review management",
       "teams": [
         "Specialists",
         "Content"
       ],
-      "commits": 1,
+      "commits": 0,
       "activity": [
         false,
         false,
@@ -55,7 +55,7 @@
       "teams": [
         "Sales"
       ],
-      "commits": 46,
+      "commits": 0,
       "activity": [
         false,
         false,
@@ -78,7 +78,7 @@
         "Content",
         "Specialists"
       ],
-      "commits": 2,
+      "commits": 0,
       "activity": [
         false,
         false,
@@ -93,14 +93,14 @@
     },
     {
       "id": 5,
-      "name": "Pem",
+      "name": "P.e.m",
       "type": "TOOL",
       "status": "ACTIVE",
       "description": "Product Enrichment Manager - metadata management",
       "teams": [
         "GMC"
       ],
-      "commits": 100,
+      "commits": 0,
       "activity": [
         false,
         false,
@@ -109,7 +109,7 @@
         false
       ],
       "repoUrl": "https://github.com/C9-Tech-GtitHub/Product-Enrichment-Manager",
-      "stars": 1,
+      "stars": 0,
       "forks": 0,
       "openIssues": 0
     },
@@ -123,9 +123,9 @@
         "Specialists",
         "Content"
       ],
-      "commits": 8,
+      "commits": 0,
       "activity": [
-        true,
+        false,
         false,
         false,
         false,
@@ -145,7 +145,7 @@
       "teams": [
         "Tech"
       ],
-      "commits": 4,
+      "commits": 0,
       "activity": [
         false,
         false,
@@ -167,7 +167,7 @@
       "teams": [
         "Management"
       ],
-      "commits": 67,
+      "commits": 73,
       "activity": [
         false,
         false,
@@ -223,5 +223,5 @@
       "openIssues": 0
     }
   ],
-  "lastUpdated": "2025-11-26T22:47:32.737Z"
+  "lastUpdated": "2025-11-27T00:15:32.653Z"
 }
