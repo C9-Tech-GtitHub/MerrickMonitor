@@ -41,12 +41,29 @@ npm run dev
 npm run build
 ```
 
-## Deployment Workflow
+## Deployment
+
+**Hosting:** Cloudflare Pages
+- **URL:** https://merrick-monitor.c9-dev.com
+- **Auth:** Username: `merrick`, Password: `peek`
+- **Production Branch:** `main` (NOT gh-pages)
+
+**Important Configuration:**
+- `vite.config.js` must have `base: "/"` (NOT `/MerrickMonitor/`)
+- Cloudflare Pages deploys from `main` branch
+- The `gh-pages` branch is deprecated and should not exist
+- Authentication is handled by `worker-auth.js` Cloudflare Worker
 
 **Push fixes to GitHub:**
 When fixing bugs or making changes:
 1. Build the project: `npm run build`
 2. Commit and push: `git add -A && git commit -m "description" && git push`
+3. Cloudflare Pages will auto-deploy from the `main` branch
+
+**Common Issues:**
+- If assets fail to load with wrong MIME types, check that `base: "/"` in vite.config.js
+- If old build is cached, ensure Cloudflare Pages is deploying from `main` not `gh-pages`
+- Never commit `node_modules` to git (already in `.gitignore`)
 
 ## Styling Guidelines
 
