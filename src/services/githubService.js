@@ -260,7 +260,7 @@ export class GitHubService {
    */
   async loadStaticData() {
     try {
-      const response = await fetch("/MerrickMonitor/data/githubData.json");
+      const response = await fetch("/data/githubData.json");
       if (response.ok) {
         return await response.json();
       }

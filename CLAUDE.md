@@ -43,21 +43,23 @@ npm run build
 
 ## Deployment
 
-**Hosting:** Cloudflare Pages with GitHub Integration
+**Hosting:** Cloudflare Pages with GitHub Actions Integration
 - **URL:** https://merrick-monitor.c9-dev.com
 - **Auth:** Username: `merrick`, Password: `peek` (handled by Worker)
 - **Production Branch:** `main`
+- **Auto-Deploy:** Enabled via GitHub integration
 
 **Architecture:**
 ```
-GitHub Push → Cloudflare Pages (auto-build) → Worker Auth → Live Site
+GitHub Push (main) → Cloudflare Pages (auto-build) → Worker Auth → Live Site
 ```
 
 **How It Works:**
 1. Push to `main` branch on GitHub
-2. Cloudflare Pages automatically detects the change
-3. Cloudflare builds and deploys (no manual steps needed)
-4. `worker-auth.js` provides authentication layer
+2. Cloudflare Pages automatically detects the change via GitHub integration
+3. Cloudflare runs `npm run build` and deploys to production
+4. `worker-auth.js` Worker provides authentication layer
+5. Site is live at https://merrick-monitor.c9-dev.com
 
 **To Deploy:**
 ```bash
@@ -75,19 +77,41 @@ Required settings:
 - **Production branch:** `main`
 - **Build command:** `npm run build`
 - **Build output directory:** `dist`
-- **Deploy command:** LEAVE EMPTY (critical - do not use `npx wrangler deploy`)
+- **Root directory:** `/` (leave empty)
+- **Deploy command:** LEAVE EMPTY (critical - Cloudflare auto-deploys the built files)
+
+**Two Separate Services:**
+
+1. **Cloudflare Pages** (Static Site)
+   - Project: `merrick-monitor`
+   - Source: GitHub repository (auto-sync from `main` branch)
+   - Purpose: Hosts the React application
+   - Deployment: Automatic on push to `main`
+
+2. **Cloudflare Worker** (Authentication)
+   - Worker: `merrick-monitor-auth`
+   - Source: `worker-auth.js` (deployed separately via `npx wrangler deploy`)
+   - Purpose: Protects the site with basic HTTP authentication
+   - Route: `merrick-monitor.c9-dev.com/*`
 
 **Important Notes:**
 - `vite.config.js` must have `base: "/"` (NOT `/MerrickMonitor/`)
-- Never use `npx wrangler deploy` for Pages (that's for Workers only)
-- The `gh-pages` branch is deprecated and should not exist
-- Authentication is handled by separate Worker: `worker-auth.js`
+- Never use `npx wrangler deploy` for the Pages project (that's for Workers only)
+- Pages auto-deploys from GitHub - no manual deploy command needed
+- Authentication Worker is deployed separately when `worker-auth.js` changes
+- The project uses GitHub integration, not GitHub Pages
 
 **Common Issues:**
-- **Build fails with route conflict:** Remove any "deploy command" in Cloudflare Pages settings
-- **Assets fail to load:** Check that `base: "/"` in vite.config.js
-- **Old build cached:** Verify Cloudflare is deploying from `main` branch
-- Never commit `node_modules` to git (already in `.gitignore`)
+- **Build fails with route conflict:** Ensure "deploy command" is empty in Cloudflare Pages settings
+- **Assets fail to load:** Verify `base: "/"` in vite.config.js
+- **Old build showing:** Check Cloudflare is deploying from `main` branch, verify latest commit in deployment logs
+- **Authentication not working:** Ensure `worker-auth.js` Worker is deployed via `npx wrangler deploy`
+
+**GitHub Integration:**
+- Repository data is fetched from GitHub API for live metrics
+- Each tool on the dashboard maps to a GitHub repository
+- Commit activity, status, and trends are calculated in real-time
+- Data refreshes every 5 minutes automatically
 
 ## Styling Guidelines
 
