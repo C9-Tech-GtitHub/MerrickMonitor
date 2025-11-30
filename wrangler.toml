@@ -1,14 +1,10 @@
-name = "merrick-monitor-auth"
-main = "worker-auth.js"
+name = "merrick-monitor"
 compatibility_date = "2024-11-27"
+pages_build_output_dir = "dist"
 
-# Routes for the worker
-routes = [
-  { pattern = "merrick-monitor.c9-dev.com/*", zone_id = "a741eecfab81e43bf0dc0a44545202f5" }
-]
+# This is a Pages project with Functions
+# Authentication is handled by functions/_middleware.js
 
-# Environment variables for credentials
-[vars]
-# These will be overridden by secrets set via wrangler secret put
-# AUTH_USER = "admin"
-# AUTH_PASS = "your-secure-password"
+# Pages configuration
+[build]
+command = "npm run build"
