@@ -941,7 +941,7 @@ const MerrickMonitor = () => {
                     </div>
                   </div>
                 );
-              })();
+              });
             })()}
           </div>
         </section>
