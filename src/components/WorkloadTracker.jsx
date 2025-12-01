@@ -109,7 +109,7 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek, weekSchedule }) => {
         if (slot.type === "planned") {
           plannedCount++;
           if (slot.completed) completedPlanned++;
-        } else if (slot.type === "unplanned") {
+        } else if (slot.type === "reactive") {
           reactiveCount++;
           if (slot.completed) completedReactive++;
         }
