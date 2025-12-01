@@ -562,6 +562,10 @@ const MerrickMonitor = () => {
   };
 
   // --- LOGIN SCREEN ---
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true);
+  };
+
   if (!isAuthenticated) {
     return <Login onLogin={handleLoginSuccess} />;
   }
