@@ -318,9 +318,9 @@ const MerrickMonitor = () => {
 
   // Calculate how many tools each team uses
   const getToolCountForTeam = (teamName) => {
-    // Use mock data for team counts since GitHub data doesn't have team info
-    return mockToolFleet.filter((tool) => tool.teams?.includes(teamName))
-      .length;
+    // Use actual tool fleet data (falls back to mock if GitHub data isn't loaded)
+    const dataSource = toolFleet.length > 0 ? toolFleet : mockToolFleet;
+    return dataSource.filter((tool) => tool.teams?.includes(teamName)).length;
   };
 
   // Get GitHub activity stats for the week from actual data
@@ -1172,45 +1172,67 @@ const MerrickMonitor = () => {
 
         {/* Top Stats Row (Always Visible) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 px-4 md:px-6">
-          {/* Currently Working On - Compact Version */}
-          <div
-            className={`p-4 transition-all duration-300 ${theme.cardBg} ${isRetro ? "border-2 border-green-500 bg-green-900/10" : "rounded-xl border-2 border-indigo-200 bg-gradient-to-r from-indigo-50 to-purple-50"}`}
-          >
-            <div className="flex items-center gap-2 mb-1">
-              <Zap
-                className={`w-3 h-3 ${isRetro ? "text-green-300" : "text-indigo-600"}`}
-              />
+          {/* Currently Working On - Dynamic from today's schedule */}
+          {(() => {
+            const currentDay = getCurrentDayShort();
+            const todaySchedule = currentWeekSchedule.schedule.find(
+              (d) => d.day === currentDay,
+            );
+            const currentHour = date.getHours();
+            const isAfternoon = currentHour >= 12;
+
+            const currentTask = todaySchedule?.slots?.find((slot) =>
+              isAfternoon
+                ? slot.timeSlot === "afternoon"
+                : slot.timeSlot === "morning",
+            );
+
+            if (!currentTask) return null;
+
+            return (
               <div
-                className={`text-[10px] uppercase tracking-wider font-bold ${isRetro ? "text-green-300" : "text-indigo-600"}`}
+                className={`p-4 transition-all duration-300 ${theme.cardBg} ${isRetro ? "border-2 border-green-500 bg-green-900/10" : "rounded-xl border-2 border-indigo-200 bg-gradient-to-r from-indigo-50 to-purple-50"}`}
               >
-                Currently Working On
+                <div className="flex items-center gap-2 mb-1">
+                  <Zap
+                    className={`w-3 h-3 ${isRetro ? "text-green-300" : "text-indigo-600"}`}
+                  />
+                  <div
+                    className={`text-[10px] uppercase tracking-wider font-bold ${isRetro ? "text-green-300" : "text-indigo-600"}`}
+                  >
+                    Currently Working On
+                  </div>
+                  <div className="flex gap-0.5 ml-auto">
+                    <span
+                      className={`w-1 h-1 rounded-full animate-pulse ${isRetro ? "bg-green-400" : "bg-indigo-600"}`}
+                      style={{ animationDelay: "0ms" }}
+                    ></span>
+                    <span
+                      className={`w-1 h-1 rounded-full animate-pulse ${isRetro ? "bg-green-400" : "bg-indigo-600"}`}
+                      style={{ animationDelay: "150ms" }}
+                    ></span>
+                    <span
+                      className={`w-1 h-1 rounded-full animate-pulse ${isRetro ? "bg-green-400" : "bg-indigo-600"}`}
+                      style={{ animationDelay: "300ms" }}
+                    ></span>
+                  </div>
+                </div>
+                <div
+                  className={`text-sm font-bold mb-1 ${isRetro ? "text-green-400" : "text-slate-900"}`}
+                >
+                  {currentTask.project}
+                </div>
+                <div
+                  className={`text-[9px] ${isRetro ? "text-green-700" : "text-slate-500"}`}
+                >
+                  {isAfternoon ? "Afternoon" : "Morning"} •{" "}
+                  {currentTask.type === "reactive"
+                    ? "Reactive work"
+                    : "Planned work"}
+                </div>
               </div>
-              <div className="flex gap-0.5 ml-auto">
-                <span
-                  className={`w-1 h-1 rounded-full animate-pulse ${isRetro ? "bg-green-400" : "bg-indigo-600"}`}
-                  style={{ animationDelay: "0ms" }}
-                ></span>
-                <span
-                  className={`w-1 h-1 rounded-full animate-pulse ${isRetro ? "bg-green-400" : "bg-indigo-600"}`}
-                  style={{ animationDelay: "150ms" }}
-                ></span>
-                <span
-                  className={`w-1 h-1 rounded-full animate-pulse ${isRetro ? "bg-green-400" : "bg-indigo-600"}`}
-                  style={{ animationDelay: "300ms" }}
-                ></span>
-              </div>
-            </div>
-            <div
-              className={`text-sm font-bold mb-1 ${isRetro ? "text-green-400" : "text-slate-900"}`}
-            >
-              On-Page Josh Bot
-            </div>
-            <div
-              className={`text-[9px] ${isRetro ? "text-green-700" : "text-slate-500"}`}
-            >
-              SEO automation enhancement
-            </div>
-          </div>
+            );
+          })()}
 
           <div
             className={`p-4 transition-all duration-300 ${theme.cardBg} ${isRetro ? "border border-yellow-900 bg-yellow-900/5" : "rounded-xl border border-amber-200"}`}
