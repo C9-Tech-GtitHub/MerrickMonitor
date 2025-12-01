@@ -5,8 +5,14 @@ export async function onRequest(context) {
   const { request, env, next } = context;
 
   // Credentials - these will be set as environment variables in Cloudflare Pages
-  const BASIC_USER = env.AUTH_USER || 'merrick';
-  const BASIC_PASS = env.AUTH_PASS || 'peek';
+  const BASIC_USER = env.AUTH_USER;
+  const BASIC_PASS = env.AUTH_PASS;
+
+  if (!BASIC_USER || !BASIC_PASS) {
+    return new Response('Server configuration error: Missing authentication credentials', {
+      status: 500
+    });
+  }
 
   const authorization = request.headers.get('Authorization');
 

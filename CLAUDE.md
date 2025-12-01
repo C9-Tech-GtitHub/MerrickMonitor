@@ -51,7 +51,7 @@ npm run build
 **Hosting:** Cloudflare Pages with GitHub Integration
 - **Production URL:** https://merrick-monitor.c9-dev.com (custom domain)
 - **Pages URL:** https://merrick-monitor.pages.dev (default)
-- **Auth:** Username: `merrick`, Password: `peek` (handled by Pages Functions)
+- **Auth:** Protected by HTTP Basic Auth (credentials in Cloudflare Pages settings)
 - **Production Branch:** `main`
 - **Auto-Deploy:** Enabled via GitHub integration
 
@@ -87,8 +87,8 @@ Navigate to: Cloudflare Dashboard → Workers & Pages → merrick-monitor → Se
 - **Deploy command:** LEAVE EMPTY (critical - Cloudflare auto-deploys the built files)
 
 **Environment Variables (Production):**
-- `AUTH_USER` = `merrick`
-- `AUTH_PASS` = `peek`
+- `AUTH_USER` = [Set in Cloudflare Dashboard]
+- `AUTH_PASS` = [Set in Cloudflare Dashboard]
 
 **Custom Domain Setup:**
 1. Go to: Workers & Pages → merrick-monitor → Custom domains

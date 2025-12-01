@@ -13,8 +13,8 @@ Your Merrick Monitor dashboard is now live and accessible!
 
 ### Access Credentials
 
-- **Username:** merrick
-- **Password:** peek
+- **Username:** [Set in Cloudflare Pages Environment Variables]
+- **Password:** [Set in Cloudflare Pages Environment Variables]
 
 ### DNS Configuration
 
@@ -47,7 +47,6 @@ The site is protected using **Cloudflare Pages Functions** with the middleware f
 - **File:** `/Users/merrickallen/Documents/MerrickMonitor/functions/_middleware.js`
 - **Method:** HTTP Basic Authentication
 - **Credentials stored in:** Environment variables (AUTH_USER, AUTH_PASS)
-- **Fallback credentials:** merrick / peek (hardcoded in middleware)
 
 ### Deployment Configuration
 
@@ -111,14 +110,14 @@ curl -I https://merrick-monitor.c9-dev.com
 
 **Test with authentication:**
 ```bash
-curl -I -u merrick:peek https://merrick-monitor.c9-dev.com
+curl -I -u <username>:<password> https://merrick-monitor.c9-dev.com
 # Expected: 200 OK
 ```
 
 **Access in browser:**
 1. Visit https://merrick-monitor.c9-dev.com
-2. Enter username: merrick
-3. Enter password: peek
+2. Enter username: [Your Configured Username]
+3. Enter password: [Your Configured Password]
 4. Dashboard loads successfully
 
 ### Troubleshooting
@@ -129,7 +128,7 @@ curl -I -u merrick:peek https://merrick-monitor.c9-dev.com
 - The site is live on Cloudflare's network already
 
 **If authentication doesn't work:**
-- Verify credentials: merrick / peek
+- Verify credentials match environment variables
 - Check browser isn't caching old credentials
 - Try in incognito/private mode
 
