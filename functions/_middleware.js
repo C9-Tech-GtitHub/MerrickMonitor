@@ -12,7 +12,10 @@ export async function onRequest(context) {
     url.pathname === "/api/auth/logout" ||
     url.pathname === "/api/auth/google" ||
     url.pathname === "/" ||
-    url.pathname.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg|json)$/)
+    url.pathname.startsWith("/assets/") ||
+    url.pathname.match(
+      /\.(js|css|png|jpg|jpeg|gif|ico|svg|json|woff|woff2|ttf|eot)$/,
+    )
   ) {
     return next();
   }
