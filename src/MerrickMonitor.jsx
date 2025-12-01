@@ -957,28 +957,59 @@ const MerrickMonitor = () => {
           </div>
         </section>
 
-        {/* GitHub Week Stats */}
+        {/* Weekly Performance Stats */}
         <section
           className={`p-6 transition-colors duration-300 ${theme.cardBg} ${isRetro ? "border" : "rounded-xl"} ${theme.border}`}
         >
           <h2
             className={`text-xs font-bold uppercase mb-4 flex items-center gap-2 ${theme.accent}`}
           >
-            <Github className="w-4 h-4" />
-            This Week
+            <BarChart2 className="w-4 h-4" />
+            Week Performance
           </h2>
           <div className="space-y-3">
+            {/* Active Development Days */}
             <div className="flex items-center justify-between">
-              <span className={`text-xs ${theme.textMuted}`}>Active Days</span>
-              <span className={`text-lg font-bold ${theme.textBold}`}>
-                {weekStats.commits || weekStats.activeDays || 0}
-              </span>
+              <span className={`text-xs ${theme.textMuted}`}>Dev Days</span>
+              <div className="flex items-center gap-2">
+                <span className={`text-lg font-bold ${theme.textBold}`}>
+                  {weekStats.activeDays || 0}
+                </span>
+                <span className={`text-[9px] ${theme.textMuted}`}>/ 5</span>
+              </div>
             </div>
+
+            {/* Active Repos */}
             <div className="flex items-center justify-between">
-              <span className={`text-xs ${theme.textMuted}`}>Active Repos</span>
-              <span className={`text-lg font-bold ${theme.textBold}`}>
-                {weekStats.repos || 0}
-              </span>
+              <span className={`text-xs ${theme.textMuted}`}>Active Tools</span>
+              <div className="flex items-center gap-2">
+                <span className={`text-lg font-bold ${theme.textBold}`}>
+                  {weekStats.repos || 0}
+                </span>
+                <span className={`text-[9px] ${theme.textMuted}`}>repos</span>
+              </div>
+            </div>
+
+            {/* Planned vs Reactive */}
+            <div className="pt-2 border-t ${theme.border}">
+              <div className="flex items-center justify-between mb-1">
+                <span className={`text-[10px] ${theme.textMuted}`}>
+                  PLANNED
+                </span>
+                <span className={`text-xs font-bold ${theme.textBold}`}>
+                  {currentMetrics.plannedPercent}%
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className={`text-[10px] ${theme.textMuted}`}>
+                  REACTIVE
+                </span>
+                <span
+                  className={`text-xs font-bold ${isRetro ? "text-amber-500" : "text-amber-600"}`}
+                >
+                  {currentMetrics.reactivePercent}%
+                </span>
+              </div>
             </div>
           </div>
         </section>
