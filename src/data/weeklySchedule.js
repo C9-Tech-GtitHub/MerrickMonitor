@@ -19,7 +19,7 @@ export const currentWeekSchedule = {
       slots: [
         {
           timeSlot: "morning",
-          project: "Merrick Monitor – agenda set",
+          project: "Merrick Monitor – Agenda Set",
           type: "planned", // "planned" or "reactive"
         },
         {
