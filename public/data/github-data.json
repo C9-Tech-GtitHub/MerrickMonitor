@@ -93,7 +93,7 @@
     },
     {
       "id": 5,
-      "name": "P.E.M",
+      "name": "P.e.m",
       "type": "TOOL",
       "status": "ACTIVE",
       "description": "Product Enrichment Manager - metadata management",
@@ -223,5 +223,5 @@
       "openIssues": 0
     }
   ],
-  "lastUpdated": "2025-12-01T00:48:59.919Z"
+  "lastUpdated": "2025-12-01T04:23:19.915Z"
 }
