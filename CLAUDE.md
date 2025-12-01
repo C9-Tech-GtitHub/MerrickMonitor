@@ -41,6 +41,11 @@ npm run dev
 npm run build
 ```
 
+**IMPORTANT - Development Workflow:**
+- After making changes to local files, **always restart the dev server** to ensure changes are reflected
+- Kill the current server (Ctrl+C or use the kill command)
+- Restart with `npm run dev`
+
 ## Deployment
 
 **Hosting:** Cloudflare Pages with GitHub Integration

@@ -2,14 +2,37 @@ import React, { useState, useEffect } from "react";
 import { Activity, Calendar, AlertTriangle, Plus, X } from "lucide-react";
 import { weeklySchedule } from "../data/weeklySchedule";
 
-// Helper function to get current week key
+// Helper function to get current week key (Melbourne timezone, 1st-5th pattern)
 function getCurrentWeekKey() {
-  const now = new Date();
-  const dayOfWeek = now.getDay() || 7;
-  const monday = new Date(now);
-  monday.setDate(now.getDate() - (dayOfWeek - 1));
-  monday.setHours(0, 0, 0, 0);
-  return monday.toISOString().split("T")[0];
+  // Get Melbourne time properly without timezone conversion issues
+  const formatter = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Australia/Melbourne",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+
+  const parts = formatter.formatToParts(new Date());
+  const dateObj = {};
+  parts.forEach(({ type, value }) => {
+    dateObj[type] = value;
+  });
+
+  const now = new Date(
+    parseInt(dateObj.year),
+    parseInt(dateObj.month) - 1,
+    parseInt(dateObj.day),
+  );
+  const dayOfMonth = now.getDate();
+
+  // Calculate which 5-day block this day falls into
+  const weekNumber = Math.floor((dayOfMonth - 1) / 5);
+  const firstDayOfWeek = weekNumber * 5 + 1;
+
+  const weekStart = new Date(now);
+  weekStart.setDate(firstDayOfWeek);
+  weekStart.setHours(0, 0, 0, 0);
+  return weekStart.toISOString().split("T")[0];
 }
 
 /**
@@ -17,7 +40,7 @@ function getCurrentWeekKey() {
  * Toggles between Maintenance Load and Weekly Workload
  * Tracks planned work vs reactive/unplanned tasks
  */
-const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
+const WorkloadTracker = ({ theme, isRetro, currentWeek, weekSchedule }) => {
   const [viewMode, setViewMode] = useState(() => {
     return localStorage.getItem("workloadViewMode") || "weekly";
   });
@@ -72,13 +95,16 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek }) => {
 
   // Calculate workload metrics from weekly schedule
   const calculateWorkload = () => {
+    // Use passed weekSchedule prop or fall back to imported default
+    const scheduleToUse = weekSchedule || weeklySchedule;
+
     // Count all slots from weekly schedule
     let plannedCount = 0;
     let reactiveCount = 0;
     let completedPlanned = 0;
     let completedReactive = 0;
 
-    weeklySchedule.forEach((day) => {
+    scheduleToUse.forEach((day) => {
       day.slots.forEach((slot) => {
         if (slot.type === "planned") {
           plannedCount++;

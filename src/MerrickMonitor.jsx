@@ -20,10 +20,7 @@ import {
 import WeeklyAgenda from "./components/WeeklyAgenda";
 import WeekHistory from "./components/WeekHistory";
 import WorkloadTracker from "./components/WorkloadTracker";
-import {
-  weeklySchedule,
-  convertToWeeklyLogFormat,
-} from "./data/weeklySchedule";
+import { currentWeekSchedule, calculateMetrics } from "./data/weeklySchedule";
 
 const MerrickMonitor = () => {
   const [date, setDate] = useState(new Date());
@@ -41,9 +38,40 @@ const MerrickMonitor = () => {
 
   const CORRECT_PASSWORD = "peek";
 
-  // Blinking cursor & Time update
+  // Blinking cursor & Time update (Melbourne timezone)
   useEffect(() => {
-    const timer = setInterval(() => setDate(new Date()), 1000);
+    const updateMelbourneTime = () => {
+      // Get Melbourne time without timezone conversion issues
+      const formatter = new Intl.DateTimeFormat("en-US", {
+        timeZone: "Australia/Melbourne",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      });
+
+      const parts = formatter.formatToParts(new Date());
+      const dateObj = {};
+      parts.forEach(({ type, value }) => {
+        dateObj[type] = value;
+      });
+
+      const melbourneDate = new Date(
+        parseInt(dateObj.year),
+        parseInt(dateObj.month) - 1,
+        parseInt(dateObj.day),
+        parseInt(dateObj.hour),
+        parseInt(dateObj.minute),
+        parseInt(dateObj.second),
+      );
+      setDate(melbourneDate);
+    };
+
+    updateMelbourneTime(); // Initial update
+    const timer = setInterval(updateMelbourneTime, 1000);
     const cursorTimer = setInterval(() => setCursorVisible((v) => !v), 800);
     return () => {
       clearInterval(timer);
@@ -100,8 +128,7 @@ const MerrickMonitor = () => {
       const response = await fetch("/data/weeklyAgendas.json");
       if (response.ok) {
         const allAgendas = await response.json();
-        const currentWeekKey = getCurrentWeekKey();
-        const weekData = allAgendas[currentWeekKey];
+        const weekData = allAgendas[currentWeekSchedule.weekStart];
         setWeeklyAgenda(weekData?.goals || []);
       }
     } catch (error) {
@@ -121,29 +148,12 @@ const MerrickMonitor = () => {
       day: "numeric",
     });
   const getCurrentDayShort = () =>
-    date.toLocaleDateString("en-US", { weekday: "short" }).toUpperCase();
-
-  const getWeekRange = () => {
-    const curr = new Date();
-    const day = curr.getDay() || 7;
-    const monday = new Date(curr);
-    monday.setDate(curr.getDate() - (day - 1));
-
-    const friday = new Date(monday);
-    friday.setDate(monday.getDate() + 4);
-
-    const opts = { month: "short", day: "numeric" };
-    return `${monday.toLocaleDateString("en-US", opts)} - ${friday.toLocaleDateString("en-US", opts)}`;
-  };
-
-  const getCurrentWeekKey = () => {
-    const now = new Date();
-    const dayOfWeek = now.getDay() || 7;
-    const monday = new Date(now);
-    monday.setDate(now.getDate() - (dayOfWeek - 1));
-    monday.setHours(0, 0, 0, 0);
-    return monday.toISOString().split("T")[0];
-  };
+    date
+      .toLocaleDateString("en-US", {
+        weekday: "short",
+        timeZone: "Australia/Melbourne",
+      })
+      .toUpperCase();
 
   // Password Handler
   const handlePasswordSubmit = (e) => {
@@ -390,27 +400,10 @@ const MerrickMonitor = () => {
   const systems = getSystemHealth();
   const weekStats = getWeekGitHubStats();
 
-  // Convert shared weekly schedule to Weekly Log format
-  const weeklyScheduleForLog = convertToWeeklyLogFormat(weeklySchedule);
+  // Calculate current week metrics
+  const currentMetrics = calculateMetrics(currentWeekSchedule.schedule);
 
-  // Calculate reactive load from weekly schedule
-  const calculateReactiveLoad = () => {
-    let totalSlots = 0;
-    let reactiveSlots = 0;
-
-    weeklySchedule.forEach((day) => {
-      day.slots.forEach((slot) => {
-        totalSlots++;
-        if (slot.type === "unplanned") {
-          reactiveSlots++;
-        }
-      });
-    });
-
-    return totalSlots > 0 ? Math.round((reactiveSlots / totalSlots) * 100) : 0;
-  };
-
-  const reactiveLoad = calculateReactiveLoad();
+  const reactiveLoad = currentMetrics.reactivePercent;
   const totalUsers = toolFleetWithUsers.reduce(
     (acc, curr) => acc + curr.users,
     0,
@@ -596,7 +589,7 @@ const MerrickMonitor = () => {
         <WorkloadTracker
           theme={theme}
           isRetro={isRetro}
-          currentWeek={getCurrentWeekKey()}
+          weekSchedule={currentWeekSchedule.schedule}
         />
 
         {/* Live Tools Table */}
@@ -727,13 +720,11 @@ const MerrickMonitor = () => {
             <Calendar className="w-4 h-4" />
             Weekly Log
           </h2>
-          <div
-            className={`text-xs mb-4 border-b pb-2 ${theme.tableHeader} ${theme.textMuted}`}
-          >
-            Current Week: {getWeekRange()}
-          </div>
+          {/* Weekly schedule */}
           <div className="space-y-4">
-            {Object.entries(weeklyScheduleForLog).map(([day, tasks]) => {
+            {currentWeekSchedule.schedule.map((dayData) => {
+              const day = dayData.day;
+              const tasks = dayData.slots || [];
               const isToday = day === getCurrentDayShort();
               return (
                 <div
@@ -741,11 +732,11 @@ const MerrickMonitor = () => {
                   className={`flex gap-4 p-2 -mx-2 rounded transition-colors ${isToday ? (isRetro ? "bg-green-900/20 border border-green-900" : "bg-indigo-50 border border-indigo-100") : ""}`}
                 >
                   <div
-                    className={`text-xs font-bold w-8 pt-1 ${isToday ? theme.accent : theme.textMuted}`}
+                    className={`text-xs font-bold w-12 pt-1 ${isToday ? theme.accent : theme.textMuted}`}
                   >
-                    {day}{" "}
+                    <div>{day}</div>
                     {isToday && (
-                      <span className="animate-pulse text-[8px] block">
+                      <span className="animate-pulse text-[8px] block mt-1">
                         NOW
                       </span>
                     )}
@@ -767,9 +758,9 @@ const MerrickMonitor = () => {
                           const isAllDay =
                             morningTasks.length === 1 &&
                             afternoonTasks.length === 1 &&
-                            morningTasks[0].task === afternoonTasks[0].task &&
-                            morningTasks[0].type === afternoonTasks[0].type &&
-                            morningTasks[0].status === afternoonTasks[0].status;
+                            morningTasks[0].project ===
+                              afternoonTasks[0].project &&
+                            morningTasks[0].type === afternoonTasks[0].type;
 
                           if (isAllDay) {
                             const t = morningTasks[0];
@@ -777,29 +768,21 @@ const MerrickMonitor = () => {
                               <div className="text-xs group">
                                 <span
                                   className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
-                                    t.status === "DONE"
+                                    t.type === "reactive"
                                       ? isRetro
-                                        ? "text-green-500 line-through opacity-50"
-                                        : "text-slate-400 line-through"
-                                      : t.type === "REACTIVE"
-                                        ? isRetro
-                                          ? "border border-amber-600 text-amber-500 bg-amber-950/50"
-                                          : "border border-amber-300 text-amber-700"
-                                        : isRetro
-                                          ? "border border-green-700 text-green-600"
-                                          : "border border-slate-300 text-slate-600"
+                                        ? "border border-amber-600 text-amber-500 bg-amber-950/50"
+                                        : "border border-amber-300 text-amber-700"
+                                      : isRetro
+                                        ? "border border-green-700 text-green-600"
+                                        : "border border-slate-300 text-slate-600"
                                   }`}
                                 >
-                                  {t.type}
+                                  {t.type === "reactive"
+                                    ? "REACTIVE"
+                                    : "PLANNED"}
                                 </span>
-                                <span
-                                  className={
-                                    t.status === "DONE"
-                                      ? theme.textMuted
-                                      : theme.textBold
-                                  }
-                                >
-                                  {t.task}
+                                <span className={theme.textBold}>
+                                  {t.project}
                                 </span>
                               </div>
                             );
@@ -815,33 +798,28 @@ const MerrickMonitor = () => {
                                   >
                                     Morning
                                   </div>
-                                  {morningTasks.map((t) => (
-                                    <div key={t.id} className="text-xs group">
+                                  {morningTasks.map((t, idx) => (
+                                    <div
+                                      key={`morning-${idx}`}
+                                      className="text-xs group"
+                                    >
                                       <span
                                         className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
-                                          t.status === "DONE"
+                                          t.type === "reactive"
                                             ? isRetro
-                                              ? "text-green-500 line-through opacity-50"
-                                              : "text-slate-400 line-through"
-                                            : t.type === "REACTIVE"
-                                              ? isRetro
-                                                ? "border border-amber-600 text-amber-500 bg-amber-950/50"
-                                                : "border border-amber-300 text-amber-700"
-                                              : isRetro
-                                                ? "border border-green-700 text-green-600"
-                                                : "border border-slate-300 text-slate-600"
+                                              ? "border border-amber-600 text-amber-500 bg-amber-950/50"
+                                              : "border border-amber-300 text-amber-700"
+                                            : isRetro
+                                              ? "border border-green-700 text-green-600"
+                                              : "border border-slate-300 text-slate-600"
                                         }`}
                                       >
-                                        {t.type}
+                                        {t.type === "reactive"
+                                          ? "REACTIVE"
+                                          : "PLANNED"}
                                       </span>
-                                      <span
-                                        className={
-                                          t.status === "DONE"
-                                            ? theme.textMuted
-                                            : theme.textBold
-                                        }
-                                      >
-                                        {t.task}
+                                      <span className={theme.textBold}>
+                                        {t.project}
                                       </span>
                                     </div>
                                   ))}
@@ -855,33 +833,28 @@ const MerrickMonitor = () => {
                                   >
                                     Afternoon
                                   </div>
-                                  {afternoonTasks.map((t) => (
-                                    <div key={t.id} className="text-xs group">
+                                  {afternoonTasks.map((t, idx) => (
+                                    <div
+                                      key={`afternoon-${idx}`}
+                                      className="text-xs group"
+                                    >
                                       <span
                                         className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
-                                          t.status === "DONE"
+                                          t.type === "reactive"
                                             ? isRetro
-                                              ? "text-green-500 line-through opacity-50"
-                                              : "text-slate-400 line-through"
-                                            : t.type === "REACTIVE"
-                                              ? isRetro
-                                                ? "border border-amber-600 text-amber-500 bg-amber-950/50"
-                                                : "border border-amber-300 text-amber-700"
-                                              : isRetro
-                                                ? "border border-green-700 text-green-600"
-                                                : "border border-slate-300 text-slate-600"
+                                              ? "border border-amber-600 text-amber-500 bg-amber-950/50"
+                                              : "border border-amber-300 text-amber-700"
+                                            : isRetro
+                                              ? "border border-green-700 text-green-600"
+                                              : "border border-slate-300 text-slate-600"
                                         }`}
                                       >
-                                        {t.type}
+                                        {t.type === "reactive"
+                                          ? "REACTIVE"
+                                          : "PLANNED"}
                                       </span>
-                                      <span
-                                        className={
-                                          t.status === "DONE"
-                                            ? theme.textMuted
-                                            : theme.textBold
-                                        }
-                                      >
-                                        {t.task}
+                                      <span className={theme.textBold}>
+                                        {t.project}
                                       </span>
                                     </div>
                                   ))}
@@ -901,6 +874,7 @@ const MerrickMonitor = () => {
               );
             })}
           </div>
+          )}
         </section>
 
         {/* GitHub Week Stats */}
@@ -917,13 +891,13 @@ const MerrickMonitor = () => {
             <div className="flex items-center justify-between">
               <span className={`text-xs ${theme.textMuted}`}>Active Days</span>
               <span className={`text-lg font-bold ${theme.textBold}`}>
-                {weekStats.commits}
+                {weekStats.commits || weekStats.activeDays || 0}
               </span>
             </div>
             <div className="flex items-center justify-between">
               <span className={`text-xs ${theme.textMuted}`}>Active Repos</span>
               <span className={`text-lg font-bold ${theme.textBold}`}>
-                {weekStats.repos}
+                {weekStats.repos || 0}
               </span>
             </div>
           </div>
@@ -1064,22 +1038,24 @@ const MerrickMonitor = () => {
             </p>
           </div>
           <div className="flex flex-col items-end gap-4">
-            {/* Mode Toggle */}
-            <div
-              className={`flex items-center p-1 rounded-lg ${isRetro ? "border border-green-900" : "bg-slate-200/50"}`}
-            >
-              <button
-                onClick={() => setViewMode("RETRO")}
-                className={`px-3 py-1 rounded text-[10px] font-bold transition-all ${isRetro ? "bg-green-900 text-green-100" : "text-slate-500 hover:text-slate-700"}`}
+            {/* Mode Toggle & Snapshot Manager */}
+            <div className="flex items-center gap-3">
+              <div
+                className={`flex items-center p-1 rounded-lg ${isRetro ? "border border-green-900" : "bg-slate-200/50"}`}
               >
-                <Terminal className="w-3 h-3 inline mr-1" /> TERMINAL
-              </button>
-              <button
-                onClick={() => setViewMode("MINIMAL")}
-                className={`px-3 py-1 rounded text-[10px] font-bold transition-all ${!isRetro ? "bg-white shadow text-slate-800" : "text-green-800 hover:text-green-600"}`}
-              >
-                <Monitor className="w-3 h-3 inline mr-1" /> CLEAN
-              </button>
+                <button
+                  onClick={() => setViewMode("RETRO")}
+                  className={`px-3 py-1 rounded text-[10px] font-bold transition-all ${isRetro ? "bg-green-900 text-green-100" : "text-slate-500 hover:text-slate-700"}`}
+                >
+                  <Terminal className="w-3 h-3 inline mr-1" /> TERMINAL
+                </button>
+                <button
+                  onClick={() => setViewMode("MINIMAL")}
+                  className={`px-3 py-1 rounded text-[10px] font-bold transition-all ${!isRetro ? "bg-white shadow text-slate-800" : "text-green-800 hover:text-green-600"}`}
+                >
+                  <Monitor className="w-3 h-3 inline mr-1" /> CLEAN
+                </button>
+              </div>
             </div>
 
             <div className="text-right">
@@ -1167,7 +1143,7 @@ const MerrickMonitor = () => {
             <div
               className={`text-2xl font-bold ${isRetro ? "text-yellow-500" : "text-amber-600"}`}
             >
-              {reactiveLoad}%
+              {currentMetrics.reactivePercent}%
             </div>
           </div>
           <div
@@ -1294,11 +1270,7 @@ const MerrickMonitor = () => {
                 <Calendar className="w-4 h-4" />
                 Weekly Agenda
               </h2>
-              <WeeklyAgenda
-                theme={theme}
-                isRetro={isRetro}
-                toolFleet={toolFleetWithUsers}
-              />
+              <WeeklyAgenda theme={theme} isRetro={isRetro} />
             </div>
           )}
         </div>
