@@ -3,54 +3,63 @@
 
 export async function onRequest(context) {
   const { request, env, next } = context;
+  const url = new URL(request.url);
 
-  // Credentials - these will be set as environment variables in Cloudflare Pages
-  const BASIC_USER = env.AUTH_USER;
-  const BASIC_PASS = env.AUTH_PASS;
-
-  if (!BASIC_USER || !BASIC_PASS) {
-    return new Response('Server configuration error: Missing authentication credentials', {
-      status: 500
-    });
+  // Allow public assets and login endpoint
+  // We allow the root path '/' so the SPA can load and show the Login component
+  if (
+    url.pathname === '/api/auth/login' ||
+    url.pathname === '/api/auth/logout' ||
+    url.pathname === '/' ||
+    url.pathname.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg|json)$/)
+  ) {
+    return next();
   }
 
-  const authorization = request.headers.get('Authorization');
+  // Check for auth cookie
+  const cookieHeader = request.headers.get('Cookie');
+  const cookies = parseCookies(cookieHeader);
+  const authSession = cookies['auth_session'];
 
-  // Check if Authorization header is present
-  if (!authorization) {
-    return new Response('Authentication required', {
+  if (!authSession) {
+    // For API requests, return 401
+    if (url.pathname.startsWith('/api/')) {
+      return new Response('Authentication required', { status: 401 });
+    }
+    // For other requests (e.g. deep links), we might want to redirect to /
+    // But since it's a SPA, we usually just let the client handle it or redirect to root
+    return Response.redirect(url.origin, 302);
+  }
+
+  // Verify credentials from cookie (simple base64 decode check against env)
+  // In a real app, verify signature
+  try {
+    const decoded = atob(authSession);
+    const [user, pass] = decoded.split(':');
+
+    if (user !== env.AUTH_USER || pass !== env.AUTH_PASS) {
+      throw new Error('Invalid credentials');
+    }
+  } catch (e) {
+    // Invalid cookie
+    return new Response('Invalid session', {
       status: 401,
       headers: {
-        'WWW-Authenticate': 'Basic realm="Merrick Monitor - Secure Area", charset="UTF-8"',
-      },
+        'Set-Cookie': `auth_session=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0`
+      }
     });
   }
 
-  // Parse the Authorization header
-  const [scheme, encoded] = authorization.split(' ');
-
-  // Verify the auth scheme is "Basic"
-  if (!encoded || scheme !== 'Basic') {
-    return new Response('Malformed authorization header', {
-      status: 400
-    });
-  }
-
-  // Decode the Base64 encoded credentials
-  const buffer = Uint8Array.from(atob(encoded), c => c.charCodeAt(0));
-  const decoded = new TextDecoder().decode(buffer);
-  const [user, pass] = decoded.split(':');
-
-  // Verify credentials
-  if (user !== BASIC_USER || pass !== BASIC_PASS) {
-    return new Response('Invalid credentials', {
-      status: 401,
-      headers: {
-        'WWW-Authenticate': 'Basic realm="Merrick Monitor - Secure Area", charset="UTF-8"',
-      },
-    });
-  }
-
-  // Authentication successful - continue to the next handler
+  // Authentication successful
   return next();
+}
+
+function parseCookies(header) {
+  const list = {};
+  if (!header) return list;
+  header.split(';').forEach(cookie => {
+    const parts = cookie.split('=');
+    list[parts.shift().trim()] = decodeURI(parts.join('='));
+  });
+  return list;
 }

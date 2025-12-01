@@ -19,6 +19,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import Login from "./components/Login";
 import WeeklyAgenda from "./components/WeeklyAgenda";
 import WeekHistory from "./components/WeekHistory";
 import WorkloadTracker from "./components/WorkloadTracker";
@@ -49,7 +50,23 @@ const MerrickMonitor = () => {
     currentWeekSchedule.weekStart,
   );
 
-  const CORRECT_PASSWORD = "peek";
+  // Check authentication status on mount
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/api/check-auth');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.authenticated) {
+            setIsAuthenticated(true);
+          }
+        }
+      } catch (error) {
+        console.error("Auth check failed:", error);
+      }
+    };
+    checkAuth();
+  }, []);
 
   // Blinking cursor & Time update (Melbourne timezone)
   useEffect(() => {
@@ -167,18 +184,6 @@ const MerrickMonitor = () => {
         timeZone: "Australia/Melbourne",
       })
       .toUpperCase();
-
-  // Password Handler
-  const handlePasswordSubmit = (e) => {
-    e.preventDefault();
-    if (passwordInput === CORRECT_PASSWORD) {
-      setIsAuthenticated(true);
-      setShowError(false);
-    } else {
-      setShowError(true);
-      setPasswordInput("");
-    }
-  };
 
   // --- THEME ENGINE ---
   const isRetro = viewMode === "RETRO";
@@ -558,62 +563,7 @@ const MerrickMonitor = () => {
 
   // --- LOGIN SCREEN ---
   if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-black text-green-500 font-mono flex items-center justify-center p-4 selection:bg-green-900 selection:text-green-100">
-        <div className="pointer-events-none fixed inset-0 z-50 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[length:100%_4px,3px_100%]" />
-
-        <div className="max-w-md w-full border-2 border-green-900 p-8 bg-black shadow-[0_0_30px_rgba(34,197,94,0.1)] relative z-10">
-          <div className="flex items-center justify-center mb-8">
-            <Lock className="w-12 h-12 text-green-500" />
-          </div>
-          <h1 className="text-2xl font-bold text-center mb-2 text-green-400 uppercase tracking-widest">
-            ACCESS REQUIRED
-          </h1>
-          <p className="text-xs text-green-700 text-center mb-8 tracking-wide">
-            MERRICK MONITOR // AUTHENTICATION PORTAL
-          </p>
-
-          <form onSubmit={handlePasswordSubmit} className="space-y-6">
-            <div>
-              <label className="block text-xs text-green-600 mb-2 uppercase tracking-wider">
-                Enter Password
-              </label>
-              <input
-                type="password"
-                value={passwordInput}
-                onChange={(e) => setPasswordInput(e.target.value)}
-                className="w-full bg-black border-2 border-green-800 text-green-400 px-4 py-3 focus:outline-none focus:border-green-500 transition-colors font-mono"
-                placeholder="••••••••"
-                autoFocus
-              />
-              {showError && (
-                <p className="text-xs text-red-500 mt-2 animate-pulse">
-                  ACCESS DENIED - INVALID PASSWORD
-                </p>
-              )}
-            </div>
-
-            <button
-              type="submit"
-              className="w-full bg-green-900 hover:bg-green-800 text-green-100 font-bold py-3 px-4 border-2 border-green-700 hover:border-green-500 transition-all uppercase tracking-widest"
-            >
-              → AUTHENTICATE
-            </button>
-          </form>
-
-          <div className="mt-8 text-center">
-            <div className="text-xs text-green-800">
-              {formatTime(date)}
-              <span
-                className={`ml-1 ${cursorVisible ? "opacity-100" : "opacity-0"} transition-opacity`}
-              >
-                _
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <Login onLogin={handleLoginSuccess} />;
   }
 
   // --- VIEWS ---
@@ -773,14 +723,13 @@ const MerrickMonitor = () => {
                   getAvailableWeeks().indexOf(selectedWeekKeyLog) >=
                   getAvailableWeeks().length - 1
                 }
-                className={`p-1 rounded transition-all ${
-                  getAvailableWeeks().indexOf(selectedWeekKeyLog) <
+                className={`p-1 rounded transition-all ${getAvailableWeeks().indexOf(selectedWeekKeyLog) <
                   getAvailableWeeks().length - 1
-                    ? isRetro
-                      ? "text-green-400 hover:bg-green-900/30 border border-green-800"
-                      : "text-slate-700 hover:bg-slate-100 border border-slate-200"
-                    : "opacity-30 cursor-not-allowed"
-                }`}
+                  ? isRetro
+                    ? "text-green-400 hover:bg-green-900/30 border border-green-800"
+                    : "text-slate-700 hover:bg-slate-100 border border-slate-200"
+                  : "opacity-30 cursor-not-allowed"
+                  }`}
                 title="Previous week"
               >
                 <ChevronLeft className="w-3 h-3" />
@@ -797,13 +746,12 @@ const MerrickMonitor = () => {
                   }
                 }}
                 disabled={getAvailableWeeks().indexOf(selectedWeekKeyLog) === 0}
-                className={`p-1 rounded transition-all ${
-                  getAvailableWeeks().indexOf(selectedWeekKeyLog) > 0
-                    ? isRetro
-                      ? "text-green-400 hover:bg-green-900/30 border border-green-800"
-                      : "text-slate-700 hover:bg-slate-100 border border-slate-200"
-                    : "opacity-30 cursor-not-allowed"
-                }`}
+                className={`p-1 rounded transition-all ${getAvailableWeeks().indexOf(selectedWeekKeyLog) > 0
+                  ? isRetro
+                    ? "text-green-400 hover:bg-green-900/30 border border-green-800"
+                    : "text-slate-700 hover:bg-slate-100 border border-slate-200"
+                  : "opacity-30 cursor-not-allowed"
+                  }`}
                 title="Next week"
               >
                 <ChevronRight className="w-3 h-3" />
@@ -852,7 +800,7 @@ const MerrickMonitor = () => {
                               morningTasks.length === 1 &&
                               afternoonTasks.length === 1 &&
                               morningTasks[0].project ===
-                                afternoonTasks[0].project &&
+                              afternoonTasks[0].project &&
                               morningTasks[0].type === afternoonTasks[0].type;
 
                             if (isAllDay) {
@@ -860,15 +808,14 @@ const MerrickMonitor = () => {
                               return (
                                 <div className="text-xs group">
                                   <span
-                                    className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
-                                      t.type === "reactive"
-                                        ? isRetro
-                                          ? "border border-amber-600 text-amber-500 bg-amber-950/50"
-                                          : "border border-amber-300 text-amber-700"
-                                        : isRetro
-                                          ? "border border-green-700 text-green-600"
-                                          : "border border-slate-300 text-slate-600"
-                                    }`}
+                                    className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${t.type === "reactive"
+                                      ? isRetro
+                                        ? "border border-amber-600 text-amber-500 bg-amber-950/50"
+                                        : "border border-amber-300 text-amber-700"
+                                      : isRetro
+                                        ? "border border-green-700 text-green-600"
+                                        : "border border-slate-300 text-slate-600"
+                                      }`}
                                   >
                                     {t.type === "reactive"
                                       ? "REACTIVE"
@@ -897,15 +844,14 @@ const MerrickMonitor = () => {
                                         className="text-xs group"
                                       >
                                         <span
-                                          className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
-                                            t.type === "reactive"
-                                              ? isRetro
-                                                ? "border border-amber-600 text-amber-500 bg-amber-950/50"
-                                                : "border border-amber-300 text-amber-700"
-                                              : isRetro
-                                                ? "border border-green-700 text-green-600"
-                                                : "border border-slate-300 text-slate-600"
-                                          }`}
+                                          className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${t.type === "reactive"
+                                            ? isRetro
+                                              ? "border border-amber-600 text-amber-500 bg-amber-950/50"
+                                              : "border border-amber-300 text-amber-700"
+                                            : isRetro
+                                              ? "border border-green-700 text-green-600"
+                                              : "border border-slate-300 text-slate-600"
+                                            }`}
                                         >
                                           {t.type === "reactive"
                                             ? "REACTIVE"
@@ -932,15 +878,14 @@ const MerrickMonitor = () => {
                                         className="text-xs group"
                                       >
                                         <span
-                                          className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
-                                            t.type === "reactive"
-                                              ? isRetro
-                                                ? "border border-amber-600 text-amber-500 bg-amber-950/50"
-                                                : "border border-amber-300 text-amber-700"
-                                              : isRetro
-                                                ? "border border-green-700 text-green-600"
-                                                : "border border-slate-300 text-slate-600"
-                                          }`}
+                                          className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${t.type === "reactive"
+                                            ? isRetro
+                                              ? "border border-amber-600 text-amber-500 bg-amber-950/50"
+                                              : "border border-amber-300 text-amber-700"
+                                            : isRetro
+                                              ? "border border-green-700 text-green-600"
+                                              : "border border-slate-300 text-slate-600"
+                                            }`}
                                         >
                                           {t.type === "reactive"
                                             ? "REACTIVE"
@@ -1295,19 +1240,18 @@ const MerrickMonitor = () => {
             </div>
             {weekComparison && (
               <div
-                className={`text-[9px] mt-1 flex items-center gap-1 ${
-                  weekComparison.direction === "down"
+                className={`text-[9px] mt-1 flex items-center gap-1 ${weekComparison.direction === "down"
+                  ? isRetro
+                    ? "text-green-600"
+                    : "text-green-700"
+                  : weekComparison.direction === "up"
                     ? isRetro
-                      ? "text-green-600"
-                      : "text-green-700"
-                    : weekComparison.direction === "up"
-                      ? isRetro
-                        ? "text-red-600"
-                        : "text-red-700"
-                      : isRetro
-                        ? "text-yellow-700"
-                        : "text-amber-700"
-                }`}
+                      ? "text-red-600"
+                      : "text-red-700"
+                    : isRetro
+                      ? "text-yellow-700"
+                      : "text-amber-700"
+                  }`}
               >
                 {weekComparison.direction === "down" && "↓"}
                 {weekComparison.direction === "up" && "↑"}
@@ -1363,29 +1307,27 @@ const MerrickMonitor = () => {
               >
                 <button
                   onClick={() => setTeamViewMode("members")}
-                  className={`px-2 py-1 rounded text-[9px] font-bold uppercase tracking-wider transition-all ${
-                    teamViewMode === "members"
-                      ? isRetro
-                        ? "bg-green-900 text-green-100"
-                        : "bg-white shadow text-slate-800"
-                      : isRetro
-                        ? "text-green-800 hover:text-green-600"
-                        : "text-slate-500 hover:text-slate-700"
-                  }`}
+                  className={`px-2 py-1 rounded text-[9px] font-bold uppercase tracking-wider transition-all ${teamViewMode === "members"
+                    ? isRetro
+                      ? "bg-green-900 text-green-100"
+                      : "bg-white shadow text-slate-800"
+                    : isRetro
+                      ? "text-green-800 hover:text-green-600"
+                      : "text-slate-500 hover:text-slate-700"
+                    }`}
                 >
                   Members
                 </button>
                 <button
                   onClick={() => setTeamViewMode("tools")}
-                  className={`px-2 py-1 rounded text-[9px] font-bold uppercase tracking-wider transition-all ${
-                    teamViewMode === "tools"
-                      ? isRetro
-                        ? "bg-green-900 text-green-100"
-                        : "bg-white shadow text-slate-800"
-                      : isRetro
-                        ? "text-green-800 hover:text-green-600"
-                        : "text-slate-500 hover:text-slate-700"
-                  }`}
+                  className={`px-2 py-1 rounded text-[9px] font-bold uppercase tracking-wider transition-all ${teamViewMode === "tools"
+                    ? isRetro
+                      ? "bg-green-900 text-green-100"
+                      : "bg-white shadow text-slate-800"
+                    : isRetro
+                      ? "text-green-800 hover:text-green-600"
+                      : "text-slate-500 hover:text-slate-700"
+                    }`}
                 >
                   Tools
                 </button>
