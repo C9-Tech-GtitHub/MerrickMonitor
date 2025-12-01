@@ -16,6 +16,8 @@ import {
   Monitor,
   Layout,
   Lock,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import WeeklyAgenda from "./components/WeeklyAgenda";
 import WeekHistory from "./components/WeekHistory";
