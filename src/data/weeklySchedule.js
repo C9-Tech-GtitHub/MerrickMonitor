@@ -24,7 +24,7 @@ export const currentWeekSchedule = {
         },
         {
           timeSlot: "afternoon",
-          project: "PEM tool + reactive training",
+          project: "PEM Tool + Reactive Training",
           type: "planned",
         },
       ],
@@ -34,7 +34,7 @@ export const currentWeekSchedule = {
       slots: [
         {
           timeSlot: "morning",
-          project: "On-page",
+          project: "On-Page",
           type: "planned",
         },
         {
@@ -49,12 +49,12 @@ export const currentWeekSchedule = {
       slots: [
         {
           timeSlot: "morning",
-          project: "Woolworths research",
+          project: "Woolworths Research",
           type: "planned",
         },
         {
           timeSlot: "afternoon",
-          project: "Woolworths research",
+          project: "Woolworths Research",
           type: "planned",
         },
       ],
@@ -79,7 +79,7 @@ export const currentWeekSchedule = {
       slots: [
         {
           timeSlot: "morning",
-          project: "On-page",
+          project: "On-Page",
           type: "planned",
         },
       ],

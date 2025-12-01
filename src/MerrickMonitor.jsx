@@ -1264,12 +1264,6 @@ const MerrickMonitor = () => {
             <div
               className={`p-6 animate-in fade-in duration-300 ${theme.cardBg} ${isRetro ? "border" : "rounded-xl"} ${theme.border}`}
             >
-              <h2
-                className={`text-xs font-bold uppercase mb-8 flex items-center gap-2 ${theme.accent}`}
-              >
-                <Calendar className="w-4 h-4" />
-                Weekly Agenda
-              </h2>
               <WeeklyAgenda theme={theme} isRetro={isRetro} />
             </div>
           )}
