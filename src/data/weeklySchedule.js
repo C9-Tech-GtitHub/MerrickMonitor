@@ -34,8 +34,8 @@ export const currentWeekSchedule = {
       slots: [
         {
           timeSlot: "morning",
-          project: "On-Page",
-          type: "planned",
+          project: "Outback Equipment",
+          type: "reactive",
         },
         {
           timeSlot: "afternoon",

@@ -20,7 +20,13 @@ import {
 import WeeklyAgenda from "./components/WeeklyAgenda";
 import WeekHistory from "./components/WeekHistory";
 import WorkloadTracker from "./components/WorkloadTracker";
-import { currentWeekSchedule, calculateMetrics } from "./data/weeklySchedule";
+import {
+  currentWeekSchedule,
+  calculateMetrics,
+  getWeekSchedule,
+  getAvailableWeeks,
+  getWeekRangeDisplay,
+} from "./data/weeklySchedule";
 
 const MerrickMonitor = () => {
   const [date, setDate] = useState(new Date());
@@ -35,6 +41,9 @@ const MerrickMonitor = () => {
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [teamViewMode, setTeamViewMode] = useState("members"); // 'members' or 'tools'
   const [weeklyAgenda, setWeeklyAgenda] = useState([]);
+  const [selectedWeekKeyLog, setSelectedWeekKeyLog] = useState(
+    currentWeekSchedule.weekStart,
+  );
 
   const CORRECT_PASSWORD = "peek";
 
@@ -714,167 +723,225 @@ const MerrickMonitor = () => {
         <section
           className={`p-6 transition-colors duration-300 ${theme.cardBg} ${isRetro ? "border" : "rounded-xl"} ${theme.border}`}
         >
-          <h2
-            className={`text-xs font-bold uppercase mb-6 flex items-center gap-2 ${theme.accent}`}
-          >
-            <Calendar className="w-4 h-4" />
-            Weekly Log
-          </h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2
+              className={`text-xs font-bold uppercase flex items-center gap-2 ${theme.accent}`}
+            >
+              <Calendar className="w-4 h-4" />
+              Weekly Log
+            </h2>
+            <div className="flex items-center gap-2">
+              {/* Previous Week Button */}
+              <button
+                onClick={() => {
+                  const availableWeeks = getAvailableWeeks();
+                  const currentIndex =
+                    availableWeeks.indexOf(selectedWeekKeyLog);
+                  if (currentIndex < availableWeeks.length - 1) {
+                    setSelectedWeekKeyLog(availableWeeks[currentIndex + 1]);
+                  }
+                }}
+                disabled={
+                  getAvailableWeeks().indexOf(selectedWeekKeyLog) >=
+                  getAvailableWeeks().length - 1
+                }
+                className={`p-1 rounded transition-all ${
+                  getAvailableWeeks().indexOf(selectedWeekKeyLog) <
+                  getAvailableWeeks().length - 1
+                    ? isRetro
+                      ? "text-green-400 hover:bg-green-900/30 border border-green-800"
+                      : "text-slate-700 hover:bg-slate-100 border border-slate-200"
+                    : "opacity-30 cursor-not-allowed"
+                }`}
+                title="Previous week"
+              >
+                <ChevronLeft className="w-3 h-3" />
+              </button>
+
+              {/* Next Week Button */}
+              <button
+                onClick={() => {
+                  const availableWeeks = getAvailableWeeks();
+                  const currentIndex =
+                    availableWeeks.indexOf(selectedWeekKeyLog);
+                  if (currentIndex > 0) {
+                    setSelectedWeekKeyLog(availableWeeks[currentIndex - 1]);
+                  }
+                }}
+                disabled={getAvailableWeeks().indexOf(selectedWeekKeyLog) === 0}
+                className={`p-1 rounded transition-all ${
+                  getAvailableWeeks().indexOf(selectedWeekKeyLog) > 0
+                    ? isRetro
+                      ? "text-green-400 hover:bg-green-900/30 border border-green-800"
+                      : "text-slate-700 hover:bg-slate-100 border border-slate-200"
+                    : "opacity-30 cursor-not-allowed"
+                }`}
+                title="Next week"
+              >
+                <ChevronRight className="w-3 h-3" />
+              </button>
+            </div>
+          </div>
           {/* Weekly schedule */}
           <div className="space-y-4">
-            {currentWeekSchedule.schedule.map((dayData) => {
-              const day = dayData.day;
-              const tasks = dayData.slots || [];
-              const isToday = day === getCurrentDayShort();
-              return (
-                <div
-                  key={day}
-                  className={`flex gap-4 p-2 -mx-2 rounded transition-colors ${isToday ? (isRetro ? "bg-green-900/20 border border-green-900" : "bg-indigo-50 border border-indigo-100") : ""}`}
-                >
+            {(() => {
+              const weekData = getWeekSchedule(selectedWeekKeyLog);
+              const weekSchedule = weekData?.schedule || [];
+              return weekSchedule.map((dayData) => {
+                const day = dayData.day;
+                const tasks = dayData.slots || [];
+                const isToday = day === getCurrentDayShort();
+                return (
                   <div
-                    className={`text-xs font-bold w-12 pt-1 ${isToday ? theme.accent : theme.textMuted}`}
+                    key={day}
+                    className={`flex gap-4 p-2 -mx-2 rounded transition-colors ${isToday ? (isRetro ? "bg-green-900/20 border border-green-900" : "bg-indigo-50 border border-indigo-100") : ""}`}
                   >
-                    <div>{day}</div>
-                    {isToday && (
-                      <span className="animate-pulse text-[8px] block mt-1">
-                        NOW
-                      </span>
-                    )}
-                  </div>
-                  <div
-                    className={`flex-1 space-y-3 border-l pl-4 ${isToday ? (isRetro ? "border-green-500" : "border-indigo-400") : isRetro ? "border-green-900" : "border-slate-200"}`}
-                  >
-                    {tasks.length > 0 ? (
-                      <>
-                        {(() => {
-                          const morningTasks = tasks.filter(
-                            (t) => t.timeSlot === "morning",
-                          );
-                          const afternoonTasks = tasks.filter(
-                            (t) => t.timeSlot === "afternoon",
-                          );
-
-                          // Check if all-day (same task AM and PM)
-                          const isAllDay =
-                            morningTasks.length === 1 &&
-                            afternoonTasks.length === 1 &&
-                            morningTasks[0].project ===
-                              afternoonTasks[0].project &&
-                            morningTasks[0].type === afternoonTasks[0].type;
-
-                          if (isAllDay) {
-                            const t = morningTasks[0];
-                            return (
-                              <div className="text-xs group">
-                                <span
-                                  className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
-                                    t.type === "reactive"
-                                      ? isRetro
-                                        ? "border border-amber-600 text-amber-500 bg-amber-950/50"
-                                        : "border border-amber-300 text-amber-700"
-                                      : isRetro
-                                        ? "border border-green-700 text-green-600"
-                                        : "border border-slate-300 text-slate-600"
-                                  }`}
-                                >
-                                  {t.type === "reactive"
-                                    ? "REACTIVE"
-                                    : "PLANNED"}
-                                </span>
-                                <span className={theme.textBold}>
-                                  {t.project}
-                                </span>
-                              </div>
+                    <div
+                      className={`text-xs font-bold w-12 pt-1 ${isToday ? theme.accent : theme.textMuted}`}
+                    >
+                      <div>{day}</div>
+                      {isToday && (
+                        <span className="animate-pulse text-[8px] block mt-1">
+                          NOW
+                        </span>
+                      )}
+                    </div>
+                    <div
+                      className={`flex-1 space-y-3 border-l pl-4 ${isToday ? (isRetro ? "border-green-500" : "border-indigo-400") : isRetro ? "border-green-900" : "border-slate-200"}`}
+                    >
+                      {tasks.length > 0 ? (
+                        <>
+                          {(() => {
+                            const morningTasks = tasks.filter(
+                              (t) => t.timeSlot === "morning",
                             );
-                          }
+                            const afternoonTasks = tasks.filter(
+                              (t) => t.timeSlot === "afternoon",
+                            );
 
-                          return (
-                            <>
-                              {/* Morning Tasks */}
-                              {morningTasks.length > 0 && (
-                                <div className="space-y-1">
-                                  <div
-                                    className={`text-[8px] uppercase font-bold tracking-wider ${theme.textMuted}`}
+                            // Check if all-day (same task AM and PM)
+                            const isAllDay =
+                              morningTasks.length === 1 &&
+                              afternoonTasks.length === 1 &&
+                              morningTasks[0].project ===
+                                afternoonTasks[0].project &&
+                              morningTasks[0].type === afternoonTasks[0].type;
+
+                            if (isAllDay) {
+                              const t = morningTasks[0];
+                              return (
+                                <div className="text-xs group">
+                                  <span
+                                    className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
+                                      t.type === "reactive"
+                                        ? isRetro
+                                          ? "border border-amber-600 text-amber-500 bg-amber-950/50"
+                                          : "border border-amber-300 text-amber-700"
+                                        : isRetro
+                                          ? "border border-green-700 text-green-600"
+                                          : "border border-slate-300 text-slate-600"
+                                    }`}
                                   >
-                                    Morning
-                                  </div>
-                                  {morningTasks.map((t, idx) => (
-                                    <div
-                                      key={`morning-${idx}`}
-                                      className="text-xs group"
-                                    >
-                                      <span
-                                        className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
-                                          t.type === "reactive"
-                                            ? isRetro
-                                              ? "border border-amber-600 text-amber-500 bg-amber-950/50"
-                                              : "border border-amber-300 text-amber-700"
-                                            : isRetro
-                                              ? "border border-green-700 text-green-600"
-                                              : "border border-slate-300 text-slate-600"
-                                        }`}
-                                      >
-                                        {t.type === "reactive"
-                                          ? "REACTIVE"
-                                          : "PLANNED"}
-                                      </span>
-                                      <span className={theme.textBold}>
-                                        {t.project}
-                                      </span>
-                                    </div>
-                                  ))}
+                                    {t.type === "reactive"
+                                      ? "REACTIVE"
+                                      : "PLANNED"}
+                                  </span>
+                                  <span className={theme.textBold}>
+                                    {t.project}
+                                  </span>
                                 </div>
-                              )}
-                              {/* Afternoon Tasks */}
-                              {afternoonTasks.length > 0 && (
-                                <div className="space-y-1">
-                                  <div
-                                    className={`text-[8px] uppercase font-bold tracking-wider ${theme.textMuted}`}
-                                  >
-                                    Afternoon
-                                  </div>
-                                  {afternoonTasks.map((t, idx) => (
+                              );
+                            }
+
+                            return (
+                              <>
+                                {/* Morning Tasks */}
+                                {morningTasks.length > 0 && (
+                                  <div className="space-y-1">
                                     <div
-                                      key={`afternoon-${idx}`}
-                                      className="text-xs group"
+                                      className={`text-[8px] uppercase font-bold tracking-wider ${theme.textMuted}`}
                                     >
-                                      <span
-                                        className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
-                                          t.type === "reactive"
-                                            ? isRetro
-                                              ? "border border-amber-600 text-amber-500 bg-amber-950/50"
-                                              : "border border-amber-300 text-amber-700"
-                                            : isRetro
-                                              ? "border border-green-700 text-green-600"
-                                              : "border border-slate-300 text-slate-600"
-                                        }`}
-                                      >
-                                        {t.type === "reactive"
-                                          ? "REACTIVE"
-                                          : "PLANNED"}
-                                      </span>
-                                      <span className={theme.textBold}>
-                                        {t.project}
-                                      </span>
+                                      Morning
                                     </div>
-                                  ))}
-                                </div>
-                              )}
-                            </>
-                          );
-                        })()}
-                      </>
-                    ) : (
-                      <span className={`text-[10px] italic ${theme.textMuted}`}>
-                        -- No Activity --
-                      </span>
-                    )}
+                                    {morningTasks.map((t, idx) => (
+                                      <div
+                                        key={`morning-${idx}`}
+                                        className="text-xs group"
+                                      >
+                                        <span
+                                          className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
+                                            t.type === "reactive"
+                                              ? isRetro
+                                                ? "border border-amber-600 text-amber-500 bg-amber-950/50"
+                                                : "border border-amber-300 text-amber-700"
+                                              : isRetro
+                                                ? "border border-green-700 text-green-600"
+                                                : "border border-slate-300 text-slate-600"
+                                          }`}
+                                        >
+                                          {t.type === "reactive"
+                                            ? "REACTIVE"
+                                            : "PLANNED"}
+                                        </span>
+                                        <span className={theme.textBold}>
+                                          {t.project}
+                                        </span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                                {/* Afternoon Tasks */}
+                                {afternoonTasks.length > 0 && (
+                                  <div className="space-y-1">
+                                    <div
+                                      className={`text-[8px] uppercase font-bold tracking-wider ${theme.textMuted}`}
+                                    >
+                                      Afternoon
+                                    </div>
+                                    {afternoonTasks.map((t, idx) => (
+                                      <div
+                                        key={`afternoon-${idx}`}
+                                        className="text-xs group"
+                                      >
+                                        <span
+                                          className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
+                                            t.type === "reactive"
+                                              ? isRetro
+                                                ? "border border-amber-600 text-amber-500 bg-amber-950/50"
+                                                : "border border-amber-300 text-amber-700"
+                                              : isRetro
+                                                ? "border border-green-700 text-green-600"
+                                                : "border border-slate-300 text-slate-600"
+                                          }`}
+                                        >
+                                          {t.type === "reactive"
+                                            ? "REACTIVE"
+                                            : "PLANNED"}
+                                        </span>
+                                        <span className={theme.textBold}>
+                                          {t.project}
+                                        </span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                              </>
+                            );
+                          })()}
+                        </>
+                      ) : (
+                        <span
+                          className={`text-[10px] italic ${theme.textMuted}`}
+                        >
+                          -- No Activity --
+                        </span>
+                      )}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })();
+            })()}
           </div>
-          )}
         </section>
 
         {/* GitHub Week Stats */}
