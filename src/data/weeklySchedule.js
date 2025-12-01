@@ -199,7 +199,41 @@ export function getAvailableWeeks() {
 }
 
 /**
+ * Get previous week's key
+ * @param {string} currentWeekKey - Current week start date (YYYY-MM-DD)
+ * @returns {string|null} - Previous week key or null if no previous week
+ */
+export function getPreviousWeekKey(currentWeekKey) {
+  const weeks = getAvailableWeeks();
+  const currentIndex = weeks.indexOf(currentWeekKey);
+  // Since weeks are sorted newest first, previous week is at index + 1
+  return currentIndex < weeks.length - 1 ? weeks[currentIndex + 1] : null;
+}
+
+/**
+ * Calculate week-over-week change in metrics
+ * @param {Object} currentMetrics - Current week metrics from calculateMetrics()
+ * @param {Object} previousMetrics - Previous week metrics from calculateMetrics()
+ * @returns {Object|null} - { reactiveChange, plannedChange, direction } or null if no comparison
+ */
+export function calculateWeekOverWeekChange(currentMetrics, previousMetrics) {
+  if (!previousMetrics || !currentMetrics) return null;
+
+  const reactiveChange =
+    currentMetrics.reactivePercent - previousMetrics.reactivePercent;
+  const plannedChange =
+    currentMetrics.plannedPercent - previousMetrics.plannedPercent;
+
+  return {
+    reactiveChange,
+    plannedChange,
+    direction: reactiveChange > 0 ? "up" : reactiveChange < 0 ? "down" : "same",
+  };
+}
+
+/**
  * Calculate workload metrics from schedule
+ * Uses same calculation as WorkloadTracker for consistency
  * @param {Array} schedule - Day schedule array
  * @returns {Object} - Metrics (plannedPercent, reactivePercent, rndPercent)
  */
@@ -212,40 +246,38 @@ export function calculateMetrics(schedule) {
     };
   }
 
-  let totalSlots = 0;
   let plannedSlots = 0;
   let reactiveSlots = 0;
-  let rndSlots = 0;
 
   schedule.forEach((day) => {
     if (!day.slots) return;
     day.slots.forEach((slot) => {
-      totalSlots++;
-
       if (slot.type === "planned") {
         plannedSlots++;
       } else if (slot.type === "reactive") {
         reactiveSlots++;
       }
-
-      // Check if project name contains R&D keywords
-      if (
-        slot.project?.toLowerCase().includes("r&d") ||
-        slot.project?.toLowerCase().includes("research")
-      ) {
-        rndSlots++;
-      }
     });
   });
 
-  if (totalSlots === 0) {
-    return { plannedPercent: 0, reactivePercent: 0, rndPercent: 0 };
-  }
+  // Fixed 15% R&D allocation
+  const rndPercent = 15;
+
+  // Calculate percentages with R&D factored in
+  const totalWork = plannedSlots + reactiveSlots;
+  const workPercent = 100 - rndPercent; // 85% for actual work
+
+  const plannedPercent =
+    totalWork > 0
+      ? Math.round((plannedSlots / totalWork) * workPercent)
+      : workPercent;
+  const reactivePercent =
+    totalWork > 0 ? Math.round((reactiveSlots / totalWork) * workPercent) : 0;
 
   return {
-    plannedPercent: Math.round((plannedSlots / totalSlots) * 100),
-    reactivePercent: Math.round((reactiveSlots / totalSlots) * 100),
-    rndPercent: Math.round((rndSlots / totalSlots) * 100),
+    plannedPercent,
+    reactivePercent,
+    rndPercent,
   };
 }
 

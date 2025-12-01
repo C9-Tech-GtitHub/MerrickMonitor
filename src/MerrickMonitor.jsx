@@ -28,6 +28,8 @@ import {
   getWeekSchedule,
   getAvailableWeeks,
   getWeekRangeDisplay,
+  getPreviousWeekKey,
+  calculateWeekOverWeekChange,
 } from "./data/weeklySchedule";
 
 const MerrickMonitor = () => {
@@ -424,6 +426,19 @@ const MerrickMonitor = () => {
 
   // Calculate current week metrics
   const currentMetrics = calculateMetrics(currentWeekSchedule.schedule);
+
+  // Calculate week-over-week comparison
+  const previousWeekKey = getPreviousWeekKey(currentWeekSchedule.weekStart);
+  const previousWeekData = previousWeekKey
+    ? getWeekSchedule(previousWeekKey)
+    : null;
+  const previousMetrics = previousWeekData
+    ? calculateMetrics(previousWeekData.schedule)
+    : null;
+  const weekComparison = calculateWeekOverWeekChange(
+    currentMetrics,
+    previousMetrics,
+  );
 
   const reactiveLoad = currentMetrics.reactivePercent;
   const totalUsers = toolFleetWithUsers.reduce(
@@ -1278,6 +1293,29 @@ const MerrickMonitor = () => {
             >
               {currentMetrics.reactivePercent}%
             </div>
+            {weekComparison && (
+              <div
+                className={`text-[9px] mt-1 flex items-center gap-1 ${
+                  weekComparison.direction === "down"
+                    ? isRetro
+                      ? "text-green-600"
+                      : "text-green-700"
+                    : weekComparison.direction === "up"
+                      ? isRetro
+                        ? "text-red-600"
+                        : "text-red-700"
+                      : isRetro
+                        ? "text-yellow-700"
+                        : "text-amber-700"
+                }`}
+              >
+                {weekComparison.direction === "down" && "↓"}
+                {weekComparison.direction === "up" && "↑"}
+                {weekComparison.direction === "same" && "−"}{" "}
+                {Math.abs(weekComparison.reactiveChange)}
+                {weekComparison.direction !== "same" ? "pts" : ""} vs last week
+              </div>
+            )}
           </div>
           <div
             className={`p-4 transition-all duration-300 ${theme.cardBg} ${isRetro ? "border border-green-900 bg-green-900/5" : "rounded-xl"}`}
