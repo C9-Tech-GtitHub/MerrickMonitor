@@ -24,8 +24,13 @@ export const currentWeekSchedule = {
         },
         {
           timeSlot: "afternoon",
-          project: "PEM Tool + Reactive Training",
+          project: "PEM Tool",
           type: "planned",
+        },
+        {
+          timeSlot: "afternoon",
+          project: "Reactive Training",
+          type: "reactive",
         },
       ],
     },
