@@ -323,21 +323,32 @@ const MerrickMonitor = () => {
       .length;
   };
 
-  // Get GitHub activity stats for the week (hardcoded based on your schedule)
+  // Get GitHub activity stats for the week from actual data
   const getWeekGitHubStats = () => {
-    // Based on your hardcoded schedule:
-    // MON: Sheet Freak, On-Page Sheet
-    // TUE: On-Page Sheet
-    // WED: Merrick Monitor
-    // THU: Merrick Monitor, On-Page Sheet (planned for today)
-    // FRI: On-Page Sheet (planned)
+    // Calculate from actual GitHub data
+    let activeDays = 0;
+    const activeRepoNames = new Set();
 
-    const activeDays = 3; // MON, TUE, WED completed
-    const activeRepos = 3; // Sheet Freak, On-Page Sheet, Merrick Monitor
+    // Count unique days with activity across all repos
+    const daysWithActivity = [false, false, false, false, false];
+
+    toolFleet.forEach((tool) => {
+      if (tool.activity) {
+        tool.activity.forEach((hasActivity, dayIndex) => {
+          if (hasActivity) {
+            daysWithActivity[dayIndex] = true;
+            activeRepoNames.add(tool.name);
+          }
+        });
+      }
+    });
+
+    activeDays = daysWithActivity.filter(Boolean).length;
 
     return {
       commits: activeDays,
-      repos: activeRepos,
+      activeDays: activeDays,
+      repos: activeRepoNames.size,
       tools: toolFleet.length || 8,
     };
   };
