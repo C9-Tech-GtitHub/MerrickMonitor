@@ -12,25 +12,20 @@
 
 // Current week's schedule (edit this at start of each week)
 export const currentWeekSchedule = {
-  weekStart: "2024-12-01", // Monday of current week (YYYY-MM-DD)
+  weekStart: "2025-12-08", // Monday of current week (YYYY-MM-DD)
   schedule: [
     {
       day: "MON",
       slots: [
         {
           timeSlot: "morning",
-          project: "Merrick Monitor – Agenda Set",
-          type: "planned", // "planned" or "reactive"
-        },
-        {
-          timeSlot: "afternoon",
-          project: "PEM Tool",
+          project: "Merrick Monitor",
           type: "planned",
         },
         {
           timeSlot: "afternoon",
-          project: "Reactive Training",
-          type: "reactive",
+          project: "Woolies research",
+          type: "planned",
         },
       ],
     },
@@ -39,13 +34,13 @@ export const currentWeekSchedule = {
       slots: [
         {
           timeSlot: "morning",
-          project: "Outback Equipment",
-          type: "reactive",
+          project: "On-Page",
+          type: "planned",
         },
         {
           timeSlot: "afternoon",
-          project: "Outback Equipment",
-          type: "reactive",
+          project: "On-Page",
+          type: "planned",
         },
       ],
     },
@@ -54,12 +49,12 @@ export const currentWeekSchedule = {
       slots: [
         {
           timeSlot: "morning",
-          project: "Woolworths Research",
+          project: "Woolies",
           type: "planned",
         },
         {
           timeSlot: "afternoon",
-          project: "Woolworths Research",
+          project: "Woolies",
           type: "planned",
         },
       ],
@@ -69,12 +64,12 @@ export const currentWeekSchedule = {
       slots: [
         {
           timeSlot: "morning",
-          project: "PEM Tool",
+          project: "BBox PEM",
           type: "planned",
         },
         {
           timeSlot: "afternoon",
-          project: "PEM Tool",
+          project: "BBox PEM",
           type: "planned",
         },
       ],
@@ -84,7 +79,12 @@ export const currentWeekSchedule = {
       slots: [
         {
           timeSlot: "morning",
-          project: "On-Page",
+          project: "Mizuno PEM",
+          type: "planned",
+        },
+        {
+          timeSlot: "afternoon",
+          project: "Mizuno PEM",
           type: "planned",
         },
       ],
@@ -95,6 +95,86 @@ export const currentWeekSchedule = {
 // Historical weeks (automatically populated, don't edit manually)
 // Structure: { "2024-11-26": { weekStart: "2024-11-26", schedule: [...] }, ... }
 export const weeklyHistory = {
+  "2024-12-01": {
+    weekStart: "2024-12-01",
+    schedule: [
+      {
+        day: "MON",
+        slots: [
+          {
+            timeSlot: "morning",
+            project: "Merrick Monitor – Agenda Set",
+            type: "planned",
+          },
+          {
+            timeSlot: "afternoon",
+            project: "PEM Tool",
+            type: "planned",
+          },
+          {
+            timeSlot: "afternoon",
+            project: "Reactive Training",
+            type: "reactive",
+          },
+        ],
+      },
+      {
+        day: "TUE",
+        slots: [
+          {
+            timeSlot: "morning",
+            project: "Outback Equipment",
+            type: "reactive",
+          },
+          {
+            timeSlot: "afternoon",
+            project: "Outback Equipment",
+            type: "reactive",
+          },
+        ],
+      },
+      {
+        day: "WED",
+        slots: [
+          {
+            timeSlot: "morning",
+            project: "Woolworths Research",
+            type: "planned",
+          },
+          {
+            timeSlot: "afternoon",
+            project: "Woolworths Research",
+            type: "planned",
+          },
+        ],
+      },
+      {
+        day: "THU",
+        slots: [
+          {
+            timeSlot: "morning",
+            project: "PEM Tool",
+            type: "planned",
+          },
+          {
+            timeSlot: "afternoon",
+            project: "PEM Tool",
+            type: "planned",
+          },
+        ],
+      },
+      {
+        day: "FRI",
+        slots: [
+          {
+            timeSlot: "morning",
+            project: "On-Page",
+            type: "planned",
+          },
+        ],
+      },
+    ],
+  },
   "2024-11-26": {
     weekStart: "2024-11-26",
     schedule: [
