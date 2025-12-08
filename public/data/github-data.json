@@ -169,11 +169,11 @@
       ],
       "commits": 100,
       "activity": [
-        true,
-        true,
-        true,
-        true,
-        true
+        false,
+        false,
+        false,
+        false,
+        false
       ],
       "repoUrl": "https://github.com/C9-Tech-GtitHub/MerrickMonitor",
       "stars": 0,
@@ -223,5 +223,5 @@
       "openIssues": 0
     }
   ],
-  "lastUpdated": "2025-12-07T04:14:23.259Z"
+  "lastUpdated": "2025-12-08T00:16:52.731Z"
 }
