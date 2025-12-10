@@ -194,12 +194,17 @@ async function fetchAllData() {
     const activity = await getWeeklyActivity(config.repo);
     const stats = await getRepoStats(config.repo);
 
+    // Format name: preserve names without underscores (like P.E.M), otherwise title-case
+    const formattedName = toolName.includes("_")
+      ? toolName
+          .split("_")
+          .map((w) => w.charAt(0) + w.slice(1).toLowerCase())
+          .join(" ")
+      : toolName;
+
     toolFleet.push({
       id: id++,
-      name: toolName
-        .split("_")
-        .map((w) => w.charAt(0) + w.slice(1).toLowerCase())
-        .join(" "),
+      name: formattedName,
       type: config.type,
       status: "ACTIVE",
       description: config.description,
