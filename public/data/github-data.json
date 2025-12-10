@@ -171,7 +171,7 @@
       "activity": [
         true,
         true,
-        false,
+        true,
         false,
         false
       ],
@@ -223,5 +223,5 @@
       "openIssues": 0
     }
   ],
-  "lastUpdated": "2025-12-10T00:16:28.563Z"
+  "lastUpdated": "2025-12-10T04:12:28.102Z"
 }
