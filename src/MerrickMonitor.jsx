@@ -49,12 +49,13 @@ const MerrickMonitor = () => {
   const [selectedWeekKeyLog, setSelectedWeekKeyLog] = useState(
     currentWeekSchedule.weekStart,
   );
+  const [weekViewMode, setWeekViewMode] = useState("actual"); // 'plan' or 'actual'
 
   // Check authentication status on mount
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch('/api/check-auth');
+        const response = await fetch("/api/check-auth");
         if (response.ok) {
           const data = await response.json();
           if (data.authenticated) {
@@ -713,6 +714,42 @@ const MerrickMonitor = () => {
               Weekly Log
             </h2>
             <div className="flex items-center gap-2">
+              {/* Plan vs Actual Toggle - only show for current week */}
+              {selectedWeekKeyLog === currentWeekSchedule.weekStart &&
+                currentWeekSchedule.plan && (
+                  <div
+                    className={`flex text-[9px] rounded overflow-hidden border ${isRetro ? "border-green-800" : "border-slate-200"}`}
+                  >
+                    <button
+                      onClick={() => setWeekViewMode("plan")}
+                      className={`px-2 py-1 transition-colors ${
+                        weekViewMode === "plan"
+                          ? isRetro
+                            ? "bg-green-800 text-green-200"
+                            : "bg-indigo-600 text-white"
+                          : isRetro
+                            ? "text-green-500 hover:bg-green-900/30"
+                            : "text-slate-600 hover:bg-slate-50"
+                      }`}
+                    >
+                      PLAN
+                    </button>
+                    <button
+                      onClick={() => setWeekViewMode("actual")}
+                      className={`px-2 py-1 transition-colors ${
+                        weekViewMode === "actual"
+                          ? isRetro
+                            ? "bg-green-800 text-green-200"
+                            : "bg-indigo-600 text-white"
+                          : isRetro
+                            ? "text-green-500 hover:bg-green-900/30"
+                            : "text-slate-600 hover:bg-slate-50"
+                      }`}
+                    >
+                      ACTUAL
+                    </button>
+                  </div>
+                )}
               {/* Previous Week Button */}
               <button
                 onClick={() => {
@@ -727,13 +764,14 @@ const MerrickMonitor = () => {
                   getAvailableWeeks().indexOf(selectedWeekKeyLog) >=
                   getAvailableWeeks().length - 1
                 }
-                className={`p-1 rounded transition-all ${getAvailableWeeks().indexOf(selectedWeekKeyLog) <
+                className={`p-1 rounded transition-all ${
+                  getAvailableWeeks().indexOf(selectedWeekKeyLog) <
                   getAvailableWeeks().length - 1
-                  ? isRetro
-                    ? "text-green-400 hover:bg-green-900/30 border border-green-800"
-                    : "text-slate-700 hover:bg-slate-100 border border-slate-200"
-                  : "opacity-30 cursor-not-allowed"
-                  }`}
+                    ? isRetro
+                      ? "text-green-400 hover:bg-green-900/30 border border-green-800"
+                      : "text-slate-700 hover:bg-slate-100 border border-slate-200"
+                    : "opacity-30 cursor-not-allowed"
+                }`}
                 title="Previous week"
               >
                 <ChevronLeft className="w-3 h-3" />
@@ -750,12 +788,13 @@ const MerrickMonitor = () => {
                   }
                 }}
                 disabled={getAvailableWeeks().indexOf(selectedWeekKeyLog) === 0}
-                className={`p-1 rounded transition-all ${getAvailableWeeks().indexOf(selectedWeekKeyLog) > 0
-                  ? isRetro
-                    ? "text-green-400 hover:bg-green-900/30 border border-green-800"
-                    : "text-slate-700 hover:bg-slate-100 border border-slate-200"
-                  : "opacity-30 cursor-not-allowed"
-                  }`}
+                className={`p-1 rounded transition-all ${
+                  getAvailableWeeks().indexOf(selectedWeekKeyLog) > 0
+                    ? isRetro
+                      ? "text-green-400 hover:bg-green-900/30 border border-green-800"
+                      : "text-slate-700 hover:bg-slate-100 border border-slate-200"
+                    : "opacity-30 cursor-not-allowed"
+                }`}
                 title="Next week"
               >
                 <ChevronRight className="w-3 h-3" />
@@ -766,7 +805,13 @@ const MerrickMonitor = () => {
           <div className="space-y-4">
             {(() => {
               const weekData = getWeekSchedule(selectedWeekKeyLog);
-              const weekSchedule = weekData?.schedule || [];
+              // Use plan or actual schedule based on view mode (only for current week)
+              const weekSchedule =
+                selectedWeekKeyLog === currentWeekSchedule.weekStart &&
+                weekViewMode === "plan" &&
+                weekData?.plan
+                  ? weekData.plan
+                  : weekData?.schedule || [];
               return weekSchedule.map((dayData) => {
                 const day = dayData.day;
                 const tasks = dayData.slots || [];
@@ -804,7 +849,7 @@ const MerrickMonitor = () => {
                               morningTasks.length === 1 &&
                               afternoonTasks.length === 1 &&
                               morningTasks[0].project ===
-                              afternoonTasks[0].project &&
+                                afternoonTasks[0].project &&
                               morningTasks[0].type === afternoonTasks[0].type;
 
                             if (isAllDay) {
@@ -812,14 +857,15 @@ const MerrickMonitor = () => {
                               return (
                                 <div className="text-xs group">
                                   <span
-                                    className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${t.type === "reactive"
-                                      ? isRetro
-                                        ? "border border-amber-600 text-amber-500 bg-amber-950/50"
-                                        : "border border-amber-300 text-amber-700"
-                                      : isRetro
-                                        ? "border border-green-700 text-green-600"
-                                        : "border border-slate-300 text-slate-600"
-                                      }`}
+                                    className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
+                                      t.type === "reactive"
+                                        ? isRetro
+                                          ? "border border-amber-600 text-amber-500 bg-amber-950/50"
+                                          : "border border-amber-300 text-amber-700"
+                                        : isRetro
+                                          ? "border border-green-700 text-green-600"
+                                          : "border border-slate-300 text-slate-600"
+                                    }`}
                                   >
                                     {t.type === "reactive"
                                       ? "REACTIVE"
@@ -828,6 +874,13 @@ const MerrickMonitor = () => {
                                   <span className={theme.textBold}>
                                     {t.project}
                                   </span>
+                                  {t.movedFrom && weekViewMode === "actual" && (
+                                    <span
+                                      className={`ml-2 text-[8px] italic ${isRetro ? "text-amber-600" : "text-amber-500"}`}
+                                    >
+                                      ← {t.movedFrom}
+                                    </span>
+                                  )}
                                 </div>
                               );
                             }
@@ -848,14 +901,15 @@ const MerrickMonitor = () => {
                                         className="text-xs group"
                                       >
                                         <span
-                                          className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${t.type === "reactive"
-                                            ? isRetro
-                                              ? "border border-amber-600 text-amber-500 bg-amber-950/50"
-                                              : "border border-amber-300 text-amber-700"
-                                            : isRetro
-                                              ? "border border-green-700 text-green-600"
-                                              : "border border-slate-300 text-slate-600"
-                                            }`}
+                                          className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
+                                            t.type === "reactive"
+                                              ? isRetro
+                                                ? "border border-amber-600 text-amber-500 bg-amber-950/50"
+                                                : "border border-amber-300 text-amber-700"
+                                              : isRetro
+                                                ? "border border-green-700 text-green-600"
+                                                : "border border-slate-300 text-slate-600"
+                                          }`}
                                         >
                                           {t.type === "reactive"
                                             ? "REACTIVE"
@@ -864,6 +918,14 @@ const MerrickMonitor = () => {
                                         <span className={theme.textBold}>
                                           {t.project}
                                         </span>
+                                        {t.movedFrom &&
+                                          weekViewMode === "actual" && (
+                                            <span
+                                              className={`ml-2 text-[8px] italic ${isRetro ? "text-amber-600" : "text-amber-500"}`}
+                                            >
+                                              ← {t.movedFrom}
+                                            </span>
+                                          )}
                                       </div>
                                     ))}
                                   </div>
@@ -882,14 +944,15 @@ const MerrickMonitor = () => {
                                         className="text-xs group"
                                       >
                                         <span
-                                          className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${t.type === "reactive"
-                                            ? isRetro
-                                              ? "border border-amber-600 text-amber-500 bg-amber-950/50"
-                                              : "border border-amber-300 text-amber-700"
-                                            : isRetro
-                                              ? "border border-green-700 text-green-600"
-                                              : "border border-slate-300 text-slate-600"
-                                            }`}
+                                          className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
+                                            t.type === "reactive"
+                                              ? isRetro
+                                                ? "border border-amber-600 text-amber-500 bg-amber-950/50"
+                                                : "border border-amber-300 text-amber-700"
+                                              : isRetro
+                                                ? "border border-green-700 text-green-600"
+                                                : "border border-slate-300 text-slate-600"
+                                          }`}
                                         >
                                           {t.type === "reactive"
                                             ? "REACTIVE"
@@ -898,6 +961,14 @@ const MerrickMonitor = () => {
                                         <span className={theme.textBold}>
                                           {t.project}
                                         </span>
+                                        {t.movedFrom &&
+                                          weekViewMode === "actual" && (
+                                            <span
+                                              className={`ml-2 text-[8px] italic ${isRetro ? "text-amber-600" : "text-amber-500"}`}
+                                            >
+                                              ← {t.movedFrom}
+                                            </span>
+                                          )}
                                       </div>
                                     ))}
                                   </div>
@@ -1244,18 +1315,19 @@ const MerrickMonitor = () => {
             </div>
             {weekComparison && (
               <div
-                className={`text-[9px] mt-1 flex items-center gap-1 ${weekComparison.direction === "down"
-                  ? isRetro
-                    ? "text-green-600"
-                    : "text-green-700"
-                  : weekComparison.direction === "up"
+                className={`text-[9px] mt-1 flex items-center gap-1 ${
+                  weekComparison.direction === "down"
                     ? isRetro
-                      ? "text-red-600"
-                      : "text-red-700"
-                    : isRetro
-                      ? "text-yellow-700"
-                      : "text-amber-700"
-                  }`}
+                      ? "text-green-600"
+                      : "text-green-700"
+                    : weekComparison.direction === "up"
+                      ? isRetro
+                        ? "text-red-600"
+                        : "text-red-700"
+                      : isRetro
+                        ? "text-yellow-700"
+                        : "text-amber-700"
+                }`}
               >
                 {weekComparison.direction === "down" && "↓"}
                 {weekComparison.direction === "up" && "↑"}
@@ -1311,27 +1383,29 @@ const MerrickMonitor = () => {
               >
                 <button
                   onClick={() => setTeamViewMode("members")}
-                  className={`px-2 py-1 rounded text-[9px] font-bold uppercase tracking-wider transition-all ${teamViewMode === "members"
-                    ? isRetro
-                      ? "bg-green-900 text-green-100"
-                      : "bg-white shadow text-slate-800"
-                    : isRetro
-                      ? "text-green-800 hover:text-green-600"
-                      : "text-slate-500 hover:text-slate-700"
-                    }`}
+                  className={`px-2 py-1 rounded text-[9px] font-bold uppercase tracking-wider transition-all ${
+                    teamViewMode === "members"
+                      ? isRetro
+                        ? "bg-green-900 text-green-100"
+                        : "bg-white shadow text-slate-800"
+                      : isRetro
+                        ? "text-green-800 hover:text-green-600"
+                        : "text-slate-500 hover:text-slate-700"
+                  }`}
                 >
                   Members
                 </button>
                 <button
                   onClick={() => setTeamViewMode("tools")}
-                  className={`px-2 py-1 rounded text-[9px] font-bold uppercase tracking-wider transition-all ${teamViewMode === "tools"
-                    ? isRetro
-                      ? "bg-green-900 text-green-100"
-                      : "bg-white shadow text-slate-800"
-                    : isRetro
-                      ? "text-green-800 hover:text-green-600"
-                      : "text-slate-500 hover:text-slate-700"
-                    }`}
+                  className={`px-2 py-1 rounded text-[9px] font-bold uppercase tracking-wider transition-all ${
+                    teamViewMode === "tools"
+                      ? isRetro
+                        ? "bg-green-900 text-green-100"
+                        : "bg-white shadow text-slate-800"
+                      : isRetro
+                        ? "text-green-800 hover:text-green-600"
+                        : "text-slate-500 hover:text-slate-700"
+                  }`}
                 >
                   Tools
                 </button>
