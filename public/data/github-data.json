@@ -6,9 +6,18 @@
       "type": "BOT",
       "status": "ACTIVE",
       "description": "On-page SEO automation bot",
-      "teams": ["Specialists", "Content"],
+      "teams": [
+        "Specialists",
+        "Content"
+      ],
       "commits": 0,
-      "activity": [false, false, false, false, false],
+      "activity": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
       "repoUrl": "https://github.com/C9-Tech-GtitHub/OnPageSheet",
       "stars": 0,
       "forks": 0,
@@ -20,9 +29,18 @@
       "type": "DASH",
       "status": "ACTIVE",
       "description": "Review Randy - Product review management",
-      "teams": ["Specialists", "Content"],
+      "teams": [
+        "Specialists",
+        "Content"
+      ],
       "commits": 0,
-      "activity": [false, false, false, false, false],
+      "activity": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
       "repoUrl": "https://github.com/C9-Tech-GtitHub/Randy",
       "stars": 0,
       "forks": 0,
@@ -30,13 +48,21 @@
     },
     {
       "id": 3,
-      "name": "Lead",
+      "name": "LEAD",
       "type": "TOOL",
       "status": "ACTIVE",
       "description": "Lead generation and management tool",
-      "teams": ["Sales"],
+      "teams": [
+        "Sales"
+      ],
       "commits": 0,
-      "activity": [false, false, false, false, false],
+      "activity": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
       "repoUrl": "https://github.com/C9-Tech-GtitHub/Lead",
       "stars": 0,
       "forks": 0,
@@ -48,9 +74,18 @@
       "type": "SEO",
       "status": "ACTIVE",
       "description": "LSI keyword analysis tool",
-      "teams": ["Content", "Specialists"],
+      "teams": [
+        "Content",
+        "Specialists"
+      ],
       "commits": 0,
-      "activity": [false, false, false, false, false],
+      "activity": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
       "repoUrl": "https://github.com/C9-Tech-GtitHub/LSI",
       "stars": 0,
       "forks": 0,
@@ -62,9 +97,17 @@
       "type": "TOOL",
       "status": "ACTIVE",
       "description": "Product Enrichment Manager - metadata management",
-      "teams": ["GMC"],
+      "teams": [
+        "GMC"
+      ],
       "commits": 0,
-      "activity": [false, false, false, false, false],
+      "activity": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
       "repoUrl": "https://github.com/C9-Tech-GtitHub/Product-Enrichment-Manager",
       "stars": 0,
       "forks": 0,
@@ -72,13 +115,22 @@
     },
     {
       "id": 6,
-      "name": "Sheetfreak",
+      "name": "SHEETFREAK",
       "type": "TOOL",
       "status": "ACTIVE",
       "description": "CLI tool for programmatic Google Sheets control",
-      "teams": ["Specialists", "Content"],
+      "teams": [
+        "Specialists",
+        "Content"
+      ],
       "commits": 0,
-      "activity": [false, false, false, false, false],
+      "activity": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
       "repoUrl": "https://github.com/C9-Tech-GtitHub/SheetFreak",
       "stars": 0,
       "forks": 0,
@@ -90,9 +142,17 @@
       "type": "TOOL",
       "status": "ACTIVE",
       "description": "Smart bootstrap system for Claude Code projects",
-      "teams": ["Tech"],
+      "teams": [
+        "Tech"
+      ],
       "commits": 4,
-      "activity": [false, false, false, false, false],
+      "activity": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
       "repoUrl": "https://github.com/C9-Tech-GtitHub/claude-code-bootstrap",
       "stars": 0,
       "forks": 0,
@@ -104,9 +164,17 @@
       "type": "DASH",
       "status": "ACTIVE",
       "description": "Surveillance dashboard for monitoring activity",
-      "teams": ["Management"],
+      "teams": [
+        "Management"
+      ],
       "commits": 100,
-      "activity": [true, true, true, false, false],
+      "activity": [
+        true,
+        true,
+        true,
+        false,
+        false
+      ],
       "repoUrl": "https://github.com/C9-Tech-GtitHub/MerrickMonitor",
       "stars": 0,
       "forks": 0,
@@ -122,7 +190,13 @@
       "description": "GMC Title Structure Dashboard - DISCONTINUED",
       "archivedDate": "2025-09-19",
       "commits": 0,
-      "activity": [false, false, false, false, false],
+      "activity": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
       "repoUrl": "https://github.com/C9-Tech-GtitHub/titlestruct",
       "stars": 0,
       "forks": 0,
@@ -136,12 +210,18 @@
       "description": "Competitor price tracking - DISCONTINUED",
       "archivedDate": "2025-10-27",
       "commits": 0,
-      "activity": [false, false, false, false, false],
+      "activity": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
       "repoUrl": "https://github.com/C9-Tech-GtitHub/Ecom-price-tracker",
       "stars": 0,
       "forks": 0,
       "openIssues": 0
     }
   ],
-  "lastUpdated": "2025-12-10T04:12:28.102Z"
+  "lastUpdated": "2025-12-11T00:16:14.993Z"
 }
