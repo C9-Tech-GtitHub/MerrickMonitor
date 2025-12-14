@@ -1181,6 +1181,30 @@ const MerrickMonitor = () => {
     <div
       className={`min-h-screen p-4 md:p-8 overflow-hidden relative transition-colors duration-500 ${theme.bg} ${theme.text} ${theme.font} ${theme.selection}`}
     >
+      {/* 8-Bit Snow Effect (Only in Festive Mode) */}
+      {festiveMode && (
+        <div className="pointer-events-none fixed inset-0 z-40 overflow-hidden font-mono">
+          {[...Array(60)].map((_, i) => {
+            const snowChars = ["*", ".", "+", "o", "°", "·"];
+            const char =
+              snowChars[Math.floor(Math.random() * snowChars.length)];
+            return (
+              <div
+                key={i}
+                className="absolute text-green-400 opacity-60 animate-snowfall drop-shadow-[0_0_2px_rgba(74,222,128,0.8)]"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 8}s`,
+                  animationDuration: `${8 + Math.random() * 12}s`,
+                  fontSize: `${10 + Math.random() * 8}px`,
+                }}
+              >
+                {char}
+              </div>
+            );
+          })}
+        </div>
+      )}
       {/* Scanline Effect (Only in Retro Mode) */}
       {isRetro && (
         <div className="pointer-events-none fixed inset-0 z-50 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[length:100%_4px,3px_100%] pointer-events-none" />
