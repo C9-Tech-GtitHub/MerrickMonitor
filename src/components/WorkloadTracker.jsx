@@ -40,7 +40,13 @@ function getCurrentWeekKey() {
  * Toggles between Maintenance Load and Weekly Workload
  * Tracks planned work vs reactive/unplanned tasks
  */
-const WorkloadTracker = ({ theme, isRetro, currentWeek, weekSchedule }) => {
+const WorkloadTracker = ({
+  theme,
+  isRetro,
+  currentWeek,
+  weekSchedule,
+  festiveMode,
+}) => {
   const [viewMode, setViewMode] = useState(() => {
     return localStorage.getItem("workloadViewMode") || "weekly";
   });
@@ -101,6 +107,7 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek, weekSchedule }) => {
     // Count all slots from weekly schedule
     let plannedCount = 0;
     let reactiveCount = 0;
+    let festiveCount = 0;
     let completedPlanned = 0;
     let completedReactive = 0;
 
@@ -112,6 +119,8 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek, weekSchedule }) => {
         } else if (slot.type === "reactive") {
           reactiveCount++;
           if (slot.completed) completedReactive++;
+        } else if (slot.type === "christmas") {
+          festiveCount++;
         }
       });
     });
@@ -120,7 +129,7 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek, weekSchedule }) => {
     const rndPercent = 15;
 
     // Calculate percentages with R&D factored in
-    const totalWork = plannedCount + reactiveCount;
+    const totalWork = plannedCount + reactiveCount + festiveCount;
     const workPercent = 100 - rndPercent; // 85% for actual work
 
     const plannedPercent =
@@ -129,6 +138,8 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek, weekSchedule }) => {
         : workPercent;
     const reactivePercent =
       totalWork > 0 ? Math.round((reactiveCount / totalWork) * workPercent) : 0;
+    const festivePercent =
+      totalWork > 0 ? Math.round((festiveCount / totalWork) * workPercent) : 0;
 
     const completionRate =
       plannedCount > 0
@@ -138,9 +149,11 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek, weekSchedule }) => {
     return {
       plannedCount,
       reactiveCount,
+      festiveCount,
       totalWork,
       plannedPercent,
       reactivePercent,
+      festivePercent,
       rndPercent,
       completedPlanned,
       completionRate,
@@ -158,6 +171,8 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek, weekSchedule }) => {
     reactivePercent = 0,
     showRnd = false,
     rndPercent = 0,
+    showFestive = false,
+    festivePercent = 0,
   }) => {
     if (isRetro) {
       // Use dynamic length based on container width (approximate characters that fit)
@@ -166,14 +181,22 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek, weekSchedule }) => {
       const reactiveLen = showReactive
         ? Math.round((length * reactivePercent) / 100)
         : 0;
+      const festiveLen = showFestive
+        ? Math.round((length * festivePercent) / 100)
+        : 0;
       const rndLen = showRnd ? Math.round((length * rndPercent) / 100) : 0;
-      const emptyLen = length - plannedLen - reactiveLen - rndLen;
+      const emptyLen = length - plannedLen - reactiveLen - festiveLen - rndLen;
 
       return (
         <div className="opacity-90 tracking-tighter text-xs overflow-hidden break-all">
           {"▓".repeat(plannedLen)}
           {showReactive && (
             <span className="text-yellow-500">{"▓".repeat(reactiveLen)}</span>
+          )}
+          {showFestive && (
+            <span className="text-red-500 animate-pulse">
+              {"▓".repeat(festiveLen)}
+            </span>
           )}
           {showRnd && (
             <span className="text-purple-500">{"▓".repeat(rndLen)}</span>
@@ -193,6 +216,12 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek, weekSchedule }) => {
           <div
             className="h-full bg-amber-500 transition-all duration-500"
             style={{ width: `${reactivePercent}%` }}
+          />
+        )}
+        {showFestive && festivePercent > 0 && (
+          <div
+            className="h-full bg-gradient-to-r from-red-500 via-green-500 to-red-500 transition-all duration-500"
+            style={{ width: `${festivePercent}%` }}
           />
         )}
         {showRnd && rndPercent > 0 && (
@@ -270,7 +299,9 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek, weekSchedule }) => {
       {viewMode === "weekly" && (
         <>
           {/* Stats Row */}
-          <div className="grid grid-cols-3 gap-3 mb-4">
+          <div
+            className={`grid gap-3 mb-4 ${workload.festivePercent > 0 || festiveMode ? "grid-cols-4" : "grid-cols-3"}`}
+          >
             <div
               className={`text-center p-2 rounded ${isRetro ? "bg-green-900/10" : "bg-slate-50"}`}
             >
@@ -293,6 +324,23 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek, weekSchedule }) => {
                 {workload.reactivePercent}%
               </div>
             </div>
+            {/* Festive Stats - only show when there's festive data or festive mode is on */}
+            {(workload.festivePercent > 0 || festiveMode) && (
+              <div
+                className={`text-center p-2 rounded ${isRetro ? "bg-red-900/20 border border-red-900/50 shadow-[0_0_10px_rgba(220,38,38,0.2)]" : "bg-gradient-to-r from-red-50 via-green-50 to-red-50 border border-red-200"}`}
+              >
+                <div
+                  className={`text-xs ${isRetro ? "text-red-400" : "text-red-600"} mb-1`}
+                >
+                  Festive
+                </div>
+                <div
+                  className={`text-lg font-bold ${isRetro ? "text-red-400 drop-shadow-[0_0_5px_rgba(220,38,38,0.5)]" : "text-red-600"}`}
+                >
+                  {workload.festivePercent}%
+                </div>
+              </div>
+            )}
             <div
               className={`text-center p-2 rounded ${isRetro ? "bg-cyan-900/10 border border-cyan-900/30" : "bg-cyan-50 border border-cyan-200"}`}
             >
@@ -320,10 +368,14 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek, weekSchedule }) => {
               percent={workload.plannedPercent}
               showReactive={true}
               reactivePercent={workload.reactivePercent}
+              showFestive={workload.festivePercent > 0 || festiveMode}
+              festivePercent={workload.festivePercent}
               showRnd={true}
               rndPercent={workload.rndPercent}
             />
-            <div className="flex justify-between text-xs mt-2 tracking-wide">
+            <div
+              className={`flex flex-wrap gap-x-4 gap-y-1 text-xs mt-2 tracking-wide ${workload.festivePercent > 0 || festiveMode ? "justify-start" : "justify-between"}`}
+            >
               <span className={`flex items-center gap-1 ${theme.textMuted}`}>
                 <span
                   className={`w-2 h-2 rounded-sm ${isRetro ? "bg-green-500" : "bg-indigo-600"}`}
@@ -338,6 +390,16 @@ const WorkloadTracker = ({ theme, isRetro, currentWeek, weekSchedule }) => {
                 ></span>
                 Reactive Work: {workload.reactivePercent}%
               </span>
+              {(workload.festivePercent > 0 || festiveMode) && (
+                <span
+                  className={`flex items-center gap-1 ${isRetro ? "text-red-400" : "text-red-600"}`}
+                >
+                  <span
+                    className={`w-2 h-2 rounded-sm ${isRetro ? "bg-red-500 animate-pulse" : "bg-gradient-to-r from-red-500 to-green-500"}`}
+                  ></span>
+                  Festive: {workload.festivePercent}%
+                </span>
+              )}
               <span
                 className={`flex items-center gap-1 ${isRetro ? "text-purple-400" : "text-purple-600"}`}
               >

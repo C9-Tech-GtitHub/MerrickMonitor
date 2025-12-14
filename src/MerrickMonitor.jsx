@@ -38,6 +38,7 @@ const MerrickMonitor = () => {
   const [cursorVisible, setCursorVisible] = useState(true);
   const [activeTab, setActiveTab] = useState("OVERVIEW");
   const [viewMode, setViewMode] = useState("RETRO"); // 'RETRO' or 'MINIMAL'
+  const [festiveMode, setFestiveMode] = useState(false); // Christmas theme toggle
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
   const [showError, setShowError] = useState(false);
@@ -582,6 +583,7 @@ const MerrickMonitor = () => {
           theme={theme}
           isRetro={isRetro}
           weekSchedule={currentWeekSchedule.schedule}
+          festiveMode={festiveMode}
         />
 
         {/* Live Tools Table */}
@@ -1212,6 +1214,20 @@ const MerrickMonitor = () => {
           <div className="flex flex-col items-end gap-4">
             {/* Mode Toggle & Snapshot Manager */}
             <div className="flex items-center gap-3">
+              {/* Festive Mode Toggle */}
+              <button
+                onClick={() => setFestiveMode(!festiveMode)}
+                className={`px-3 py-1.5 rounded text-[10px] font-bold transition-all flex items-center gap-1.5 ${
+                  festiveMode
+                    ? "bg-gradient-to-r from-red-600 via-green-600 to-red-600 text-white shadow-[0_0_15px_rgba(220,38,38,0.5)] animate-pulse"
+                    : isRetro
+                      ? "border border-green-900 text-green-600 hover:bg-green-900/30"
+                      : "bg-slate-100 text-slate-500 hover:bg-slate-200"
+                }`}
+              >
+                <span className="text-sm">{festiveMode ? "🎄" : "🎅"}</span>
+                FESTIVE
+              </button>
               <div
                 className={`flex items-center p-1 rounded-lg ${isRetro ? "border border-green-900" : "bg-slate-200/50"}`}
               >
