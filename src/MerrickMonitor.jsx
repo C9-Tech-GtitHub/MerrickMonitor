@@ -855,23 +855,33 @@ const MerrickMonitor = () => {
                             if (isAllDay) {
                               const t = morningTasks[0];
                               return (
-                                <div className="text-xs group">
+                                <div
+                                  className={`text-xs group ${t.type === "christmas" ? (isRetro ? "bg-gradient-to-r from-red-950/30 via-green-950/30 to-red-950/30 -mx-2 px-2 py-1 rounded" : "bg-gradient-to-r from-red-50 via-green-50 to-red-50 -mx-2 px-2 py-1 rounded") : ""}`}
+                                >
                                   <span
                                     className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
-                                      t.type === "reactive"
+                                      t.type === "christmas"
                                         ? isRetro
-                                          ? "border border-amber-600 text-amber-500 bg-amber-950/50"
-                                          : "border border-amber-300 text-amber-700"
-                                        : isRetro
-                                          ? "border border-green-700 text-green-600"
-                                          : "border border-slate-300 text-slate-600"
+                                          ? "border border-red-500 text-red-400 bg-red-950/50 shadow-[0_0_8px_rgba(220,38,38,0.4)]"
+                                          : "border border-red-300 text-red-600 bg-red-50"
+                                        : t.type === "reactive"
+                                          ? isRetro
+                                            ? "border border-amber-600 text-amber-500 bg-amber-950/50"
+                                            : "border border-amber-300 text-amber-700"
+                                          : isRetro
+                                            ? "border border-green-700 text-green-600"
+                                            : "border border-slate-300 text-slate-600"
                                     }`}
                                   >
-                                    {t.type === "reactive"
-                                      ? "REACTIVE"
-                                      : "PLANNED"}
+                                    {t.type === "christmas"
+                                      ? "FESTIVE"
+                                      : t.type === "reactive"
+                                        ? "REACTIVE"
+                                        : "PLANNED"}
                                   </span>
-                                  <span className={theme.textBold}>
+                                  <span
+                                    className={`${theme.textBold} ${t.type === "christmas" ? (isRetro ? "text-red-400 drop-shadow-[0_0_6px_rgba(220,38,38,0.5)]" : "text-red-600") : ""}`}
+                                  >
                                     {t.project}
                                   </span>
                                   {t.movedFrom && weekViewMode === "actual" && (
@@ -898,24 +908,32 @@ const MerrickMonitor = () => {
                                     {morningTasks.map((t, idx) => (
                                       <div
                                         key={`morning-${idx}`}
-                                        className="text-xs group"
+                                        className={`text-xs group ${t.type === "christmas" ? (isRetro ? "bg-gradient-to-r from-red-950/30 via-green-950/30 to-red-950/30 -mx-2 px-2 py-1 rounded" : "bg-gradient-to-r from-red-50 via-green-50 to-red-50 -mx-2 px-2 py-1 rounded") : ""}`}
                                       >
                                         <span
                                           className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
-                                            t.type === "reactive"
+                                            t.type === "christmas"
                                               ? isRetro
-                                                ? "border border-amber-600 text-amber-500 bg-amber-950/50"
-                                                : "border border-amber-300 text-amber-700"
-                                              : isRetro
-                                                ? "border border-green-700 text-green-600"
-                                                : "border border-slate-300 text-slate-600"
+                                                ? "border border-red-500 text-red-400 bg-red-950/50 shadow-[0_0_8px_rgba(220,38,38,0.4)]"
+                                                : "border border-red-300 text-red-600 bg-red-50"
+                                              : t.type === "reactive"
+                                                ? isRetro
+                                                  ? "border border-amber-600 text-amber-500 bg-amber-950/50"
+                                                  : "border border-amber-300 text-amber-700"
+                                                : isRetro
+                                                  ? "border border-green-700 text-green-600"
+                                                  : "border border-slate-300 text-slate-600"
                                           }`}
                                         >
-                                          {t.type === "reactive"
-                                            ? "REACTIVE"
-                                            : "PLANNED"}
+                                          {t.type === "christmas"
+                                            ? "FESTIVE"
+                                            : t.type === "reactive"
+                                              ? "REACTIVE"
+                                              : "PLANNED"}
                                         </span>
-                                        <span className={theme.textBold}>
+                                        <span
+                                          className={`${theme.textBold} ${t.type === "christmas" ? (isRetro ? "text-red-400 drop-shadow-[0_0_6px_rgba(220,38,38,0.5)]" : "text-red-600") : ""}`}
+                                        >
                                           {t.project}
                                         </span>
                                         {t.movedFrom &&
@@ -941,24 +959,32 @@ const MerrickMonitor = () => {
                                     {afternoonTasks.map((t, idx) => (
                                       <div
                                         key={`afternoon-${idx}`}
-                                        className="text-xs group"
+                                        className={`text-xs group ${t.type === "christmas" ? (isRetro ? "bg-gradient-to-r from-red-950/30 via-green-950/30 to-red-950/30 -mx-2 px-2 py-1 rounded" : "bg-gradient-to-r from-red-50 via-green-50 to-red-50 -mx-2 px-2 py-1 rounded") : ""}`}
                                       >
                                         <span
                                           className={`text-[9px] mr-2 px-1 rounded uppercase font-bold tracking-wide ${
-                                            t.type === "reactive"
+                                            t.type === "christmas"
                                               ? isRetro
-                                                ? "border border-amber-600 text-amber-500 bg-amber-950/50"
-                                                : "border border-amber-300 text-amber-700"
-                                              : isRetro
-                                                ? "border border-green-700 text-green-600"
-                                                : "border border-slate-300 text-slate-600"
+                                                ? "border border-red-500 text-red-400 bg-red-950/50 shadow-[0_0_8px_rgba(220,38,38,0.4)]"
+                                                : "border border-red-300 text-red-600 bg-red-50"
+                                              : t.type === "reactive"
+                                                ? isRetro
+                                                  ? "border border-amber-600 text-amber-500 bg-amber-950/50"
+                                                  : "border border-amber-300 text-amber-700"
+                                                : isRetro
+                                                  ? "border border-green-700 text-green-600"
+                                                  : "border border-slate-300 text-slate-600"
                                           }`}
                                         >
-                                          {t.type === "reactive"
-                                            ? "REACTIVE"
-                                            : "PLANNED"}
+                                          {t.type === "christmas"
+                                            ? "FESTIVE"
+                                            : t.type === "reactive"
+                                              ? "REACTIVE"
+                                              : "PLANNED"}
                                         </span>
-                                        <span className={theme.textBold}>
+                                        <span
+                                          className={`${theme.textBold} ${t.type === "christmas" ? (isRetro ? "text-red-400 drop-shadow-[0_0_6px_rgba(220,38,38,0.5)]" : "text-red-600") : ""}`}
+                                        >
                                           {t.project}
                                         </span>
                                         {t.movedFrom &&
