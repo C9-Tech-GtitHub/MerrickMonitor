@@ -1249,8 +1249,10 @@ const MerrickMonitor = () => {
                       : "bg-slate-100 text-slate-500 hover:bg-slate-200"
                 }`}
               >
-                <span className="text-sm">{festiveMode ? "🎄" : "🎅"}</span>
-                FESTIVE
+                <span className="font-mono">
+                  {festiveMode ? "/*\\" : "/^\\"}
+                </span>
+                FESTIVE MODE
               </button>
               <div
                 className={`flex items-center p-1 rounded-lg ${isRetro ? "border border-green-900" : "bg-slate-200/50"}`}
