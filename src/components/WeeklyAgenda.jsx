@@ -48,6 +48,20 @@ const WeeklyAgenda = ({ theme, isRetro }) => {
     if (!slot)
       return { bg: "bg-transparent", text: "text-green-900/20", border: "" };
 
+    // Christmas party - festive red and green theme
+    if (slot.type === "christmas") {
+      return {
+        bg: isRetro
+          ? "bg-gradient-to-r from-red-950/40 via-green-950/40 to-red-950/40 shadow-[inset_0_0_30px_rgba(220,38,38,0.2)]"
+          : "bg-gradient-to-r from-red-100 via-green-100 to-red-100",
+        text: isRetro
+          ? "text-red-400 font-bold drop-shadow-[0_0_8px_rgba(220,38,38,0.6)] animate-pulse"
+          : "text-red-600 font-bold",
+        border: "",
+        isChristmas: true,
+      };
+    }
+
     if (slot.type === "reactive") {
       return {
         bg: isRetro
@@ -280,18 +294,24 @@ const WeeklyAgenda = ({ theme, isRetro }) => {
                       </span>
                       <span
                         className={`text-[10px] uppercase border px-1.5 py-0.5 rounded tracking-wider ${
-                          morningSlot.type === "reactive"
+                          morningSlot.type === "christmas"
                             ? isRetro
-                              ? "border-amber-600 text-amber-500 bg-amber-950/50"
-                              : "border-amber-300 text-amber-700"
-                            : isRetro
-                              ? "border-green-700 text-green-600"
-                              : "border-slate-300 text-slate-600"
+                              ? "border-red-500 text-red-400 bg-red-950/50 shadow-[0_0_10px_rgba(220,38,38,0.3)]"
+                              : "border-red-300 text-red-600 bg-red-50"
+                            : morningSlot.type === "reactive"
+                              ? isRetro
+                                ? "border-amber-600 text-amber-500 bg-amber-950/50"
+                                : "border-amber-300 text-amber-700"
+                              : isRetro
+                                ? "border-green-700 text-green-600"
+                                : "border-slate-300 text-slate-600"
                         }`}
                       >
-                        {morningSlot.type === "reactive"
-                          ? "REACTIVE"
-                          : "PLANNED"}
+                        {morningSlot.type === "christmas"
+                          ? "FESTIVE"
+                          : morningSlot.type === "reactive"
+                            ? "REACTIVE"
+                            : "PLANNED"}
                       </span>
                     </div>
                   </div>
@@ -312,18 +332,24 @@ const WeeklyAgenda = ({ theme, isRetro }) => {
                           </span>
                           <span
                             className={`text-[10px] uppercase border px-1.5 py-0.5 rounded tracking-wider ${
-                              morningSlot.type === "reactive"
+                              morningSlot.type === "christmas"
                                 ? isRetro
-                                  ? "border-amber-600 text-amber-500 bg-amber-950/50"
-                                  : "border-amber-300 text-amber-700"
-                                : isRetro
-                                  ? "border-green-700 text-green-600"
-                                  : "border-slate-300 text-slate-600"
+                                  ? "border-red-500 text-red-400 bg-red-950/50 shadow-[0_0_10px_rgba(220,38,38,0.3)]"
+                                  : "border-red-300 text-red-600 bg-red-50"
+                                : morningSlot.type === "reactive"
+                                  ? isRetro
+                                    ? "border-amber-600 text-amber-500 bg-amber-950/50"
+                                    : "border-amber-300 text-amber-700"
+                                  : isRetro
+                                    ? "border-green-700 text-green-600"
+                                    : "border-slate-300 text-slate-600"
                             }`}
                           >
-                            {morningSlot.type === "reactive"
-                              ? "REACTIVE"
-                              : "PLANNED"}
+                            {morningSlot.type === "christmas"
+                              ? "FESTIVE"
+                              : morningSlot.type === "reactive"
+                                ? "REACTIVE"
+                                : "PLANNED"}
                           </span>
                         </div>
                       ) : (
@@ -344,18 +370,24 @@ const WeeklyAgenda = ({ theme, isRetro }) => {
                           </span>
                           <span
                             className={`text-[10px] uppercase border px-1.5 py-0.5 rounded tracking-wider ${
-                              afternoonSlot.type === "reactive"
+                              afternoonSlot.type === "christmas"
                                 ? isRetro
-                                  ? "border-amber-600 text-amber-500 bg-amber-950/50"
-                                  : "border-amber-300 text-amber-700"
-                                : isRetro
-                                  ? "border-green-700 text-green-600"
-                                  : "border-slate-300 text-slate-600"
+                                  ? "border-red-500 text-red-400 bg-red-950/50 shadow-[0_0_10px_rgba(220,38,38,0.3)]"
+                                  : "border-red-300 text-red-600 bg-red-50"
+                                : afternoonSlot.type === "reactive"
+                                  ? isRetro
+                                    ? "border-amber-600 text-amber-500 bg-amber-950/50"
+                                    : "border-amber-300 text-amber-700"
+                                  : isRetro
+                                    ? "border-green-700 text-green-600"
+                                    : "border-slate-300 text-slate-600"
                             }`}
                           >
-                            {afternoonSlot.type === "reactive"
-                              ? "REACTIVE"
-                              : "PLANNED"}
+                            {afternoonSlot.type === "christmas"
+                              ? "FESTIVE"
+                              : afternoonSlot.type === "reactive"
+                                ? "REACTIVE"
+                                : "PLANNED"}
                           </span>
                         </div>
                       ) : (

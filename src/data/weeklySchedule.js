@@ -13,42 +13,46 @@
 // Current week's schedule (edit this at start of each week)
 // Use "actual" for what actually happened, "plan" for original plan
 export const currentWeekSchedule = {
-  weekStart: "2025-12-08", // Monday of current week (YYYY-MM-DD)
+  weekStart: "2025-12-15", // Monday of current week (YYYY-MM-DD)
   // Original plan for the week (set at start of week, don't modify)
   plan: [
     {
       day: "MON",
       slots: [
-        { timeSlot: "morning", project: "Merrick Monitor", type: "planned" },
-        { timeSlot: "afternoon", project: "Woolies research", type: "planned" },
+        { timeSlot: "morning", project: "P.E.M", type: "planned" },
+        { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
       ],
     },
     {
       day: "TUE",
       slots: [
-        { timeSlot: "morning", project: "On-Page", type: "planned" },
-        { timeSlot: "afternoon", project: "On-Page", type: "planned" },
+        { timeSlot: "morning", project: "P.E.M", type: "planned" },
+        { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
       ],
     },
     {
       day: "WED",
       slots: [
-        { timeSlot: "morning", project: "Woolies", type: "planned" },
-        { timeSlot: "afternoon", project: "Woolies", type: "planned" },
+        { timeSlot: "morning", project: "P.E.M", type: "planned" },
+        { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
       ],
     },
     {
       day: "THU",
       slots: [
-        { timeSlot: "morning", project: "BBox PEM", type: "planned" },
-        { timeSlot: "afternoon", project: "BBox PEM", type: "planned" },
+        { timeSlot: "morning", project: "P.E.M", type: "planned" },
+        { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
       ],
     },
     {
       day: "FRI",
       slots: [
-        { timeSlot: "morning", project: "Mizuno PEM", type: "planned" },
-        { timeSlot: "afternoon", project: "Mizuno PEM", type: "planned" },
+        { timeSlot: "morning", project: "Christmas Party", type: "christmas" },
+        {
+          timeSlot: "afternoon",
+          project: "Christmas Party",
+          type: "christmas",
+        },
       ],
     },
   ],
@@ -57,71 +61,40 @@ export const currentWeekSchedule = {
     {
       day: "MON",
       slots: [
-        { timeSlot: "morning", project: "Merrick Monitor", type: "planned" },
-        { timeSlot: "afternoon", project: "Woolies research", type: "planned" },
+        { timeSlot: "morning", project: "P.E.M", type: "planned" },
+        { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
       ],
     },
     {
       day: "TUE",
       slots: [
-        {
-          timeSlot: "morning",
-          project: "PEM",
-          type: "reactive",
-          movedFrom: "On-Page",
-        },
-        {
-          timeSlot: "afternoon",
-          project: "Woolies research",
-          type: "reactive",
-          movedFrom: "On-Page",
-        },
+        { timeSlot: "morning", project: "P.E.M", type: "planned" },
+        { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
       ],
     },
     {
       day: "WED",
       slots: [
-        {
-          timeSlot: "morning",
-          project: "Title Dashboard",
-          type: "reactive",
-          movedFrom: "Woolies",
-        },
-        {
-          timeSlot: "afternoon",
-          project: "Title Dashboard",
-          type: "reactive",
-          movedFrom: "Woolies",
-        },
+        { timeSlot: "morning", project: "P.E.M", type: "planned" },
+        { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
       ],
     },
     {
       day: "THU",
       slots: [
-        {
-          timeSlot: "morning",
-          project: "Back Links",
-          type: "reactive",
-          movedFrom: "BBox PEM",
-        },
-        {
-          timeSlot: "afternoon",
-          project: "Leads",
-          type: "reactive",
-          movedFrom: "BBox PEM",
-        },
+        { timeSlot: "morning", project: "P.E.M", type: "planned" },
+        { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
       ],
     },
     {
       day: "FRI",
       slots: [
+        { timeSlot: "morning", project: "Christmas Party", type: "christmas" },
         {
-          timeSlot: "morning",
-          project: "BBox PEM",
-          type: "planned",
-          movedFrom: "THU",
+          timeSlot: "afternoon",
+          project: "Christmas Party",
+          type: "christmas",
         },
-        { timeSlot: "afternoon", project: "Mizuno PEM", type: "planned" },
       ],
     },
   ],
@@ -130,6 +103,126 @@ export const currentWeekSchedule = {
 // Historical weeks (automatically populated, don't edit manually)
 // Structure: { "2024-11-26": { weekStart: "2024-11-26", schedule: [...] }, ... }
 export const weeklyHistory = {
+  "2025-12-08": {
+    weekStart: "2025-12-08",
+    plan: [
+      {
+        day: "MON",
+        slots: [
+          { timeSlot: "morning", project: "Merrick Monitor", type: "planned" },
+          {
+            timeSlot: "afternoon",
+            project: "Woolies research",
+            type: "planned",
+          },
+        ],
+      },
+      {
+        day: "TUE",
+        slots: [
+          { timeSlot: "morning", project: "On-Page", type: "planned" },
+          { timeSlot: "afternoon", project: "On-Page", type: "planned" },
+        ],
+      },
+      {
+        day: "WED",
+        slots: [
+          { timeSlot: "morning", project: "Woolies", type: "planned" },
+          { timeSlot: "afternoon", project: "Woolies", type: "planned" },
+        ],
+      },
+      {
+        day: "THU",
+        slots: [
+          { timeSlot: "morning", project: "BBox PEM", type: "planned" },
+          { timeSlot: "afternoon", project: "BBox PEM", type: "planned" },
+        ],
+      },
+      {
+        day: "FRI",
+        slots: [
+          { timeSlot: "morning", project: "Mizuno PEM", type: "planned" },
+          { timeSlot: "afternoon", project: "Mizuno PEM", type: "planned" },
+        ],
+      },
+    ],
+    schedule: [
+      {
+        day: "MON",
+        slots: [
+          { timeSlot: "morning", project: "Merrick Monitor", type: "planned" },
+          {
+            timeSlot: "afternoon",
+            project: "Woolies research",
+            type: "planned",
+          },
+        ],
+      },
+      {
+        day: "TUE",
+        slots: [
+          {
+            timeSlot: "morning",
+            project: "PEM",
+            type: "reactive",
+            movedFrom: "On-Page",
+          },
+          {
+            timeSlot: "afternoon",
+            project: "Woolies research",
+            type: "reactive",
+            movedFrom: "On-Page",
+          },
+        ],
+      },
+      {
+        day: "WED",
+        slots: [
+          {
+            timeSlot: "morning",
+            project: "Title Dashboard",
+            type: "reactive",
+            movedFrom: "Woolies",
+          },
+          {
+            timeSlot: "afternoon",
+            project: "Title Dashboard",
+            type: "reactive",
+            movedFrom: "Woolies",
+          },
+        ],
+      },
+      {
+        day: "THU",
+        slots: [
+          {
+            timeSlot: "morning",
+            project: "Back Links",
+            type: "reactive",
+            movedFrom: "BBox PEM",
+          },
+          {
+            timeSlot: "afternoon",
+            project: "Leads",
+            type: "reactive",
+            movedFrom: "BBox PEM",
+          },
+        ],
+      },
+      {
+        day: "FRI",
+        slots: [
+          {
+            timeSlot: "morning",
+            project: "BBox PEM",
+            type: "planned",
+            movedFrom: "THU",
+          },
+          { timeSlot: "afternoon", project: "Mizuno PEM", type: "planned" },
+        ],
+      },
+    ],
+  },
   "2024-12-01": {
     weekStart: "2024-12-01",
     schedule: [
