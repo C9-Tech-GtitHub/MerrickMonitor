@@ -121,6 +121,49 @@ Navigate to: Cloudflare Dashboard → Workers & Pages → merrick-monitor → Se
 - Commit activity, status, and trends are calculated in real-time
 - Data refreshes every 5 minutes automatically
 
+## Claude Code Telemetry
+
+The TELEMETRY tab displays real-time metrics from Claude Code via Grafana Cloud.
+
+**Architecture:**
+```
+Claude Code CLI → Grafana Cloud (OTLP) → Prometheus API → Cloudflare Proxy → Dashboard
+```
+
+**Setup Steps:**
+
+1. **Create Grafana Cloud Account**
+   - Sign up at https://grafana.com/auth/sign-up/create-user (free tier)
+   - Create a stack (auto-provisions Prometheus)
+
+2. **Configure Claude Code to Send Telemetry**
+   ```bash
+   # Add to ~/.zshrc or ~/.bashrc
+   export CLAUDE_CODE_ENABLE_TELEMETRY=1
+   export OTEL_METRICS_EXPORTER=otlp
+   export OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+   export OTEL_EXPORTER_OTLP_ENDPOINT=https://otlp-gateway-prod-<region>.grafana.net/otlp
+   export OTEL_EXPORTER_OTLP_HEADERS="Authorization=Basic <base64(instanceId:token)>"
+   ```
+
+3. **Set Cloudflare Environment Variables**
+   - Go to: Cloudflare Dashboard → Workers & Pages → merrick-monitor → Settings → Environment Variables
+   - Add:
+     - `GRAFANA_PROMETHEUS_URL` = `https://prometheus-prod-<region>.grafana.net/api/prom`
+     - `GRAFANA_INSTANCE_ID` = Your Grafana instance ID
+     - `GRAFANA_API_TOKEN` = API token with MetricsPublisher scope
+
+**Metrics Displayed:**
+- Sessions, Cost, Active Time, Total Tokens
+- Token breakdown (input/output/cache)
+- Productivity (commits, PRs, lines of code)
+- Cost by model
+
+**Files:**
+- `functions/api/telemetry.js` - Cloudflare proxy for Prometheus queries
+- `src/services/telemetryService.js` - Client-side service for fetching metrics
+- `src/components/ClaudeTelemetry.jsx` - Dashboard UI component
+
 ## Styling Guidelines
 
 **Retro Terminal Theme:**

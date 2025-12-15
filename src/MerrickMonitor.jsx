@@ -23,6 +23,7 @@ import Login from "./components/Login";
 import WeeklyAgenda from "./components/WeeklyAgenda";
 import WeekHistory from "./components/WeekHistory";
 import WorkloadTracker from "./components/WorkloadTracker";
+import ClaudeTelemetry from "./components/ClaudeTelemetry";
 import {
   currentWeekSchedule,
   calculateMetrics,
@@ -1290,7 +1291,7 @@ const MerrickMonitor = () => {
               </div>
               {/* Tab Navigation */}
               <div className="flex justify-end gap-6 text-xs mt-2">
-                {["OVERVIEW", "ADOPTION", "AGENDA"].map((tab) => (
+                {["OVERVIEW", "ADOPTION", "AGENDA", "TELEMETRY"].map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
@@ -1525,6 +1526,9 @@ const MerrickMonitor = () => {
             >
               <WeeklyAgenda theme={theme} isRetro={isRetro} />
             </div>
+          )}
+          {activeTab === "TELEMETRY" && (
+            <ClaudeTelemetry theme={theme} isRetro={isRetro} />
           )}
         </div>
       </div>
