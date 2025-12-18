@@ -19,36 +19,36 @@ export const currentWeekSchedule = {
     {
       day: "MON",
       slots: [
-        { timeSlot: "morning", project: "FAQ-Off (SOP Hub)", type: "planned" },
-        { timeSlot: "afternoon", project: "FAQ-Off (SOP Hub)", type: "planned" },
+        { timeSlot: "morning", project: "P.E.M", type: "planned" },
+        { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
       ],
     },
     {
       day: "TUE",
       slots: [
-        { timeSlot: "morning", project: "FAQ-Off (SOP Hub)", type: "planned" },
-        { timeSlot: "afternoon", project: "FAQ-Off (SOP Hub)", type: "planned" },
+        { timeSlot: "morning", project: "P.E.M", type: "planned" },
+        { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
       ],
     },
     {
       day: "WED",
       slots: [
-        { timeSlot: "morning", project: "Woolies Research", type: "planned" },
-        { timeSlot: "afternoon", project: "Woolies Research", type: "planned" },
+        { timeSlot: "morning", project: "P.E.M", type: "planned" },
+        { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
       ],
     },
     {
       day: "THU",
       slots: [
-        { timeSlot: "morning", project: "Woolies Calls", type: "planned" },
-        { timeSlot: "afternoon", project: "Lead Gen Tool", type: "planned" },
+        { timeSlot: "morning", project: "P.E.M", type: "planned" },
+        { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
       ],
     },
     {
       day: "FRI",
       slots: [
-        { timeSlot: "morning", project: "Festive Holidays", type: "christmas" },
-        { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" },
+        { timeSlot: "morning", project: "Christmas Party", type: "christmas" },
+        { timeSlot: "afternoon", project: "Christmas Party", type: "christmas" },
       ],
     },
   ],
