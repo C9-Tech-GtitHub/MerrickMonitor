@@ -19,40 +19,36 @@ export const currentWeekSchedule = {
     {
       day: "MON",
       slots: [
-        { timeSlot: "morning", project: "P.E.M", type: "planned" },
-        { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
+        { timeSlot: "morning", project: "FAQ-Off (SOP Hub)", type: "planned" },
+        { timeSlot: "afternoon", project: "FAQ-Off (SOP Hub)", type: "planned" },
       ],
     },
     {
       day: "TUE",
       slots: [
-        { timeSlot: "morning", project: "P.E.M", type: "planned" },
-        { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
+        { timeSlot: "morning", project: "FAQ-Off (SOP Hub)", type: "planned" },
+        { timeSlot: "afternoon", project: "FAQ-Off (SOP Hub)", type: "planned" },
       ],
     },
     {
       day: "WED",
       slots: [
-        { timeSlot: "morning", project: "P.E.M", type: "planned" },
-        { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
+        { timeSlot: "morning", project: "Woolies Research", type: "planned" },
+        { timeSlot: "afternoon", project: "Woolies Research", type: "planned" },
       ],
     },
     {
       day: "THU",
       slots: [
-        { timeSlot: "morning", project: "P.E.M", type: "planned" },
-        { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
+        { timeSlot: "morning", project: "Woolies Calls", type: "planned" },
+        { timeSlot: "afternoon", project: "Lead Gen Tool", type: "planned" },
       ],
     },
     {
       day: "FRI",
       slots: [
-        { timeSlot: "morning", project: "Christmas Party", type: "christmas" },
-        {
-          timeSlot: "afternoon",
-          project: "Christmas Party",
-          type: "christmas",
-        },
+        { timeSlot: "morning", project: "Festive Holidays", type: "christmas" },
+        { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" },
       ],
     },
   ],
@@ -61,40 +57,36 @@ export const currentWeekSchedule = {
     {
       day: "MON",
       slots: [
-        { timeSlot: "morning", project: "P.E.M", type: "planned" },
-        { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
+        { timeSlot: "morning", project: "FAQ-Off (SOP Hub)", type: "planned" },
+        { timeSlot: "afternoon", project: "FAQ-Off (SOP Hub)", type: "planned" },
       ],
     },
     {
       day: "TUE",
       slots: [
-        { timeSlot: "morning", project: "P.E.M", type: "planned" },
-        { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
+        { timeSlot: "morning", project: "FAQ-Off (SOP Hub)", type: "planned" },
+        { timeSlot: "afternoon", project: "FAQ-Off (SOP Hub)", type: "planned" },
       ],
     },
     {
       day: "WED",
       slots: [
-        { timeSlot: "morning", project: "P.E.M", type: "planned" },
-        { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
+        { timeSlot: "morning", project: "Woolies Research", type: "planned" },
+        { timeSlot: "afternoon", project: "Woolies Research", type: "planned" },
       ],
     },
     {
       day: "THU",
       slots: [
-        { timeSlot: "morning", project: "P.E.M", type: "planned" },
-        { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
+        { timeSlot: "morning", project: "Woolies Calls", type: "planned" },
+        { timeSlot: "afternoon", project: "Lead Gen Tool", type: "planned" },
       ],
     },
     {
       day: "FRI",
       slots: [
-        { timeSlot: "morning", project: "Christmas Party", type: "christmas" },
-        {
-          timeSlot: "afternoon",
-          project: "Christmas Party",
-          type: "christmas",
-        },
+        { timeSlot: "morning", project: "Festive Holidays", type: "christmas" },
+        { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" },
       ],
     },
   ],
@@ -103,6 +95,83 @@ export const currentWeekSchedule = {
 // Historical weeks (automatically populated, don't edit manually)
 // Structure: { "2024-11-26": { weekStart: "2024-11-26", schedule: [...] }, ... }
 export const weeklyHistory = {
+  "2025-12-22": {
+    weekStart: "2025-12-22",
+    plan: [
+      {
+        day: "MON",
+        slots: [
+          { timeSlot: "morning", project: "Festive Holidays", type: "christmas" },
+          { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" },
+        ],
+      },
+      {
+        day: "TUE",
+        slots: [
+          { timeSlot: "morning", project: "Festive Holidays", type: "christmas" },
+          { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" },
+        ],
+      },
+      {
+        day: "WED",
+        slots: [
+          { timeSlot: "morning", project: "Festive Holidays", type: "christmas" },
+          { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" },
+        ],
+      },
+      {
+        day: "THU",
+        slots: [
+          { timeSlot: "morning", project: "Festive Holidays", type: "christmas" },
+          { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" },
+        ],
+      },
+      {
+        day: "FRI",
+        slots: [
+          { timeSlot: "morning", project: "Festive Holidays", type: "christmas" },
+          { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" },
+        ],
+      },
+    ],
+    schedule: [
+      {
+        day: "MON",
+        slots: [
+          { timeSlot: "morning", project: "Festive Holidays", type: "christmas" },
+          { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" },
+        ],
+      },
+      {
+        day: "TUE",
+        slots: [
+          { timeSlot: "morning", project: "Festive Holidays", type: "christmas" },
+          { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" },
+        ],
+      },
+      {
+        day: "WED",
+        slots: [
+          { timeSlot: "morning", project: "Festive Holidays", type: "christmas" },
+          { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" },
+        ],
+      },
+      {
+        day: "THU",
+        slots: [
+          { timeSlot: "morning", project: "Festive Holidays", type: "christmas" },
+          { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" },
+        ],
+      },
+      {
+        day: "FRI",
+        slots: [
+          { timeSlot: "morning", project: "Festive Holidays", type: "christmas" },
+          { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" },
+        ],
+      },
+    ],
+  },
   "2025-12-08": {
     weekStart: "2025-12-08",
     plan: [
