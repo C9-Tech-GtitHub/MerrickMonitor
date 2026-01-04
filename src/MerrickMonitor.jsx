@@ -39,7 +39,7 @@ const MerrickMonitor = () => {
   const [cursorVisible, setCursorVisible] = useState(true);
   const [activeTab, setActiveTab] = useState("OVERVIEW");
   const [viewMode, setViewMode] = useState("RETRO"); // 'RETRO' or 'MINIMAL'
-  const [festiveMode, setFestiveMode] = useState(false); // Christmas theme toggle
+  const [holidayMode, setHolidayMode] = useState(false); // Holiday theme toggle
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
   const [showError, setShowError] = useState(false);
@@ -584,7 +584,7 @@ const MerrickMonitor = () => {
           theme={theme}
           isRetro={isRetro}
           weekSchedule={currentWeekSchedule.schedule}
-          festiveMode={festiveMode}
+          holidayMode={holidayMode}
         />
 
         {/* Live Tools Table */}
@@ -1182,8 +1182,8 @@ const MerrickMonitor = () => {
     <div
       className={`min-h-screen p-4 md:p-8 overflow-hidden relative transition-colors duration-500 ${theme.bg} ${theme.text} ${theme.font} ${theme.selection}`}
     >
-      {/* 8-Bit Snow Effect (Only in Festive Mode) */}
-      {festiveMode && (
+      {/* 8-Bit Snow Effect (Only in Holiday Mode) */}
+      {holidayMode && (
         <div className="pointer-events-none fixed inset-0 z-40 overflow-hidden font-mono">
           {[...Array(60)].map((_, i) => {
             const snowChars = ["*", ".", "+", "o", "°", "·"];
@@ -1239,11 +1239,11 @@ const MerrickMonitor = () => {
           <div className="flex flex-col items-end gap-4">
             {/* Mode Toggle & Snapshot Manager */}
             <div className="flex items-center gap-3">
-              {/* Festive Mode Toggle */}
+              {/* Holiday Mode Toggle */}
               <button
-                onClick={() => setFestiveMode(!festiveMode)}
+                onClick={() => setHolidayMode(!holidayMode)}
                 className={`px-3 py-1.5 rounded text-[10px] font-bold transition-all flex items-center gap-1.5 ${
-                  festiveMode
+                  holidayMode
                     ? "bg-gradient-to-r from-red-600 via-green-600 to-red-600 text-white shadow-[0_0_15px_rgba(220,38,38,0.5)] animate-pulse"
                     : isRetro
                       ? "border border-green-900 text-green-600 hover:bg-green-900/30"
@@ -1251,9 +1251,9 @@ const MerrickMonitor = () => {
                 }`}
               >
                 <span className="font-mono">
-                  {festiveMode ? "/*\\" : "/^\\"}
+                  {holidayMode ? "/*\\" : "/^\\"}
                 </span>
-                FESTIVE MODE
+                HOLIDAY MODE
               </button>
               <div
                 className={`flex items-center p-1 rounded-lg ${isRetro ? "border border-green-900" : "bg-slate-200/50"}`}

@@ -45,7 +45,7 @@ const WorkloadTracker = ({
   isRetro,
   currentWeek,
   weekSchedule,
-  festiveMode,
+  holidayMode,
 }) => {
   const [viewMode, setViewMode] = useState(() => {
     return localStorage.getItem("workloadViewMode") || "weekly";
@@ -300,7 +300,7 @@ const WorkloadTracker = ({
         <>
           {/* Stats Row */}
           <div
-            className={`grid gap-3 mb-4 ${workload.festivePercent > 0 || festiveMode ? "grid-cols-4" : "grid-cols-3"}`}
+            className={`grid gap-3 mb-4 ${workload.festivePercent > 0 || holidayMode ? "grid-cols-4" : "grid-cols-3"}`}
           >
             <div
               className={`text-center p-2 rounded ${isRetro ? "bg-green-900/10" : "bg-slate-50"}`}
@@ -324,8 +324,8 @@ const WorkloadTracker = ({
                 {workload.reactivePercent}%
               </div>
             </div>
-            {/* Vacation Stats - only show when there's vacation data or festive mode is on */}
-            {(workload.festivePercent > 0 || festiveMode) && (
+            {/* Vacation Stats - only show when there's vacation data or holiday mode is on */}
+            {(workload.festivePercent > 0 || holidayMode) && (
               <div
                 className={`text-center p-2 rounded ${isRetro ? "bg-cyan-900/20 border border-cyan-900/50 shadow-[0_0_10px_rgba(6,182,212,0.2)]" : "bg-gradient-to-r from-cyan-50 via-orange-50 to-cyan-50 border border-cyan-200"}`}
               >
@@ -368,13 +368,13 @@ const WorkloadTracker = ({
               percent={workload.plannedPercent}
               showReactive={true}
               reactivePercent={workload.reactivePercent}
-              showFestive={workload.festivePercent > 0 || festiveMode}
+              showFestive={workload.festivePercent > 0 || holidayMode}
               festivePercent={workload.festivePercent}
               showRnd={true}
               rndPercent={workload.rndPercent}
             />
             <div
-              className={`flex flex-wrap gap-x-4 gap-y-1 text-xs mt-2 tracking-wide ${workload.festivePercent > 0 || festiveMode ? "justify-start" : "justify-between"}`}
+              className={`flex flex-wrap gap-x-4 gap-y-1 text-xs mt-2 tracking-wide ${workload.festivePercent > 0 || holidayMode ? "justify-start" : "justify-between"}`}
             >
               <span className={`flex items-center gap-1 ${theme.textMuted}`}>
                 <span
@@ -390,7 +390,7 @@ const WorkloadTracker = ({
                 ></span>
                 Reactive Work: {workload.reactivePercent}%
               </span>
-              {(workload.festivePercent > 0 || festiveMode) && (
+              {(workload.festivePercent > 0 || holidayMode) && (
                 <span
                   className={`flex items-center gap-1 ${isRetro ? "text-cyan-400" : "text-cyan-600"}`}
                 >
