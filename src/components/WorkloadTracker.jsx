@@ -194,7 +194,7 @@ const WorkloadTracker = ({
             <span className="text-yellow-500">{"▓".repeat(reactiveLen)}</span>
           )}
           {showFestive && (
-            <span className="text-red-500 animate-pulse">
+            <span className="text-cyan-500">
               {"▓".repeat(festiveLen)}
             </span>
           )}
@@ -220,7 +220,7 @@ const WorkloadTracker = ({
         )}
         {showFestive && festivePercent > 0 && (
           <div
-            className="h-full bg-gradient-to-r from-red-500 via-green-500 to-red-500 transition-all duration-500"
+            className="h-full bg-gradient-to-r from-cyan-500 via-orange-400 to-cyan-500 transition-all duration-500"
             style={{ width: `${festivePercent}%` }}
           />
         )}
@@ -324,18 +324,18 @@ const WorkloadTracker = ({
                 {workload.reactivePercent}%
               </div>
             </div>
-            {/* Festive Stats - only show when there's festive data or festive mode is on */}
+            {/* Vacation Stats - only show when there's vacation data or festive mode is on */}
             {(workload.festivePercent > 0 || festiveMode) && (
               <div
-                className={`text-center p-2 rounded ${isRetro ? "bg-red-900/20 border border-red-900/50 shadow-[0_0_10px_rgba(220,38,38,0.2)]" : "bg-gradient-to-r from-red-50 via-green-50 to-red-50 border border-red-200"}`}
+                className={`text-center p-2 rounded ${isRetro ? "bg-cyan-900/20 border border-cyan-900/50 shadow-[0_0_10px_rgba(6,182,212,0.2)]" : "bg-gradient-to-r from-cyan-50 via-orange-50 to-cyan-50 border border-cyan-200"}`}
               >
                 <div
-                  className={`text-xs ${isRetro ? "text-red-400" : "text-red-600"} mb-1`}
+                  className={`text-xs ${isRetro ? "text-cyan-400" : "text-cyan-600"} mb-1`}
                 >
-                  Festive
+                  Vacation
                 </div>
                 <div
-                  className={`text-lg font-bold ${isRetro ? "text-red-400 drop-shadow-[0_0_5px_rgba(220,38,38,0.5)]" : "text-red-600"}`}
+                  className={`text-lg font-bold ${isRetro ? "text-cyan-400 drop-shadow-[0_0_5px_rgba(6,182,212,0.5)]" : "text-cyan-600"}`}
                 >
                   {workload.festivePercent}%
                 </div>
@@ -392,12 +392,12 @@ const WorkloadTracker = ({
               </span>
               {(workload.festivePercent > 0 || festiveMode) && (
                 <span
-                  className={`flex items-center gap-1 ${isRetro ? "text-red-400" : "text-red-600"}`}
+                  className={`flex items-center gap-1 ${isRetro ? "text-cyan-400" : "text-cyan-600"}`}
                 >
                   <span
-                    className={`w-2 h-2 rounded-sm ${isRetro ? "bg-red-500 animate-pulse" : "bg-gradient-to-r from-red-500 to-green-500"}`}
+                    className={`w-2 h-2 rounded-sm ${isRetro ? "bg-cyan-500" : "bg-gradient-to-r from-cyan-500 to-orange-400"}`}
                   ></span>
-                  Festive: {workload.festivePercent}%
+                  Vacation: {workload.festivePercent}%
                 </span>
               )}
               <span

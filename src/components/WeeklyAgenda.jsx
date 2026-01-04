@@ -48,17 +48,17 @@ const WeeklyAgenda = ({ theme, isRetro }) => {
     if (!slot)
       return { bg: "bg-transparent", text: "text-green-900/20", border: "" };
 
-    // Christmas party - festive red and green theme
+    // Vacation/holiday theme - tropical beach vibes
     if (slot.type === "christmas") {
       return {
         bg: isRetro
-          ? "bg-gradient-to-r from-red-950/40 via-green-950/40 to-red-950/40 shadow-[inset_0_0_30px_rgba(220,38,38,0.2)]"
-          : "bg-gradient-to-r from-red-100 via-green-100 to-red-100",
+          ? "bg-gradient-to-r from-cyan-950/40 via-orange-950/30 to-cyan-950/40 shadow-[inset_0_0_30px_rgba(6,182,212,0.2)]"
+          : "bg-gradient-to-r from-cyan-100 via-orange-100 to-cyan-100",
         text: isRetro
-          ? "text-red-400 font-bold drop-shadow-[0_0_8px_rgba(220,38,38,0.6)] animate-pulse"
-          : "text-red-600 font-bold",
+          ? "text-cyan-400 font-bold drop-shadow-[0_0_8px_rgba(6,182,212,0.6)]"
+          : "text-cyan-600 font-bold",
         border: "",
-        isChristmas: true,
+        isVacation: true,
       };
     }
 
@@ -296,8 +296,8 @@ const WeeklyAgenda = ({ theme, isRetro }) => {
                         className={`text-[10px] uppercase border px-1.5 py-0.5 rounded tracking-wider ${
                           morningSlot.type === "christmas"
                             ? isRetro
-                              ? "border-red-500 text-red-400 bg-red-950/50 shadow-[0_0_10px_rgba(220,38,38,0.3)]"
-                              : "border-red-300 text-red-600 bg-red-50"
+                              ? "border-cyan-500 text-cyan-400 bg-cyan-950/50 shadow-[0_0_10px_rgba(6,182,212,0.3)]"
+                              : "border-cyan-300 text-cyan-600 bg-cyan-50"
                             : morningSlot.type === "reactive"
                               ? isRetro
                                 ? "border-amber-600 text-amber-500 bg-amber-950/50"
@@ -308,7 +308,7 @@ const WeeklyAgenda = ({ theme, isRetro }) => {
                         }`}
                       >
                         {morningSlot.type === "christmas"
-                          ? "FESTIVE"
+                          ? "VACATION"
                           : morningSlot.type === "reactive"
                             ? "REACTIVE"
                             : "PLANNED"}
@@ -334,8 +334,8 @@ const WeeklyAgenda = ({ theme, isRetro }) => {
                             className={`text-[10px] uppercase border px-1.5 py-0.5 rounded tracking-wider ${
                               morningSlot.type === "christmas"
                                 ? isRetro
-                                  ? "border-red-500 text-red-400 bg-red-950/50 shadow-[0_0_10px_rgba(220,38,38,0.3)]"
-                                  : "border-red-300 text-red-600 bg-red-50"
+                                  ? "border-cyan-500 text-cyan-400 bg-cyan-950/50 shadow-[0_0_10px_rgba(6,182,212,0.3)]"
+                                  : "border-cyan-300 text-cyan-600 bg-cyan-50"
                                 : morningSlot.type === "reactive"
                                   ? isRetro
                                     ? "border-amber-600 text-amber-500 bg-amber-950/50"
@@ -346,7 +346,7 @@ const WeeklyAgenda = ({ theme, isRetro }) => {
                             }`}
                           >
                             {morningSlot.type === "christmas"
-                              ? "FESTIVE"
+                              ? "VACATION"
                               : morningSlot.type === "reactive"
                                 ? "REACTIVE"
                                 : "PLANNED"}
@@ -372,8 +372,8 @@ const WeeklyAgenda = ({ theme, isRetro }) => {
                             className={`text-[10px] uppercase border px-1.5 py-0.5 rounded tracking-wider ${
                               afternoonSlot.type === "christmas"
                                 ? isRetro
-                                  ? "border-red-500 text-red-400 bg-red-950/50 shadow-[0_0_10px_rgba(220,38,38,0.3)]"
-                                  : "border-red-300 text-red-600 bg-red-50"
+                                  ? "border-cyan-500 text-cyan-400 bg-cyan-950/50 shadow-[0_0_10px_rgba(6,182,212,0.3)]"
+                                  : "border-cyan-300 text-cyan-600 bg-cyan-50"
                                 : afternoonSlot.type === "reactive"
                                   ? isRetro
                                     ? "border-amber-600 text-amber-500 bg-amber-950/50"
@@ -384,7 +384,7 @@ const WeeklyAgenda = ({ theme, isRetro }) => {
                             }`}
                           >
                             {afternoonSlot.type === "christmas"
-                              ? "FESTIVE"
+                              ? "VACATION"
                               : afternoonSlot.type === "reactive"
                                 ? "REACTIVE"
                                 : "PLANNED"}
