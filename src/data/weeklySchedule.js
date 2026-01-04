@@ -13,42 +13,42 @@
 // Current week's schedule (edit this at start of each week)
 // Use "actual" for what actually happened, "plan" for original plan
 export const currentWeekSchedule = {
-  weekStart: "2025-12-15", // Monday of current week (YYYY-MM-DD)
+  weekStart: "2026-01-05", // Monday of current week (YYYY-MM-DD)
   // Original plan for the week (set at start of week, don't modify)
   plan: [
     {
       day: "MON",
       slots: [
-        { timeSlot: "morning", project: "P.E.M", type: "planned" },
-        { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
+        { timeSlot: "morning", project: "Merrick Monitor & Agenda Planning", type: "planned" },
+        { timeSlot: "afternoon", project: "Lead Gen Woolies Prep", type: "planned" },
       ],
     },
     {
       day: "TUE",
       slots: [
-        { timeSlot: "morning", project: "P.E.M", type: "planned" },
-        { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
+        { timeSlot: "morning", project: "Lead Gen", type: "planned" },
+        { timeSlot: "afternoon", project: "SOP Review", type: "planned" },
       ],
     },
     {
       day: "WED",
       slots: [
-        { timeSlot: "morning", project: "P.E.M", type: "planned" },
-        { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
+        { timeSlot: "morning", project: "PEM Tool", type: "planned" },
+        { timeSlot: "afternoon", project: "Woolies Review", type: "planned" },
       ],
     },
     {
       day: "THU",
       slots: [
-        { timeSlot: "morning", project: "P.E.M", type: "planned" },
-        { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
+        { timeSlot: "morning", project: "Full Review & Trip Setup", type: "planned" },
+        { timeSlot: "afternoon", project: "Full Review & Trip Setup", type: "planned" },
       ],
     },
     {
       day: "FRI",
       slots: [
-        { timeSlot: "morning", project: "Christmas Party", type: "christmas" },
-        { timeSlot: "afternoon", project: "Christmas Party", type: "christmas" },
+        { timeSlot: "morning", project: "Holidays", type: "christmas" },
+        { timeSlot: "afternoon", project: "Holidays", type: "christmas" },
       ],
     },
   ],
@@ -57,36 +57,36 @@ export const currentWeekSchedule = {
     {
       day: "MON",
       slots: [
-        { timeSlot: "morning", project: "FAQ-Off (SOP Hub)", type: "planned" },
-        { timeSlot: "afternoon", project: "FAQ-Off (SOP Hub)", type: "planned" },
+        { timeSlot: "morning", project: "Merrick Monitor & Agenda Planning", type: "planned" },
+        { timeSlot: "afternoon", project: "Lead Gen Woolies Prep", type: "planned" },
       ],
     },
     {
       day: "TUE",
       slots: [
-        { timeSlot: "morning", project: "FAQ-Off (SOP Hub)", type: "planned" },
-        { timeSlot: "afternoon", project: "FAQ-Off (SOP Hub)", type: "planned" },
+        { timeSlot: "morning", project: "Lead Gen", type: "planned" },
+        { timeSlot: "afternoon", project: "SOP Review", type: "planned" },
       ],
     },
     {
       day: "WED",
       slots: [
-        { timeSlot: "morning", project: "Woolies Research", type: "planned" },
-        { timeSlot: "afternoon", project: "Woolies Research", type: "planned" },
+        { timeSlot: "morning", project: "PEM Tool", type: "planned" },
+        { timeSlot: "afternoon", project: "Woolies Review", type: "planned" },
       ],
     },
     {
       day: "THU",
       slots: [
-        { timeSlot: "morning", project: "Woolies Calls", type: "planned" },
-        { timeSlot: "afternoon", project: "Lead Gen Tool", type: "planned" },
+        { timeSlot: "morning", project: "Full Review & Trip Setup", type: "planned" },
+        { timeSlot: "afternoon", project: "Full Review & Trip Setup", type: "planned" },
       ],
     },
     {
       day: "FRI",
       slots: [
-        { timeSlot: "morning", project: "Festive Holidays", type: "christmas" },
-        { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" },
+        { timeSlot: "morning", project: "Holidays", type: "christmas" },
+        { timeSlot: "afternoon", project: "Holidays", type: "christmas" },
       ],
     },
   ],
@@ -95,42 +95,127 @@ export const currentWeekSchedule = {
 // Historical weeks (automatically populated, don't edit manually)
 // Structure: { "2024-11-26": { weekStart: "2024-11-26", schedule: [...] }, ... }
 export const weeklyHistory = {
+  "2026-01-26": {
+    weekStart: "2026-01-26",
+    plan: [
+      { day: "MON", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "TUE", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "WED", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "THU", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "FRI", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+    ],
+    schedule: [
+      { day: "MON", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "TUE", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "WED", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "THU", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "FRI", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+    ],
+  },
+  "2026-01-19": {
+    weekStart: "2026-01-19",
+    plan: [
+      { day: "MON", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "TUE", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "WED", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "THU", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "FRI", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+    ],
+    schedule: [
+      { day: "MON", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "TUE", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "WED", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "THU", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "FRI", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+    ],
+  },
+  "2026-01-12": {
+    weekStart: "2026-01-12",
+    plan: [
+      { day: "MON", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "TUE", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "WED", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "THU", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "FRI", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+    ],
+    schedule: [
+      { day: "MON", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "TUE", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "WED", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "THU", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "FRI", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+    ],
+  },
+  "2025-12-29": {
+    weekStart: "2025-12-29",
+    plan: [
+      { day: "MON", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "TUE", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "WED", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "THU", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "FRI", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+    ],
+    schedule: [
+      { day: "MON", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "TUE", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "WED", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "THU", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+      { day: "FRI", slots: [{ timeSlot: "morning", project: "Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Holidays", type: "christmas" }] },
+    ],
+  },
   "2025-12-22": {
     weekStart: "2025-12-22",
+    plan: [
+      { day: "MON", slots: [{ timeSlot: "morning", project: "Festive Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" }] },
+      { day: "TUE", slots: [{ timeSlot: "morning", project: "Festive Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" }] },
+      { day: "WED", slots: [{ timeSlot: "morning", project: "Festive Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" }] },
+      { day: "THU", slots: [{ timeSlot: "morning", project: "Festive Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" }] },
+      { day: "FRI", slots: [{ timeSlot: "morning", project: "Festive Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" }] },
+    ],
+    schedule: [
+      { day: "MON", slots: [{ timeSlot: "morning", project: "Festive Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" }] },
+      { day: "TUE", slots: [{ timeSlot: "morning", project: "Festive Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" }] },
+      { day: "WED", slots: [{ timeSlot: "morning", project: "Festive Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" }] },
+      { day: "THU", slots: [{ timeSlot: "morning", project: "Festive Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" }] },
+      { day: "FRI", slots: [{ timeSlot: "morning", project: "Festive Holidays", type: "christmas" }, { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" }] },
+    ],
+  },
+  "2025-12-15": {
+    weekStart: "2025-12-15",
     plan: [
       {
         day: "MON",
         slots: [
-          { timeSlot: "morning", project: "Festive Holidays", type: "christmas" },
-          { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" },
+          { timeSlot: "morning", project: "P.E.M", type: "planned" },
+          { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
         ],
       },
       {
         day: "TUE",
         slots: [
-          { timeSlot: "morning", project: "Festive Holidays", type: "christmas" },
-          { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" },
+          { timeSlot: "morning", project: "P.E.M", type: "planned" },
+          { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
         ],
       },
       {
         day: "WED",
         slots: [
-          { timeSlot: "morning", project: "Festive Holidays", type: "christmas" },
-          { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" },
+          { timeSlot: "morning", project: "P.E.M", type: "planned" },
+          { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
         ],
       },
       {
         day: "THU",
         slots: [
-          { timeSlot: "morning", project: "Festive Holidays", type: "christmas" },
-          { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" },
+          { timeSlot: "morning", project: "P.E.M", type: "planned" },
+          { timeSlot: "afternoon", project: "P.E.M", type: "planned" },
         ],
       },
       {
         day: "FRI",
         slots: [
-          { timeSlot: "morning", project: "Festive Holidays", type: "christmas" },
-          { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" },
+          { timeSlot: "morning", project: "Christmas Party", type: "christmas" },
+          { timeSlot: "afternoon", project: "Christmas Party", type: "christmas" },
         ],
       },
     ],
@@ -138,29 +223,29 @@ export const weeklyHistory = {
       {
         day: "MON",
         slots: [
-          { timeSlot: "morning", project: "Festive Holidays", type: "christmas" },
-          { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" },
+          { timeSlot: "morning", project: "FAQ-Off (SOP Hub)", type: "planned" },
+          { timeSlot: "afternoon", project: "FAQ-Off (SOP Hub)", type: "planned" },
         ],
       },
       {
         day: "TUE",
         slots: [
-          { timeSlot: "morning", project: "Festive Holidays", type: "christmas" },
-          { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" },
+          { timeSlot: "morning", project: "FAQ-Off (SOP Hub)", type: "planned" },
+          { timeSlot: "afternoon", project: "FAQ-Off (SOP Hub)", type: "planned" },
         ],
       },
       {
         day: "WED",
         slots: [
-          { timeSlot: "morning", project: "Festive Holidays", type: "christmas" },
-          { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" },
+          { timeSlot: "morning", project: "Woolies Research", type: "planned" },
+          { timeSlot: "afternoon", project: "Woolies Research", type: "planned" },
         ],
       },
       {
         day: "THU",
         slots: [
-          { timeSlot: "morning", project: "Festive Holidays", type: "christmas" },
-          { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" },
+          { timeSlot: "morning", project: "Woolies Calls", type: "planned" },
+          { timeSlot: "afternoon", project: "Lead Gen Tool", type: "planned" },
         ],
       },
       {
@@ -179,11 +264,7 @@ export const weeklyHistory = {
         day: "MON",
         slots: [
           { timeSlot: "morning", project: "Merrick Monitor", type: "planned" },
-          {
-            timeSlot: "afternoon",
-            project: "Woolies research",
-            type: "planned",
-          },
+          { timeSlot: "afternoon", project: "Woolies research", type: "planned" },
         ],
       },
       {
@@ -220,73 +301,34 @@ export const weeklyHistory = {
         day: "MON",
         slots: [
           { timeSlot: "morning", project: "Merrick Monitor", type: "planned" },
-          {
-            timeSlot: "afternoon",
-            project: "Woolies research",
-            type: "planned",
-          },
+          { timeSlot: "afternoon", project: "Woolies research", type: "planned" },
         ],
       },
       {
         day: "TUE",
         slots: [
-          {
-            timeSlot: "morning",
-            project: "PEM",
-            type: "reactive",
-            movedFrom: "On-Page",
-          },
-          {
-            timeSlot: "afternoon",
-            project: "Woolies research",
-            type: "reactive",
-            movedFrom: "On-Page",
-          },
+          { timeSlot: "morning", project: "PEM", type: "reactive", movedFrom: "On-Page" },
+          { timeSlot: "afternoon", project: "Woolies research", type: "reactive", movedFrom: "On-Page" },
         ],
       },
       {
         day: "WED",
         slots: [
-          {
-            timeSlot: "morning",
-            project: "Title Dashboard",
-            type: "reactive",
-            movedFrom: "Woolies",
-          },
-          {
-            timeSlot: "afternoon",
-            project: "Title Dashboard",
-            type: "reactive",
-            movedFrom: "Woolies",
-          },
+          { timeSlot: "morning", project: "Title Dashboard", type: "reactive", movedFrom: "Woolies" },
+          { timeSlot: "afternoon", project: "Title Dashboard", type: "reactive", movedFrom: "Woolies" },
         ],
       },
       {
         day: "THU",
         slots: [
-          {
-            timeSlot: "morning",
-            project: "Back Links",
-            type: "reactive",
-            movedFrom: "BBox PEM",
-          },
-          {
-            timeSlot: "afternoon",
-            project: "Leads",
-            type: "reactive",
-            movedFrom: "BBox PEM",
-          },
+          { timeSlot: "morning", project: "Back Links", type: "reactive", movedFrom: "BBox PEM" },
+          { timeSlot: "afternoon", project: "Leads", type: "reactive", movedFrom: "BBox PEM" },
         ],
       },
       {
         day: "FRI",
         slots: [
-          {
-            timeSlot: "morning",
-            project: "BBox PEM",
-            type: "planned",
-            movedFrom: "THU",
-          },
+          { timeSlot: "morning", project: "BBox PEM", type: "planned", movedFrom: "THU" },
           { timeSlot: "afternoon", project: "Mizuno PEM", type: "planned" },
         ],
       },
@@ -298,76 +340,36 @@ export const weeklyHistory = {
       {
         day: "MON",
         slots: [
-          {
-            timeSlot: "morning",
-            project: "Merrick Monitor – Agenda Set",
-            type: "planned",
-          },
-          {
-            timeSlot: "afternoon",
-            project: "PEM Tool",
-            type: "planned",
-          },
-          {
-            timeSlot: "afternoon",
-            project: "Reactive Training",
-            type: "reactive",
-          },
+          { timeSlot: "morning", project: "Merrick Monitor – Agenda Set", type: "planned" },
+          { timeSlot: "afternoon", project: "PEM Tool", type: "planned" },
+          { timeSlot: "afternoon", project: "Reactive Training", type: "reactive" },
         ],
       },
       {
         day: "TUE",
         slots: [
-          {
-            timeSlot: "morning",
-            project: "Outback Equipment",
-            type: "reactive",
-          },
-          {
-            timeSlot: "afternoon",
-            project: "Outback Equipment",
-            type: "reactive",
-          },
+          { timeSlot: "morning", project: "Outback Equipment", type: "reactive" },
+          { timeSlot: "afternoon", project: "Outback Equipment", type: "reactive" },
         ],
       },
       {
         day: "WED",
         slots: [
-          {
-            timeSlot: "morning",
-            project: "Woolworths Research",
-            type: "planned",
-          },
-          {
-            timeSlot: "afternoon",
-            project: "Woolworths Research",
-            type: "planned",
-          },
+          { timeSlot: "morning", project: "Woolworths Research", type: "planned" },
+          { timeSlot: "afternoon", project: "Woolworths Research", type: "planned" },
         ],
       },
       {
         day: "THU",
         slots: [
-          {
-            timeSlot: "morning",
-            project: "PEM Tool",
-            type: "planned",
-          },
-          {
-            timeSlot: "afternoon",
-            project: "PEM Tool",
-            type: "planned",
-          },
+          { timeSlot: "morning", project: "PEM Tool", type: "planned" },
+          { timeSlot: "afternoon", project: "PEM Tool", type: "planned" },
         ],
       },
       {
         day: "FRI",
         slots: [
-          {
-            timeSlot: "morning",
-            project: "On-Page",
-            type: "planned",
-          },
+          { timeSlot: "morning", project: "On-Page", type: "planned" },
         ],
       },
     ],
@@ -378,76 +380,36 @@ export const weeklyHistory = {
       {
         day: "MON",
         slots: [
-          {
-            timeSlot: "morning",
-            project: "Sheet Freak",
-            type: "planned",
-          },
-          {
-            timeSlot: "afternoon",
-            project: "On-Page Sheet",
-            type: "planned",
-          },
+          { timeSlot: "morning", project: "Sheet Freak", type: "planned" },
+          { timeSlot: "afternoon", project: "On-Page Sheet", type: "planned" },
         ],
       },
       {
         day: "TUE",
         slots: [
-          {
-            timeSlot: "morning",
-            project: "On-Page Sheet",
-            type: "planned",
-          },
-          {
-            timeSlot: "afternoon",
-            project: "On-Page Sheet",
-            type: "planned",
-          },
+          { timeSlot: "morning", project: "On-Page Sheet", type: "planned" },
+          { timeSlot: "afternoon", project: "On-Page Sheet", type: "planned" },
         ],
       },
       {
         day: "WED",
         slots: [
-          {
-            timeSlot: "morning",
-            project: "Merrick Monitor",
-            type: "reactive",
-          },
-          {
-            timeSlot: "afternoon",
-            project: "Merrick Monitor",
-            type: "reactive",
-          },
+          { timeSlot: "morning", project: "Merrick Monitor", type: "reactive" },
+          { timeSlot: "afternoon", project: "Merrick Monitor", type: "reactive" },
         ],
       },
       {
         day: "THU",
         slots: [
-          {
-            timeSlot: "morning",
-            project: "Merrick Monitor",
-            type: "reactive",
-          },
-          {
-            timeSlot: "afternoon",
-            project: "On-Page Sheet",
-            type: "planned",
-          },
+          { timeSlot: "morning", project: "Merrick Monitor", type: "reactive" },
+          { timeSlot: "afternoon", project: "On-Page Sheet", type: "planned" },
         ],
       },
       {
         day: "FRI",
         slots: [
-          {
-            timeSlot: "morning",
-            project: "On-Page Sheet",
-            type: "planned",
-          },
-          {
-            timeSlot: "afternoon",
-            project: "On-Page Sheet",
-            type: "planned",
-          },
+          { timeSlot: "morning", project: "On-Page Sheet", type: "planned" },
+          { timeSlot: "afternoon", project: "On-Page Sheet", type: "planned" },
         ],
       },
     ],
