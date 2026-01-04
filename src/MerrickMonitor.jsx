@@ -1182,22 +1182,27 @@ const MerrickMonitor = () => {
     <div
       className={`min-h-screen p-4 md:p-8 overflow-hidden relative transition-colors duration-500 ${theme.bg} ${theme.text} ${theme.font} ${theme.selection}`}
     >
-      {/* 8-Bit Snow Effect (Only in Holiday Mode) */}
+      {/* Summer Vacation Effect (Only in Holiday Mode) */}
       {holidayMode && (
         <div className="pointer-events-none fixed inset-0 z-40 overflow-hidden font-mono">
-          {[...Array(60)].map((_, i) => {
-            const snowChars = ["*", ".", "+", "o", "°", "·"];
+          {[...Array(40)].map((_, i) => {
+            const summerChars = ["~", "≈", "○", "◦", "∘", "☼", "✦"];
             const char =
-              snowChars[Math.floor(Math.random() * snowChars.length)];
+              summerChars[Math.floor(Math.random() * summerChars.length)];
+            const isWave = char === "~" || char === "≈";
             return (
               <div
                 key={i}
-                className="absolute text-green-400 opacity-60 animate-snowfall drop-shadow-[0_0_2px_rgba(74,222,128,0.8)]"
+                className={`absolute opacity-50 animate-float-up ${
+                  isWave
+                    ? "text-cyan-400 drop-shadow-[0_0_3px_rgba(34,211,238,0.8)]"
+                    : "text-orange-400 drop-shadow-[0_0_3px_rgba(251,146,60,0.8)]"
+                }`}
                 style={{
                   left: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 8}s`,
-                  animationDuration: `${8 + Math.random() * 12}s`,
-                  fontSize: `${10 + Math.random() * 8}px`,
+                  animationDelay: `${Math.random() * 10}s`,
+                  animationDuration: `${12 + Math.random() * 8}s`,
+                  fontSize: `${12 + Math.random() * 10}px`,
                 }}
               >
                 {char}
@@ -1244,14 +1249,14 @@ const MerrickMonitor = () => {
                 onClick={() => setHolidayMode(!holidayMode)}
                 className={`px-3 py-1.5 rounded text-[10px] font-bold transition-all flex items-center gap-1.5 ${
                   holidayMode
-                    ? "bg-gradient-to-r from-red-600 via-green-600 to-red-600 text-white shadow-[0_0_15px_rgba(220,38,38,0.5)] animate-pulse"
+                    ? "bg-gradient-to-r from-cyan-500 via-orange-400 to-cyan-500 text-white shadow-[0_0_15px_rgba(34,211,238,0.5)]"
                     : isRetro
                       ? "border border-green-900 text-green-600 hover:bg-green-900/30"
                       : "bg-slate-100 text-slate-500 hover:bg-slate-200"
                 }`}
               >
                 <span className="font-mono">
-                  {holidayMode ? "/*\\" : "/^\\"}
+                  {holidayMode ? "~☼~" : "~~~"}
                 </span>
                 HOLIDAY MODE
               </button>
