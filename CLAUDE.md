@@ -72,9 +72,10 @@ GitHub Push (main) → Cloudflare Pages + Functions (auto-build) → Live Site
 git add -A
 git commit -m "Your changes"
 git push origin main
+npm run build && npx wrangler pages deploy dist --project-name=merrick-monitor
 ```
 
-That's it! Cloudflare handles the rest automatically.
+**Always deploy with Wrangler after pushing.** The GitHub auto-deploy integration is unreliable/disconnected. Wrangler deploy is the source of truth.
 
 **Cloudflare Pages Configuration:**
 Navigate to: Cloudflare Dashboard → Workers & Pages → merrick-monitor → Settings

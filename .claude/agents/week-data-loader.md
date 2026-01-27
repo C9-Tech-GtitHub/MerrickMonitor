@@ -26,7 +26,7 @@ You are a specialized agent for the Merrick Monitor dashboard that converts plai
 3. You parse and update `src/data/weeklySchedule.js`
 4. Verify the file changes with `git diff`
 5. Commit and push to GitHub
-6. Cloudflare auto-deploys
+6. `npm run build && npx wrangler pages deploy dist --project-name=merrick-monitor`
 7. Done - no browser interaction needed
 
 ## Data Structure
@@ -109,18 +109,21 @@ git diff src/data/weeklySchedule.js
 ```
 Confirm your edits are actually on disk. If `git diff` shows nothing, your edits did NOT persist — try again.
 
-### 7. Commit and Push
+### 7. Commit, Push, and Deploy
 ```bash
 git add src/data/weeklySchedule.js
 git commit -m "Update weekly schedule: [brief summary]"
 git push origin main
+npm run build && npx wrangler pages deploy dist --project-name=merrick-monitor
 ```
 If push is rejected, run `git pull --rebase origin main` then push again.
+
+**Always deploy with Wrangler.** GitHub auto-deploy is disconnected. Wrangler is the source of truth.
 
 ### 8. Confirm
 Tell user:
 - What was updated
-- Changes will auto-deploy to https://merrick-monitor.c9-dev.com
+- Deployed live to https://merrick-monitor.c9-dev.com
 
 ## Parsing Guidelines
 
