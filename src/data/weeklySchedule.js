@@ -13,42 +13,42 @@
 // Current week's schedule (edit this at start of each week)
 // Use "actual" for what actually happened, "plan" for original plan
 export const currentWeekSchedule = {
-  weekStart: "2026-01-05", // Monday of current week (YYYY-MM-DD)
+  weekStart: "2026-01-27", // Monday of current week (YYYY-MM-DD)
   // Original plan for the week (set at start of week, don't modify)
   plan: [
     {
       day: "MON",
       slots: [
-        { timeSlot: "morning", project: "Merrick Monitor & Agenda Planning", type: "planned" },
-        { timeSlot: "afternoon", project: "Lead Gen Woolies Prep", type: "planned" },
+        { timeSlot: "morning", project: "Holiday", type: "holiday" },
+        { timeSlot: "afternoon", project: "P.E.M Tool", type: "planned" },
       ],
     },
     {
       day: "TUE",
       slots: [
-        { timeSlot: "morning", project: "Lead Gen", type: "planned" },
-        { timeSlot: "afternoon", project: "SOP Review", type: "planned" },
+        { timeSlot: "morning", project: "Holiday", type: "holiday" },
+        { timeSlot: "afternoon", project: "Merrick Monitor & Randy Review", type: "planned" },
       ],
     },
     {
       day: "WED",
       slots: [
-        { timeSlot: "morning", project: "PEM Tool", type: "planned" },
-        { timeSlot: "afternoon", project: "Woolies Review", type: "planned" },
+        { timeSlot: "morning", project: "Holiday", type: "holiday" },
+        { timeSlot: "afternoon", project: "Woolies/P.E.M", type: "planned" },
       ],
     },
     {
       day: "THU",
       slots: [
-        { timeSlot: "morning", project: "Full Review & Trip Setup", type: "planned" },
-        { timeSlot: "afternoon", project: "Full Review & Trip Setup", type: "planned" },
+        { timeSlot: "morning", project: "Holiday", type: "holiday" },
+        { timeSlot: "afternoon", project: "On-page", type: "planned" },
       ],
     },
     {
       day: "FRI",
       slots: [
-        { timeSlot: "morning", project: "Holidays", type: "christmas" },
-        { timeSlot: "afternoon", project: "Holidays", type: "christmas" },
+        { timeSlot: "morning", project: "Singapore Holiday", type: "holiday" },
+        { timeSlot: "afternoon", project: "Singapore Holiday", type: "holiday" },
       ],
     },
   ],
@@ -57,36 +57,36 @@ export const currentWeekSchedule = {
     {
       day: "MON",
       slots: [
-        { timeSlot: "morning", project: "Merrick Monitor & Agenda Planning", type: "planned" },
-        { timeSlot: "afternoon", project: "Lead Gen Woolies Prep", type: "planned" },
+        { timeSlot: "morning", project: "Holiday", type: "holiday" },
+        { timeSlot: "afternoon", project: "P.E.M Tool", type: "planned" },
       ],
     },
     {
       day: "TUE",
       slots: [
-        { timeSlot: "morning", project: "Lead Gen", type: "planned" },
-        { timeSlot: "afternoon", project: "SOP Review", type: "planned" },
+        { timeSlot: "morning", project: "Holiday", type: "holiday" },
+        { timeSlot: "afternoon", project: "Merrick Monitor & Randy Review", type: "planned" },
       ],
     },
     {
       day: "WED",
       slots: [
-        { timeSlot: "morning", project: "PEM Tool", type: "planned" },
-        { timeSlot: "afternoon", project: "Woolies Review", type: "planned" },
+        { timeSlot: "morning", project: "Holiday", type: "holiday" },
+        { timeSlot: "afternoon", project: "Woolies/P.E.M", type: "planned" },
       ],
     },
     {
       day: "THU",
       slots: [
-        { timeSlot: "morning", project: "Full Review & Trip Setup", type: "planned" },
-        { timeSlot: "afternoon", project: "Full Review & Trip Setup", type: "planned" },
+        { timeSlot: "morning", project: "Holiday", type: "holiday" },
+        { timeSlot: "afternoon", project: "On-page", type: "planned" },
       ],
     },
     {
       day: "FRI",
       slots: [
-        { timeSlot: "morning", project: "Holidays", type: "christmas" },
-        { timeSlot: "afternoon", project: "Holidays", type: "christmas" },
+        { timeSlot: "morning", project: "Singapore Holiday", type: "holiday" },
+        { timeSlot: "afternoon", project: "Singapore Holiday", type: "holiday" },
       ],
     },
   ],
@@ -95,6 +95,23 @@ export const currentWeekSchedule = {
 // Historical weeks (automatically populated, don't edit manually)
 // Structure: { "2024-11-26": { weekStart: "2024-11-26", schedule: [...] }, ... }
 export const weeklyHistory = {
+  "2026-01-05": {
+    weekStart: "2026-01-05",
+    plan: [
+      { day: "MON", slots: [{ timeSlot: "morning", project: "Merrick Monitor & Agenda Planning", type: "planned" }, { timeSlot: "afternoon", project: "Lead Gen Woolies Prep", type: "planned" }] },
+      { day: "TUE", slots: [{ timeSlot: "morning", project: "Lead Gen", type: "planned" }, { timeSlot: "afternoon", project: "SOP Review", type: "planned" }] },
+      { day: "WED", slots: [{ timeSlot: "morning", project: "PEM Tool", type: "planned" }, { timeSlot: "afternoon", project: "Woolies Review", type: "planned" }] },
+      { day: "THU", slots: [{ timeSlot: "morning", project: "Full Review & Trip Setup", type: "planned" }, { timeSlot: "afternoon", project: "Full Review & Trip Setup", type: "planned" }] },
+      { day: "FRI", slots: [{ timeSlot: "morning", project: "Holidays", type: "holiday" }, { timeSlot: "afternoon", project: "Holidays", type: "holiday" }] },
+    ],
+    schedule: [
+      { day: "MON", slots: [{ timeSlot: "morning", project: "Merrick Monitor & Agenda Planning", type: "planned" }, { timeSlot: "afternoon", project: "Lead Gen Woolies Prep", type: "planned" }] },
+      { day: "TUE", slots: [{ timeSlot: "morning", project: "Lead Gen", type: "planned" }, { timeSlot: "afternoon", project: "SOP Review", type: "planned" }] },
+      { day: "WED", slots: [{ timeSlot: "morning", project: "PEM Tool", type: "planned" }, { timeSlot: "afternoon", project: "Woolies Review", type: "planned" }] },
+      { day: "THU", slots: [{ timeSlot: "morning", project: "Full Review & Trip Setup", type: "planned" }, { timeSlot: "afternoon", project: "Full Review & Trip Setup", type: "planned" }] },
+      { day: "FRI", slots: [{ timeSlot: "morning", project: "Holidays", type: "holiday" }, { timeSlot: "afternoon", project: "Holidays", type: "holiday" }] },
+    ],
+  },
   "2026-01-26": {
     weekStart: "2026-01-26",
     plan: [
