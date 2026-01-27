@@ -164,6 +164,21 @@ Claude Code CLI → Grafana Cloud (OTLP) → Prometheus API → Cloudflare Proxy
 - `src/services/telemetryService.js` - Client-side service for fetching metrics
 - `src/components/ClaudeTelemetry.jsx` - Dashboard UI component
 
+## Weekly Schedule Updates
+
+**When the user asks to set their weekly agenda/schedule:**
+
+Use the `week-data-loader` subagent. But be aware of these known issues:
+
+1. **Always verify the subagent's changes persisted.** After the subagent completes, run `git status` or `git diff` to confirm the file `src/data/weeklySchedule.js` was actually modified. The subagent's MCP-proxied write tools can sometimes fail silently. If changes didn't persist, manually edit the file.
+2. **Remote is often ahead.** Automated "Update GitHub data" commits push to remote regularly. Always `git pull --rebase origin main` before editing and before pushing.
+3. **Holiday type is `"holiday"`** — not `"christmas"`. The codebase was refactored.
+4. **Archive old weeks.** When setting a new week, the old `currentWeekSchedule` must be moved to `weeklyHistory` first.
+5. **Half-day schedules.** "Arvo only" means morning slots are `type: "holiday"` and afternoon slots have the actual work as `type: "planned"`.
+
+**File:** `src/data/weeklySchedule.js`
+**Agent config:** `.claude/agents/week-data-loader.md`
+
 ## Styling Guidelines
 
 **Retro Terminal Theme:**

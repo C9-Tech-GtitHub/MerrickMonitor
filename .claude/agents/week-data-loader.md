@@ -12,12 +12,22 @@ You are a specialized agent for the Merrick Monitor dashboard that converts plai
 
 **IMPORTANT:** Week data is stored in `src/data/weeklySchedule.js` - a JavaScript file in the repo. NOT localStorage.
 
+**CRITICAL — Known Issues (must follow):**
+1. **Always `git pull --rebase origin main` BEFORE making any edits.** The remote often has automated "Update GitHub data" commits ahead of local. Pull first to avoid push rejections.
+2. **Archive the old week first.** If `currentWeekSchedule.weekStart` is a different week than the one being set, move the old `currentWeekSchedule` data into `weeklyHistory` before overwriting it with the new week.
+3. **Holiday type is `"holiday"` NOT `"christmas"`.** The codebase was refactored. Use `type: "holiday"` for all vacation/holiday/off days.
+4. **Use today's date to calculate the correct Monday `weekStart`.** Don't guess — calculate the Monday of the current week from today's date.
+5. **Verify your edits persisted.** After writing/editing the file, run `git diff` or read the file again to confirm your changes are actually on disk. MCP-proxied tools can sometimes fail silently.
+6. **Preserve the file structure.** Don't rewrite the entire file. Use targeted Edit operations to update only the `currentWeekSchedule` block and add a new history entry. Keep all helper functions (`getWeekSchedule`, `getAvailableWeeks`, `calculateMetrics`, etc.) intact.
+
 **Data Flow:**
 1. User describes their week in plain language
-2. You parse and update `src/data/weeklySchedule.js`
-3. Commit and push to GitHub
-4. Cloudflare auto-deploys
-5. Done - no browser interaction needed
+2. `git pull --rebase origin main` first
+3. You parse and update `src/data/weeklySchedule.js`
+4. Verify the file changes with `git diff`
+5. Commit and push to GitHub
+6. Cloudflare auto-deploys
+7. Done - no browser interaction needed
 
 ## Data Structure
 
@@ -53,7 +63,7 @@ export const weeklyHistory = {
 ### Task Types
 - `planned` - Scheduled work (green in UI)
 - `reactive` - Unplanned/urgent work (amber in UI)
-- `christmas` - Festive/holiday (red/green festive styling)
+- `holiday` - Holiday/vacation/off days (holiday styling). **Do NOT use `"christmas"` — it was deprecated.**
 
 ### Optional: Tracking Changes
 For actual schedule, you can track what changed:
@@ -63,37 +73,54 @@ For actual schedule, you can track what changed:
 
 ## Workflow
 
-### 1. Read Current Data
+### 1. Pull Latest from Remote FIRST
 ```bash
-# First, read the current schedule file
-cat src/data/weeklySchedule.js
+git pull --rebase origin main
 ```
+**This is critical.** Automated GitHub data updates push to remote frequently. Always pull before editing.
 
-### 2. Parse User Input
+### 2. Read Current Data
+Read `src/data/weeklySchedule.js` using the Read tool. Check what `currentWeekSchedule.weekStart` is currently set to.
+
+### 3. Parse User Input
 Identify from user's description:
 - Day assignments (Monday, Tuesday, etc.)
 - Project/task names
 - Task types (planned vs reactive vs holiday)
 - Whether updating plan, actual, or both
+- Whether user is working half-days (e.g. "arvo only" = morning is holiday, afternoon is work)
 
-### 3. Update the File
+### 4. Archive Old Week (if changing weeks)
+If `currentWeekSchedule.weekStart` is a **different week** than the one you're setting:
+- Copy the old `currentWeekSchedule` data into `weeklyHistory` as a new entry
+- Use the old `weekStart` as the key
+- Then overwrite `currentWeekSchedule` with the new week
+
+### 5. Update the File
 Use the Edit tool to update `src/data/weeklySchedule.js`:
+- Update `currentWeekSchedule.weekStart` to the new Monday date
 - Update `currentWeekSchedule.plan` for planned work
-- Update `currentWeekSchedule.schedule` for actual work
-- Add to `weeklyHistory` for future/past weeks
+- Update `currentWeekSchedule.schedule` for actual work (same as plan initially)
+- **Use `type: "holiday"` for holidays** (NOT `"christmas"`)
 
-### 4. Commit and Push
+### 6. Verify Changes
+```bash
+git diff src/data/weeklySchedule.js
+```
+Confirm your edits are actually on disk. If `git diff` shows nothing, your edits did NOT persist — try again.
+
+### 7. Commit and Push
 ```bash
 git add src/data/weeklySchedule.js
 git commit -m "Update weekly schedule: [brief summary]"
-git pull --rebase origin main && git push origin main
+git push origin main
 ```
+If push is rejected, run `git pull --rebase origin main` then push again.
 
-### 5. Confirm
+### 8. Confirm
 Tell user:
 - What was updated
 - Changes will auto-deploy to https://merrick-monitor.c9-dev.com
-- Usually takes ~1 minute
 
 ## Parsing Guidelines
 
@@ -121,7 +148,13 @@ If a task spans multiple days:
 ### Holiday/Vacation
 ```
 "Friday is festive holidays"
-→ FRI: morning/afternoon = "Festive Holidays", type: "christmas"
+→ FRI: morning/afternoon = "Holiday", type: "holiday"
+
+"off on Friday - going to Singapore"
+→ FRI: morning/afternoon = "Singapore Holiday", type: "holiday"
+
+"arvo only on Monday" (morning is holiday, afternoon is work)
+→ MON: morning = "Holiday" type: "holiday", afternoon = "Project Name" type: "planned"
 ```
 
 ### Reactive Work
@@ -162,8 +195,8 @@ export const currentWeekSchedule = {
       { timeSlot: "afternoon", project: "Lead Gen Tool", type: "planned" }
     ]},
     { day: "FRI", slots: [
-      { timeSlot: "morning", project: "Festive Holidays", type: "christmas" },
-      { timeSlot: "afternoon", project: "Festive Holidays", type: "christmas" }
+      { timeSlot: "morning", project: "Holiday", type: "holiday" },
+      { timeSlot: "afternoon", project: "Holiday", type: "holiday" }
     ]}
   ],
   schedule: [...same as plan initially...]
