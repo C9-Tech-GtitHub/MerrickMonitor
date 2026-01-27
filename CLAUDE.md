@@ -109,9 +109,10 @@ Navigate to: Cloudflare Dashboard → Workers & Pages → merrick-monitor → Se
 - The project uses Cloudflare Pages, not GitHub Pages
 
 **Common Issues:**
+- **Auto-deploy not working / GitHub integration disconnected:** The GitHub source can become disconnected (`"source": null` in API). When this happens, pushes to `main` won't trigger builds. **Fix:** Go to Cloudflare Dashboard → Workers & Pages → merrick-monitor → Settings → Builds & Deployments → Connect to Git → link `C9-Tech-GtitHub/MerrickMonitor` repo, set production branch to `main`, build command to `npm run build`, output dir to `dist`. **Workaround:** Run `npm run build && npx wrangler pages deploy dist --project-name=merrick-monitor` to manually deploy.
 - **Build fails with route conflict:** Ensure "deploy command" is empty in Cloudflare Pages settings
 - **Assets fail to load:** Verify `base: "/"` in vite.config.js
-- **Old build showing:** Check Cloudflare is deploying from `main` branch, verify latest commit in deployment logs
+- **Old build showing:** Check Cloudflare is deploying from `main` branch, verify latest commit in deployment logs. If auto-deploy is disconnected (see above), deploy manually.
 - **Authentication not working:** Ensure environment variables `AUTH_USER` and `AUTH_PASS` are set in Pages Settings → Environment variables → Production
 - **Custom domain not working:** Verify custom domain is added in Pages Settings → Custom domains, and DNS CNAME exists
 
