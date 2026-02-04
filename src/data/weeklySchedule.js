@@ -13,42 +13,42 @@
 // Current week's schedule (edit this at start of each week)
 // Use "actual" for what actually happened, "plan" for original plan
 export const currentWeekSchedule = {
-  weekStart: "2026-01-27", // Monday of current week (YYYY-MM-DD)
+  weekStart: "2026-02-03", // Monday of current week (YYYY-MM-DD)
   // Original plan for the week (set at start of week, don't modify)
   plan: [
     {
       day: "MON",
       slots: [
-        { timeSlot: "morning", project: "Holiday", type: "holiday" },
-        { timeSlot: "afternoon", project: "P.E.M Tool", type: "planned" },
+        { timeSlot: "morning", project: "Meeting & KPI Measurements", type: "planned" },
+        { timeSlot: "afternoon", project: "Holiday", type: "holiday" },
       ],
     },
     {
       day: "TUE",
       slots: [
-        { timeSlot: "morning", project: "Holiday", type: "holiday" },
-        { timeSlot: "afternoon", project: "Merrick Monitor & Randy Review", type: "planned" },
+        { timeSlot: "morning", project: "Recovery from Flight", type: "holiday" },
+        { timeSlot: "afternoon", project: "Recovery from Flight", type: "holiday" },
       ],
     },
     {
       day: "WED",
       slots: [
-        { timeSlot: "morning", project: "Holiday", type: "holiday" },
-        { timeSlot: "afternoon", project: "Woolies/P.E.M", type: "planned" },
+        { timeSlot: "morning", project: "Merrick Monitor & Review Randy", type: "planned" },
+        { timeSlot: "afternoon", project: "Merrick Monitor & Review Randy", type: "planned" },
       ],
     },
     {
       day: "THU",
       slots: [
-        { timeSlot: "morning", project: "Holiday", type: "holiday" },
-        { timeSlot: "afternoon", project: "On-page", type: "planned" },
+        { timeSlot: "morning", project: "PEM & Woolies", type: "planned" },
+        { timeSlot: "afternoon", project: "PEM & Woolies", type: "planned" },
       ],
     },
     {
       day: "FRI",
       slots: [
-        { timeSlot: "morning", project: "Singapore Holiday", type: "holiday" },
-        { timeSlot: "afternoon", project: "Singapore Holiday", type: "holiday" },
+        { timeSlot: "morning", project: "PEM", type: "planned" },
+        { timeSlot: "afternoon", project: "PEM", type: "planned" },
       ],
     },
   ],
@@ -57,36 +57,36 @@ export const currentWeekSchedule = {
     {
       day: "MON",
       slots: [
-        { timeSlot: "morning", project: "Holiday", type: "holiday" },
-        { timeSlot: "afternoon", project: "P.E.M Tool", type: "planned" },
+        { timeSlot: "morning", project: "Meeting & KPI Measurements", type: "planned" },
+        { timeSlot: "afternoon", project: "Holiday", type: "holiday" },
       ],
     },
     {
       day: "TUE",
       slots: [
-        { timeSlot: "morning", project: "Holiday", type: "holiday" },
-        { timeSlot: "afternoon", project: "Merrick Monitor & Randy Review", type: "planned" },
+        { timeSlot: "morning", project: "Recovery from Flight", type: "holiday" },
+        { timeSlot: "afternoon", project: "Recovery from Flight", type: "holiday" },
       ],
     },
     {
       day: "WED",
       slots: [
-        { timeSlot: "morning", project: "Holiday", type: "holiday" },
-        { timeSlot: "afternoon", project: "Woolies/P.E.M", type: "planned" },
+        { timeSlot: "morning", project: "Merrick Monitor & Review Randy", type: "planned" },
+        { timeSlot: "afternoon", project: "Merrick Monitor & Review Randy", type: "planned" },
       ],
     },
     {
       day: "THU",
       slots: [
-        { timeSlot: "morning", project: "Holiday", type: "holiday" },
-        { timeSlot: "afternoon", project: "On-page", type: "planned" },
+        { timeSlot: "morning", project: "PEM & Woolies", type: "planned" },
+        { timeSlot: "afternoon", project: "PEM & Woolies", type: "planned" },
       ],
     },
     {
       day: "FRI",
       slots: [
-        { timeSlot: "morning", project: "Singapore Holiday", type: "holiday" },
-        { timeSlot: "afternoon", project: "Singapore Holiday", type: "holiday" },
+        { timeSlot: "morning", project: "PEM", type: "planned" },
+        { timeSlot: "afternoon", project: "PEM", type: "planned" },
       ],
     },
   ],
@@ -95,6 +95,23 @@ export const currentWeekSchedule = {
 // Historical weeks (automatically populated, don't edit manually)
 // Structure: { "2024-11-26": { weekStart: "2024-11-26", schedule: [...] }, ... }
 export const weeklyHistory = {
+  "2026-01-27": {
+    weekStart: "2026-01-27",
+    plan: [
+      { day: "MON", slots: [{ timeSlot: "morning", project: "Holiday", type: "holiday" }, { timeSlot: "afternoon", project: "P.E.M Tool", type: "planned" }] },
+      { day: "TUE", slots: [{ timeSlot: "morning", project: "Holiday", type: "holiday" }, { timeSlot: "afternoon", project: "Merrick Monitor & Randy Review", type: "planned" }] },
+      { day: "WED", slots: [{ timeSlot: "morning", project: "Holiday", type: "holiday" }, { timeSlot: "afternoon", project: "Woolies/P.E.M", type: "planned" }] },
+      { day: "THU", slots: [{ timeSlot: "morning", project: "Holiday", type: "holiday" }, { timeSlot: "afternoon", project: "On-page", type: "planned" }] },
+      { day: "FRI", slots: [{ timeSlot: "morning", project: "Singapore Holiday", type: "holiday" }, { timeSlot: "afternoon", project: "Singapore Holiday", type: "holiday" }] },
+    ],
+    schedule: [
+      { day: "MON", slots: [{ timeSlot: "morning", project: "Holiday", type: "holiday" }, { timeSlot: "afternoon", project: "P.E.M Tool", type: "planned" }] },
+      { day: "TUE", slots: [{ timeSlot: "morning", project: "Holiday", type: "holiday" }, { timeSlot: "afternoon", project: "Merrick Monitor & Randy Review", type: "planned" }] },
+      { day: "WED", slots: [{ timeSlot: "morning", project: "Holiday", type: "holiday" }, { timeSlot: "afternoon", project: "Woolies/P.E.M", type: "planned" }] },
+      { day: "THU", slots: [{ timeSlot: "morning", project: "Holiday", type: "holiday" }, { timeSlot: "afternoon", project: "On-page", type: "planned" }] },
+      { day: "FRI", slots: [{ timeSlot: "morning", project: "Singapore Holiday", type: "holiday" }, { timeSlot: "afternoon", project: "Singapore Holiday", type: "holiday" }] },
+    ],
+  },
   "2026-01-05": {
     weekStart: "2026-01-05",
     plan: [
