@@ -13,42 +13,42 @@
 // Current week's schedule (edit this at start of each week)
 // Use "actual" for what actually happened, "plan" for original plan
 export const currentWeekSchedule = {
-  weekStart: "2026-02-16", // Monday of current week (YYYY-MM-DD)
+  weekStart: "2026-02-23", // Monday of current week (YYYY-MM-DD)
   // Original plan for the week (set at start of week, don't modify)
   plan: [
     {
       day: "MON",
       slots: [
-        { timeSlot: "morning", project: "Meeting, Interview & Merrick Monitor", type: "planned" },
-        { timeSlot: "afternoon", project: "Cloud Screaming Frog", type: "planned" },
+        { timeSlot: "morning", project: "Merrick Monitor / PEM Mapping", type: "planned" },
+        { timeSlot: "afternoon", project: "Meeting and PEM Mapping", type: "planned" },
       ],
     },
     {
       day: "TUE",
       slots: [
-        { timeSlot: "morning", project: "PEM", type: "planned" },
-        { timeSlot: "afternoon", project: "On-Page", type: "planned" },
+        { timeSlot: "morning", project: "PEM Mapping", type: "planned" },
+        { timeSlot: "afternoon", project: "Meetings", type: "planned" },
       ],
     },
     {
       day: "WED",
       slots: [
-        { timeSlot: "morning", project: "Cloud SF & PEM Integration Research", type: "planned" },
-        { timeSlot: "afternoon", project: "On-Page Sheet", type: "planned" },
+        { timeSlot: "morning", project: "Development Allocation", type: "planned" },
+        { timeSlot: "afternoon", project: "Development Allocation", type: "planned" },
       ],
     },
     {
       day: "THU",
       slots: [
-        { timeSlot: "morning", project: "Woolworths Review", type: "planned" },
-        { timeSlot: "afternoon", project: "Client PEM Mapping", type: "planned" },
+        { timeSlot: "morning", project: "On-page Handover Plan", type: "planned" },
+        { timeSlot: "afternoon", project: "On-page Handover Plan", type: "planned" },
       ],
     },
     {
       day: "FRI",
       slots: [
-        { timeSlot: "morning", project: "On-Page Sheet", type: "planned" },
-        { timeSlot: "afternoon", project: "Cloud Screaming Frog Review", type: "planned" },
+        { timeSlot: "morning", project: "Leads Review and PEM Development", type: "planned" },
+        { timeSlot: "afternoon", project: "Leads Review and PEM Development", type: "planned" },
       ],
     },
   ],
@@ -57,36 +57,36 @@ export const currentWeekSchedule = {
     {
       day: "MON",
       slots: [
-        { timeSlot: "morning", project: "Meeting, Interview & Merrick Monitor", type: "planned" },
-        { timeSlot: "afternoon", project: "Cloud Screaming Frog", type: "planned" },
+        { timeSlot: "morning", project: "Merrick Monitor / PEM Mapping", type: "planned" },
+        { timeSlot: "afternoon", project: "Meeting and PEM Mapping", type: "planned" },
       ],
     },
     {
       day: "TUE",
       slots: [
-        { timeSlot: "morning", project: "PEM", type: "planned" },
-        { timeSlot: "afternoon", project: "On-Page", type: "planned" },
+        { timeSlot: "morning", project: "PEM Mapping", type: "planned" },
+        { timeSlot: "afternoon", project: "Meetings", type: "planned" },
       ],
     },
     {
       day: "WED",
       slots: [
-        { timeSlot: "morning", project: "Cloud SF & PEM Integration Research", type: "planned" },
-        { timeSlot: "afternoon", project: "On-Page Sheet", type: "planned" },
+        { timeSlot: "morning", project: "Development Allocation", type: "planned" },
+        { timeSlot: "afternoon", project: "Development Allocation", type: "planned" },
       ],
     },
     {
       day: "THU",
       slots: [
-        { timeSlot: "morning", project: "Woolworths Review", type: "planned" },
-        { timeSlot: "afternoon", project: "Client PEM Mapping", type: "planned" },
+        { timeSlot: "morning", project: "On-page Handover Plan", type: "planned" },
+        { timeSlot: "afternoon", project: "On-page Handover Plan", type: "planned" },
       ],
     },
     {
       day: "FRI",
       slots: [
-        { timeSlot: "morning", project: "On-Page Sheet", type: "planned" },
-        { timeSlot: "afternoon", project: "Cloud Screaming Frog Review", type: "planned" },
+        { timeSlot: "morning", project: "Leads Review and PEM Development", type: "planned" },
+        { timeSlot: "afternoon", project: "Leads Review and PEM Development", type: "planned" },
       ],
     },
   ],
@@ -95,6 +95,23 @@ export const currentWeekSchedule = {
 // Historical weeks (automatically populated, don't edit manually)
 // Structure: { "2024-11-26": { weekStart: "2024-11-26", schedule: [...] }, ... }
 export const weeklyHistory = {
+  "2026-02-16": {
+    weekStart: "2026-02-16",
+    plan: [
+      { day: "MON", slots: [{ timeSlot: "morning", project: "Meeting, Interview & Merrick Monitor", type: "planned" }, { timeSlot: "afternoon", project: "Cloud Screaming Frog", type: "planned" }] },
+      { day: "TUE", slots: [{ timeSlot: "morning", project: "PEM", type: "planned" }, { timeSlot: "afternoon", project: "On-Page", type: "planned" }] },
+      { day: "WED", slots: [{ timeSlot: "morning", project: "Cloud SF & PEM Integration Research", type: "planned" }, { timeSlot: "afternoon", project: "On-Page Sheet", type: "planned" }] },
+      { day: "THU", slots: [{ timeSlot: "morning", project: "Woolworths Review", type: "planned" }, { timeSlot: "afternoon", project: "Client PEM Mapping", type: "planned" }] },
+      { day: "FRI", slots: [{ timeSlot: "morning", project: "On-Page Sheet", type: "planned" }, { timeSlot: "afternoon", project: "Cloud Screaming Frog Review", type: "planned" }] },
+    ],
+    schedule: [
+      { day: "MON", slots: [{ timeSlot: "morning", project: "Meeting, Interview & Merrick Monitor", type: "planned" }, { timeSlot: "afternoon", project: "Cloud Screaming Frog", type: "planned" }] },
+      { day: "TUE", slots: [{ timeSlot: "morning", project: "PEM", type: "planned" }, { timeSlot: "afternoon", project: "On-Page", type: "planned" }] },
+      { day: "WED", slots: [{ timeSlot: "morning", project: "Cloud SF & PEM Integration Research", type: "planned" }, { timeSlot: "afternoon", project: "On-Page Sheet", type: "planned" }] },
+      { day: "THU", slots: [{ timeSlot: "morning", project: "Woolworths Review", type: "planned" }, { timeSlot: "afternoon", project: "Client PEM Mapping", type: "planned" }] },
+      { day: "FRI", slots: [{ timeSlot: "morning", project: "On-Page Sheet", type: "planned" }, { timeSlot: "afternoon", project: "Cloud Screaming Frog Review", type: "planned" }] },
+    ],
+  },
   "2026-02-09": {
     weekStart: "2026-02-09",
     plan: [
